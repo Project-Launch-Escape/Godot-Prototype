@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://snj8ta1xythe"]
+
+[ext_resource type="Script" path="res://CelestialScript.cs" id="1_sc8hu"]
+[ext_resource type="Script" path="res://GlobalValues.cs" id="2_3rynr"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_qocvl"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_u2bho"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Global" type="Node" parent="."]
+script = ExtResource("2_3rynr")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.740101, 0.672496, 0, -0.672496, 0.740101, 0, 10, 13.3454)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0971899)
+
+[node name="Planet" type="StaticBody3D" parent="." node_paths=PackedStringArray("ReferenceBody")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45257, -0.000980377, -5.97097)
+script = ExtResource("1_sc8hu")
+Mass = 10000.0
+ReferenceBody = NodePath("../Star")
+a = 10.0
+e = 0.5
+w = 2.0
+i = 1.0
+l = 3.0
+Radius = 0.25
+CoordLayer = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Planet"]
+mesh = SubResource("SphereMesh_qocvl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Planet"]
+shape = SubResource("SphereShape3D_u2bho")
+
+[node name="Star" type="StaticBody3D" parent="."]
+script = ExtResource("1_sc8hu")
+Mass = 1e+13
+Radius = 1.0
+CoordLayer = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Star"]
+mesh = SubResource("SphereMesh_qocvl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Star"]
+shape = SubResource("SphereShape3D_u2bho")
