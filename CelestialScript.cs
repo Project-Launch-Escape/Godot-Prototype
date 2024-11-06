@@ -8,7 +8,7 @@ public partial class CelestialScript : StaticBody3D
 	[Export] public float a;
 	private float b;
 	[Export] public float e;
-	private float n;
+	[Export] public float n;
 	[Export] public float w;
 	[Export] public float i;
 	[Export] public float l;
@@ -23,7 +23,7 @@ public partial class CelestialScript : StaticBody3D
 		b = a * (1 - Mathf.Pow(e, 2));
 		if (ReferenceBody != null)
 		{
-			n = Mathf.Sqrt(GlobalValues.G * ReferenceBody.Mass / a) / a; // Don't forget all angles are in radians
+			n = Mathf.Sqrt(GlobalValues.G * ReferenceBody.Mass /( a * GlobalValues.GetRefConversionFactor(CoordLayer, 0))) / (a * GlobalValues.GetRefConversionFactor(CoordLayer, 0)); // Don't forget all angles are in radians
 		}
 		else
 		{
@@ -50,8 +50,9 @@ public partial class CelestialScript : StaticBody3D
 	public Vector3 GetRenderSpacePos()
 	{
 		Vector3 PosAbsolute = new Vector3();
-		PosAbsolute += GetPosition(2) * GlobalValues.GetRefConversionFactor(2,0) * GlobalValues.Scale;
-		PosAbsolute += GetPosition(1) * GlobalValues.GetRefConversionFactor(1,0) * GlobalValues.Scale;
+		PosAbsolute += GetPosition(3) * GlobalValues.GetRefConversionFactor(3, 0) * GlobalValues.Scale;
+		PosAbsolute += GetPosition(2) * GlobalValues.GetRefConversionFactor(2, 0) * GlobalValues.Scale;
+		PosAbsolute += GetPosition(1) * GlobalValues.GetRefConversionFactor(1, 0) * GlobalValues.Scale;
 		return PosAbsolute;
 	}
 	public override void _Process(double dt)
