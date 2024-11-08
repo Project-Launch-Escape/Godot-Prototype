@@ -1,25 +1,36 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using CustomTypes;
 
 public partial class GlobalValues : Node
 {
 	[Export] public float TimeScale = 1;
 	public static float time;
 	public static float G = 0.000000000066743f;
-	public static float[] Units = { 1f, 9007199254740992f, 137438953472f, 1024f};
-	public static float Scale = 0.00000000001f;
+	public static float[] Units = { 1f, 281474976710656f, 4294967296f, 1024f};
+	public static float Scale = 0.000000000232830643653869625849394142f; // 1/2^32
+	public static List<CelestialScript> AllCelestials = new List<CelestialScript>();
 
-	public static float GetRefConversionFactor(int StartingRef, int ConversionRef)
+	public static float GetRefConversionFactor(CoordinateSpace StartingLayer, CoordinateSpace ConversionLayer)
 	{
-		if (StartingRef >= 4)
+		if ((int)StartingLayer > (int)Units.Length-1)
 		{
-			StartingRef = 3;
+			StartingLayer = (CoordinateSpace)(Units.Length-1);
 		}
-		if (ConversionRef >= 4)
+		if ((int)ConversionLayer > (int)Units.Length-1)
 		{
-			ConversionRef = 3;
+			ConversionLayer = (CoordinateSpace)(Units.Length-1);
 		}
-		return Units[StartingRef] / Units[ConversionRef];
+		
+		return Units[(int)StartingLayer] / Units[(int)ConversionLayer];
+	}
+	public static void RecieveCelestials(CelestialScript Celestial)
+	{
+		if (!AllCelestials.Contains(Celestial))
+		{
+			AllCelestials.Add(Celestial);
+		}
 	}
 	public override void _Ready()
 	{
