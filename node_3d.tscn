@@ -75,10 +75,11 @@ environment = SubResource("Environment_om47e")
 script = ExtResource("2_imltp")
 StartingParentCelestial = NodePath("../Sol")
 
-[node name="Sol" type="StaticBody3D" parent="."]
+[node name="Sol" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(2.593, 0, 0, 0, 2.593, 0, 0, 0, 2.593, 0, 0, 0)
 script = ExtResource("1_sc8hu")
 Mass = 1.9891e+30
+ParentCelestial = NodePath(".")
 Radius = 5.0
 CoordLayer = 1
 
@@ -89,10 +90,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_t82ai")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Sol"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Mercury" type="StaticBody3D" parent="."]
+[node name="Mercury" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(0.145, 0, 0, 0, 0.145, 0, 0, 0, 0.145, -0.0202284, 0, -2.92382)
 script = ExtResource("1_sc8hu")
 Mass = 3.30103e+23
+ParentCelestial = NodePath("../Sol")
 a = 12.992
 e = 0.206
 w = 0.509
@@ -108,10 +110,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_k8xj0")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mercury"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Venus" type="StaticBody3D" parent="."]
+[node name="Venus" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(0.361, 0, 0, 0, 0.361, 0, 0, 0, 0.361, -0.353172, -0.00196075, -7.7876)
 script = ExtResource("1_sc8hu")
 Mass = 4.86731e+24
+ParentCelestial = NodePath("../Sol")
 a = 25.184
 e = 0.007
 w = 0.965
@@ -127,10 +130,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_vf15n")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Venus"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Earth" type="StaticBody3D" parent="."]
+[node name="Earth" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(0.38, 0, 0, 0, 0.38, 0, 0, 0, 0.38, 0.203899, -0.000980377, -10.698)
 script = ExtResource("1_sc8hu")
 Mass = 5.97217e+24
+ParentCelestial = NodePath("../Sol")
 a = 34.848
 e = 0.017
 w = 5.032
@@ -145,10 +149,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_xis5n")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Earth"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Luna" type="StaticBody3D" parent="."]
+[node name="Luna" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(0.104, 0, 0, 0, 0.104, 0, 0, 0, 0.104, 2.56321, 0, -10.277)
 script = ExtResource("1_sc8hu")
 Mass = 7.34767e+22
+ParentCelestial = NodePath("../Earth")
 a = 135644.0
 e = 0.1
 Radius = 0.25
@@ -180,10 +185,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_eew4u")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mars"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Ceres" type="StaticBody3D" parent="."]
+[node name="Ceres" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(0.028, 0, 0, 0, 0.028, 0, 0, 0, 0.028, -0.353172, -0.00196075, -18.1413)
 script = ExtResource("1_sc8hu")
 Mass = 9.38416e+20
+ParentCelestial = NodePath("../Sol")
 a = 96.384
 e = 0.079
 w = 1.281
@@ -199,10 +205,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_7a12v")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ceres"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Jupiter" type="StaticBody3D" parent="."]
+[node name="Jupiter" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(4.167, 0, 0, 0, 4.167, 0, 0, 0, 4.167, -0.353172, -0.00196075, -23.1188)
 script = ExtResource("1_sc8hu")
 Mass = 1.89813e+27
+ParentCelestial = NodePath("../Sol")
 a = 181.248
 e = 0.048
 w = 4.773
@@ -218,10 +225,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_wyxpf")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Jupiter"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Saturn" type="StaticBody3D" parent="."]
+[node name="Saturn" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(3.592, 0, 0, 0, 3.592, 0, 0, 0, 3.592, -0.353172, -0.00196075, -31.5315)
 script = ExtResource("1_sc8hu")
 Mass = 5.68317e+26
+ParentCelestial = NodePath("../Sol")
 a = 333.408
 e = 0.055
 w = 5.857
@@ -237,10 +245,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_3pt0e")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Saturn"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Uranus" type="StaticBody3D" parent="."]
+[node name="Uranus" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(1.512, 0, 0, 0, 1.512, 0, 0, 0, 1.512, -0.353172, -0.00196075, -39.7427)
 script = ExtResource("1_sc8hu")
 Mass = 8.68099e+25
+ParentCelestial = NodePath("../Sol")
 a = 672.416
 e = 0.045
 w = 1.584
@@ -256,10 +265,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_1og8x")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Uranus"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Neptune" type="StaticBody3D" parent="."]
+[node name="Neptune" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(1.468, 0, 0, 0, 1.468, 0, 0, 0, 1.468, -0.353172, -0.00196075, -47.2705)
 script = ExtResource("1_sc8hu")
 Mass = 1.02409e+26
+ParentCelestial = NodePath("../Sol")
 a = 1053.79
 e = 0.014
 w = 4.543
@@ -275,10 +285,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_rsma8")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Neptune"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Pluto-Charon Barycenter" type="StaticBody3D" parent="."]
+[node name="Pluto-Charon Barycenter" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.353172, -0.00196075, -47.2705)
 script = ExtResource("1_sc8hu")
 Mass = 1.3029e+22
+ParentCelestial = NodePath("../Sol")
 a = 1374.4
 e = 0.247
 w = 1.99
@@ -290,16 +301,17 @@ CoordLayer = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Pluto-Charon Barycenter"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Pluto" type="StaticBody3D" parent="."]
+[node name="Pluto" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(0.071, 0, 0, 0, 0.071, 0, 0, 0, 0.071, -0.353172, -0.00196075, -60.9334)
 script = ExtResource("1_sc8hu")
 Mass = 1.3029e+22
+ParentCelestial = NodePath("../Pluto-Charon Barycenter")
 a = 2077.15
 n = 0.001
 i = 1.97
 l = 3.969
 Radius = 3.0
-CoordLayer = 2
+CoordLayer = 3
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Pluto"]
 mesh = SubResource("SphereMesh_qocvl")
@@ -308,17 +320,18 @@ surface_material_override/0 = SubResource("StandardMaterial3D_hs6ud")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Pluto"]
 shape = SubResource("SphereShape3D_u2bho")
 
-[node name="Charon" type="StaticBody3D" parent="."]
+[node name="Charon" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(0.036, 0, 0, 0, 0.036, 0, 0, 0, 0.036, 1.92458, -0.00196075, -60.872)
 script = ExtResource("1_sc8hu")
 Mass = 5.029e+21
+ParentCelestial = NodePath(".")
 a = 17060.0
 n = 0.001
 w = 3.142
 i = 1.97
 l = 3.969
 Radius = 2.0
-CoordLayer = 2
+CoordLayer = 3
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Charon"]
 mesh = SubResource("SphereMesh_qocvl")
