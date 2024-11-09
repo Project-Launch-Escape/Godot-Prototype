@@ -1,6 +1,7 @@
 using Godot;
-using System;
-using CustomTypes;
+using GodotPrototype.Scripts.Simulation.ReferenceFrames;
+
+namespace GodotPrototype.Scripts;
 
 public partial class CelestialScript : StaticBody3D
 {
@@ -33,14 +34,14 @@ public partial class CelestialScript : StaticBody3D
 			NestedPos = new NestedPosition(Transform.Origin);
 		}
 		Transform = Transform.Scaled(new Vector3(Radius, Radius, Radius));
-		GlobalValues.RecieveCelestials(this);
+		GlobalValues.ReceiveCelestials(this);
 	}
 
 	public override void _Process(double dt)
 	{
 		if (ParentCelestial != null)
 		{
-			float E = CalculateEccentricAnomaly(-n * GlobalValues.time + w);
+			float E = CalculateEccentricAnomaly(-n * GlobalValues.Time + w);
 			float x = a * (Mathf.Cos(E)) - a + b;
 			float z = b * Mathf.Sin(E);
 
