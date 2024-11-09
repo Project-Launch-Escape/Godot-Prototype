@@ -12,6 +12,8 @@ public partial class GlobalValues : Node
 	public const float Scale = 0.000000000232830643653869625849394142f; // 1/2^32
 	public static readonly List<CelestialScript> AllCelestials = [];
 
+	private bool _paused = false;
+
 	public static float GetRefConversionFactor(CoordinateSpace startingLayer, CoordinateSpace conversionLayer)
 	{
 		if ((int)startingLayer > Units.Length-1)
@@ -39,7 +41,19 @@ public partial class GlobalValues : Node
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (_paused) return;
 		var dt = Convert.ToSingle(delta);
 		Time += dt * TimeScale;
+	}
+
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventKey inputEventKey)
+		{
+			if (inputEventKey.Pressed && inputEventKey.Keycode == Key.Space)
+			{
+				_paused = !_paused;
+			}
+		}
 	}
 }
