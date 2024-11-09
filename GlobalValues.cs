@@ -14,11 +14,11 @@ public partial class GlobalValues : Node
 
 	public static float GetRefConversionFactor(CoordinateSpace StartingLayer, CoordinateSpace ConversionLayer)
 	{
-		if ((int)StartingLayer > (int)Units.Length-1)
+		if ((int)StartingLayer > Units.Length-1)
 		{
 			StartingLayer = (CoordinateSpace)(Units.Length-1);
 		}
-		if ((int)ConversionLayer > (int)Units.Length-1)
+		if ((int)ConversionLayer > Units.Length-1)
 		{
 			ConversionLayer = (CoordinateSpace)(Units.Length-1);
 		}
