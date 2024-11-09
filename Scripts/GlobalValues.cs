@@ -56,7 +56,7 @@ public partial class GlobalValues : Node
 
             if (inputEventKey.Pressed && inputEventKey.Keycode == Key.Comma)
             {
-                TimeScale *= 0.75f;
+                TimeScale /= 1.5f;
             }
 
             if (inputEventKey.Pressed && inputEventKey.Keycode == Key.Period)
