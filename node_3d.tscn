@@ -1,21 +1,21 @@
 [gd_scene load_steps=33 format=3 uid="uid://snj8ta1xythe"]
 
-[ext_resource type="Script" path="res://CelestialScript.cs" id="1_sc8hu"]
-[ext_resource type="Script" path="res://GlobalValues.cs" id="2_3rynr"]
-[ext_resource type="Script" path="res://Freecam.cs" id="2_imltp"]
-[ext_resource type="Texture2D" uid="uid://womn3vn07gov" path="res://planet-textures/2k_sun.jpg" id="4_i0x5a"]
-[ext_resource type="Texture2D" uid="uid://ch401mgypxvn6" path="res://planet-textures/2k_mercury.jpg" id="5_4uwb6"]
-[ext_resource type="Texture2D" uid="uid://cft7d73i3ru6v" path="res://planet-textures/2k_venus_atmosphere.jpg" id="6_pr1ok"]
-[ext_resource type="Texture2D" uid="uid://crcostayfxe6t" path="res://planet-textures/2k_earth_daymap.jpg" id="7_kj5p4"]
-[ext_resource type="Texture2D" uid="uid://iftvlf5gysb6" path="res://planet-textures/2k_moon.jpg" id="8_3bx44"]
-[ext_resource type="Texture2D" uid="uid://47hu4c6bwasl" path="res://planet-textures/2k_mars.jpg" id="9_m7d2d"]
-[ext_resource type="Texture2D" uid="uid://cklvvryepyc8k" path="res://planet-textures/2k_ceres_fictional.jpg" id="10_p2heh"]
-[ext_resource type="Texture2D" uid="uid://bohv6gy5urkjq" path="res://planet-textures/2k_jupiter.jpg" id="11_l17ju"]
-[ext_resource type="Texture2D" uid="uid://beyosfxjxct2p" path="res://planet-textures/2k_saturn.jpg" id="12_y1non"]
-[ext_resource type="Texture2D" uid="uid://cit1gq6cti3wp" path="res://planet-textures/2k_uranus.jpg" id="13_kga75"]
-[ext_resource type="Texture2D" uid="uid://dd2of522sk5iv" path="res://planet-textures/2k_neptune.jpg" id="14_ivybu"]
-[ext_resource type="Texture2D" uid="uid://bcc22vpk5oaos" path="res://planet-textures/plutomap2k.jpg" id="15_42u8d"]
-[ext_resource type="Texture2D" uid="uid://co3totwd3nkqo" path="res://planet-textures/Charon.webp" id="16_ft715"]
+[ext_resource type="Script" path="res://Scripts/CelestialScript.cs" id="1_sc8hu"]
+[ext_resource type="Script" path="res://Scripts/GlobalValues.cs" id="2_3rynr"]
+[ext_resource type="Script" path="res://Scripts/Freecam.cs" id="2_imltp"]
+[ext_resource type="Texture2D" uid="uid://4dsq8waa3sch" path="res://planet-textures/2k_sun.jpg" id="4_i0x5a"]
+[ext_resource type="Texture2D" uid="uid://dqgoiw8t1fo4a" path="res://planet-textures/2k_mercury.jpg" id="5_4uwb6"]
+[ext_resource type="Texture2D" uid="uid://c2s5v07v5k3en" path="res://planet-textures/2k_venus_atmosphere.jpg" id="6_pr1ok"]
+[ext_resource type="Texture2D" uid="uid://clv3wlcrse2ko" path="res://planet-textures/2k_earth_daymap.jpg" id="7_kj5p4"]
+[ext_resource type="Texture2D" uid="uid://b1dqj7tfexs58" path="res://planet-textures/2k_moon.jpg" id="8_3bx44"]
+[ext_resource type="Texture2D" uid="uid://cc4uf4hnocg5k" path="res://planet-textures/2k_mars.jpg" id="9_m7d2d"]
+[ext_resource type="Texture2D" uid="uid://bou6g0uf2yju0" path="res://planet-textures/2k_ceres_fictional.jpg" id="10_p2heh"]
+[ext_resource type="Texture2D" uid="uid://7uyxyu6e5nni" path="res://planet-textures/2k_jupiter.jpg" id="11_l17ju"]
+[ext_resource type="Texture2D" uid="uid://be6pgbxqt3fpn" path="res://planet-textures/2k_saturn.jpg" id="12_y1non"]
+[ext_resource type="Texture2D" uid="uid://jw8sl0ndyc2h" path="res://planet-textures/2k_uranus.jpg" id="13_kga75"]
+[ext_resource type="Texture2D" uid="uid://cc0lx6cqivyop" path="res://planet-textures/2k_neptune.jpg" id="14_ivybu"]
+[ext_resource type="Texture2D" uid="uid://bpi4x38k6pp6a" path="res://planet-textures/plutomap2k.jpg" id="15_42u8d"]
+[ext_resource type="Texture2D" uid="uid://qcfxk3ypww10" path="res://planet-textures/Charon.webp" id="16_ft715"]
 
 [sub_resource type="Environment" id="Environment_om47e"]
 background_mode = 1
@@ -207,7 +207,7 @@ mesh = SubResource("SphereMesh_qocvl")
 shape = SubResource("SphereShape3D_u2bho")
 
 [node name="Luna" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.56321, 0, -10.277)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.54753, 0.0207076, -10.2898)
 script = ExtResource("1_sc8hu")
 Mass = 7.34767e+22
 ParentCelestial = NodePath("../Earth")
