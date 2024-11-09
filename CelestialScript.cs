@@ -18,7 +18,7 @@ public partial class CelestialScript : StaticBody3D
 	[Export] public float Radius;
 	[Export] public float SOIRadius;
 	[Export] public CoordinateSpace CoordLayer;
-	public CoordSpacePosition CoordPositions;
+	public NestedPosition NestedPos;
 
 	public override void _Ready()
 	{
@@ -30,7 +30,7 @@ public partial class CelestialScript : StaticBody3D
 		}
 		else
 		{
-			CoordPositions = new CoordSpacePosition(Transform.Origin);
+			NestedPos = new NestedPosition(Transform.Origin);
 		}
 		Transform = Transform.Scaled(new Vector3(Radius, Radius, Radius));
 		GlobalValues.RecieveCelestials(this);
@@ -48,9 +48,9 @@ public partial class CelestialScript : StaticBody3D
 			float y_Rot = x * (Mathf.Sin(w) * Mathf.Sin(i)) + z * (Mathf.Cos(w) * Mathf.Sin(i));
 			float z_Rot = x * (Mathf.Cos(w) * Mathf.Sin(l) + Mathf.Sin(w) * Mathf.Cos(l) * Mathf.Cos(i)) + z * (-Mathf.Sin(w) * Mathf.Sin(l) + Mathf.Cos(w) * Mathf.Cos(l) * Mathf.Cos(i));
 
-			CoordPositions = new CoordSpacePosition(new Vector3(x_Rot, y_Rot, z_Rot), ParentCelestial);
+			NestedPos = new NestedPosition(new Vector3(x_Rot, y_Rot, z_Rot), ParentCelestial);
 		}
-		Transform = new Transform3D(Transform.Basis, CoordPositions.GetPositionAtLayer(CoordinateSpace.RenderSpace));
+		Transform = new Transform3D(Transform.Basis, NestedPos.GetPositionAtLayer(CoordinateSpace.RenderSpace));
 	}
 	float CalculateEccentricAnomaly(float M)
 	{
