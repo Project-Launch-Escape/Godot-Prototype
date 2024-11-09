@@ -3,35 +3,35 @@ using System;
 
 namespace CustomTypes;
 
-public class CoordSpacePosition
+public class NestedPosition
 {
 	public CoordinateSpace CoordLayer;
 	public Vector3 LocalPosition;
 	public CelestialScript ParentCelestial;
 
-	public CoordSpacePosition(Vector3 _LocalPosition, CelestialScript _ParentCelestial)
+	public NestedPosition(Vector3 _LocalPosition, CelestialScript _ParentCelestial)
 	{
 		LocalPosition = _LocalPosition;
 		ParentCelestial = _ParentCelestial;
-		CoordLayer = (CoordinateSpace)((int)_ParentCelestial.CoordLayer + 1);
+		CoordLayer = _ParentCelestial.CoordLayer.Increment();
 	}
-	public CoordSpacePosition(CoordSpacePosition _CoordSpacePosition)
+	public NestedPosition(NestedPosition _NestedPosition)
 	{
-		LocalPosition = _CoordSpacePosition.LocalPosition;
-		ParentCelestial = _CoordSpacePosition.ParentCelestial;
-		CoordLayer = _CoordSpacePosition.CoordLayer;
+		LocalPosition = _NestedPosition.LocalPosition;
+		ParentCelestial = _NestedPosition.ParentCelestial;
+		CoordLayer = _NestedPosition.CoordLayer;
 	}
-	public CoordSpacePosition(Vector3 _LocalPosition)
+	public NestedPosition(Vector3 _LocalPosition)
 	{
 		LocalPosition = _LocalPosition;
 		ParentCelestial = null;
 		CoordLayer = CoordinateSpace.GalaxySpace;
 	}
-	public CoordSpacePosition() // Base Case
+	public NestedPosition() // Base Case
 	{
-		CoordLayer = CoordinateSpace.GalaxySpace;
 		LocalPosition = new Vector3(0, 0, 0);
 		ParentCelestial = null;
+		CoordLayer = CoordinateSpace.GalaxySpace;
 	}
 
 	public Vector3 GetPositionAtLayer(CoordinateSpace Layer)
@@ -39,12 +39,12 @@ public class CoordSpacePosition
 		// Layer 0 is Renderspace, Layer 1 is GalaxySpace, 2 is StarSpace, 3 is PlanetSpace, 4 is MoonSpace and 5+ are levels of nested MoonSpace
 		if (Layer == CoordinateSpace.RenderSpace)
 		{
-			Vector3 RenderSpacePos = new Vector3();
-			for (int i = 1; i < Mathf.Max((int)CoordLayer, (int)Freecam.CoordLayer)+1; i++)
+			Vector3 ConvertedPosition = new Vector3();
+			for (int i = 1; i < Mathf.Max((int)CoordLayer, (int)Freecam.NestedPos.CoordLayer + 1); i++)
 			{
-				RenderSpacePos += (GetPositionAtLayer((CoordinateSpace)i) - Freecam.CoordPositions.GetPositionAtLayer((CoordinateSpace)i)) * GlobalValues.GetRefConversionFactor((CoordinateSpace)i, 0) * GlobalValues.Scale;
+				ConvertedPosition += (GetPositionAtLayer((CoordinateSpace)i) - Freecam.NestedPos.GetPositionAtLayer((CoordinateSpace)i)) * GlobalValues.GetRefConversionFactor((CoordinateSpace)i, 0) * GlobalValues.Scale;
 			}
-			return RenderSpacePos;
+			return ConvertedPosition;
 		}
 		if (Layer == CoordLayer)
 		{
@@ -52,7 +52,7 @@ public class CoordSpacePosition
 		}
 		else if (Layer < CoordLayer)
 		{
-			return ParentCelestial.CoordPositions.GetPositionAtLayer(Layer);
+			return ParentCelestial.NestedPos.GetPositionAtLayer(Layer);
 		}
 		else
 		{
@@ -60,10 +60,16 @@ public class CoordSpacePosition
 		}
 	}
 
-	//public static CoordSpacePosition ConvertPosition(CoordSpacePosition Position1, CoordSpacePosition Position2)
-	//{
-	//	
-	//} Unfinished Method
+	public static Vector3 ConvertPositionReference(NestedPosition ConversionPosition, NestedPosition NewRefPosition)
+	{
+		Vector3 ConvertedPosition = new Vector3();
+		for (int i = 1; i < Mathf.Max((int)ConversionPosition.CoordLayer, (int)NewRefPosition.CoordLayer) + 1; i++)
+		{
+			ConvertedPosition += (ConversionPosition.GetPositionAtLayer((CoordinateSpace)i) - NewRefPosition.GetPositionAtLayer((CoordinateSpace)i)) * GlobalValues.GetRefConversionFactor((CoordinateSpace)i, NewRefPosition.CoordLayer);
+		}
+		return ConvertedPosition;
+	}
+
 }
 public enum CoordinateSpace
 {
@@ -73,3 +79,10 @@ public enum CoordinateSpace
 	PlanetSpace = 3,
 	MoonSpace = 4,
 };
+public static class Extensions
+{
+	public static CoordinateSpace Increment(this CoordinateSpace CoordLayer)
+	{
+		return (CoordinateSpace)((int)CoordLayer + 1);
+	}
+}
