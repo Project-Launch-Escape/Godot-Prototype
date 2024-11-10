@@ -29,6 +29,7 @@ public partial class GizmoTranslate : Node3D
 		query.CollideWithAreas = true;
 		query.CollisionMask = mask;
 		var result = GetWorld3D().DirectSpaceState.IntersectRay(query);
+		GD.Print(result);
 		if (result.Count==0) {this.Hide();mask = 0b00001;return;}
 		if (mask != 0b10000){mask = 0b10000;collider = (Node)result["collider"];this.Show();this.Position = ((Node3D)collider).GlobalPosition;return;}
 		
