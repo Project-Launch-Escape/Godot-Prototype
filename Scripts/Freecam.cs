@@ -7,13 +7,14 @@ public partial class Freecam : Camera3D
 {
 	public static CelestialScript ParentCelestial;
 	[Export] public CelestialScript StartingParentCelestial;
+	[Export] private DebugUiController DebugUI;
+	
 	public static CoordinateSpace CoordLayer;
 	public static NestedPosition NestedPos;
-	[Export] private DebugUiController DebugUI;
-	[Export] public float VelocityMultiplier = 4;
-	[Export] public float Acceleration = 30;
-	[Export] public float Deceleration = 50;
-
+	
+	public static float VelocityMultiplier = 100f;
+	[Export] public float Acceleration = 50;
+	[Export] public float Deceleration = 80;
 	[Export] public float ModifierSpeedMultiplier = 2.5f;
 
 	[Export(PropertyHint.Range, "0.0,1.0")] public float Sensitivity = 0.25f;
@@ -52,7 +53,7 @@ public partial class Freecam : Camera3D
 
 		foreach (var t in celestials)
 		{
-			var dist = t.NestedPos.LocalPosition.DistanceTo(NestedPosition.ConvertPositionReference(NestedPos, t.NestedPos));
+			var dist = NestedPosition.ConvertPositionReference(NestedPos, t.NestedPos, t.CoordLayer).Length();
 
 			if (dist <= t.SOIRadius)
 			{
@@ -64,8 +65,10 @@ public partial class Freecam : Camera3D
 		{
 			return null;
 		}
+		
 		var highestSOILayer = CoordinateSpace.GalaxySpace;
 		var highestSOIIndex = 0;
+		
 		for (var i = 0; i < currentSOIs.Count; i++)
 		{
 			if (currentSOIs[i].CoordLayer <= highestSOILayer) continue;
@@ -76,21 +79,28 @@ public partial class Freecam : Camera3D
 		return currentSOIs[highestSOIIndex];
 	}
 	
-	//private void SOIChange(CelestialScript NewSOI)
-	//{
-	//	LocalPos = (LocalPos - NewSOI.GetPosition(CoordLayer)) * GlobalValues.GetRefConversionFactor(CoordLayer, NewSOI.CoordLayer+1) + ParentCelestial.GetPosition(NewSOI.CoordLayer+1);
-	//	ParentCelestial = NewSOI;
-	//}
+	private void SOIChange(CelestialScript newSOI)
+	{
+		var newRefPosition = new NestedPosition();
+		var newCoordLayer = CoordinateSpace.GalaxySpace;
+		if (newSOI != null)
+		{
+			newRefPosition = newSOI.NestedPos;
+			newCoordLayer = newSOI.CoordLayer.Increment();
+		}
+
+		var newPosition = NestedPosition.ConvertPositionReference(NestedPos, newRefPosition, newCoordLayer);
+		NestedPos = new NestedPosition(newPosition, newSOI);
+		CoordLayer = newCoordLayer;
+		ParentCelestial = newSOI;	
+	}
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-			CelestialScript HighestSOI = GetHighestSOI();
-		//	if (ParentCelestial != HighestSOI && HighestSOI != null)
-		//	{
-		//		
-		//	}
-		// SOI stuff is still broken
+		var highestSOI = GetHighestSOI();
+		if (ParentCelestial != highestSOI) SOIChange(highestSOI);
+
 		UpdateMouseLook();
 		UpdateMovement((float)delta);
 	}
@@ -114,8 +124,8 @@ public partial class Freecam : Camera3D
 			Velocity.Y = Mathf.Clamp(Velocity.Y + offset.Y, -VelocityMultiplier, VelocityMultiplier);
 			Velocity.Z = Mathf.Clamp(Velocity.Z + offset.Z, -VelocityMultiplier, VelocityMultiplier);
 			Vector3 velocityRotated = Velocity.Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-TotalYaw));
-			velocityRotated = velocityRotated.Rotated(new Vector3(1f,0f,0f).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-TotalYaw)), Mathf.DegToRad(-TotalPitch));
-			NestedPos = new NestedPosition(NestedPos.LocalPosition + (velocityRotated * delta * speedMulti), ParentCelestial);
+			velocityRotated = velocityRotated.Rotated((new Vector3(1f,0f,0f).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-TotalYaw))).Normalized(), Mathf.DegToRad(-TotalPitch));
+			NestedPos = new NestedPosition(NestedPos.LocalPosition + (velocityRotated * delta * speedMulti * GlobalValues.GetRefConversionFactor(0,CoordLayer)), ParentCelestial);
 		}
 
 	}
