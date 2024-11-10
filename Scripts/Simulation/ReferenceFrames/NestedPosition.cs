@@ -39,7 +39,7 @@ public class NestedPosition
 		if (layer == CoordinateSpace.RenderSpace)
 		{
 			var convertedPosition = new Vector3();
-			for (int i = 1; i < Mathf.Max((int)CoordLayer, (int)Freecam.NestedPos.CoordLayer + 1); i++)
+			for (int i = 1; i < Mathf.Max((int)CoordLayer, (int)Freecam.NestedPos.CoordLayer) + 1; i++)
 			{
 				convertedPosition += (GetPositionAtLayer((CoordinateSpace)i) - Freecam.NestedPos.GetPositionAtLayer((CoordinateSpace)i)) * ((CoordinateSpace)i).GetConversionFactor(0) * GlobalValues.Scale;
 			}
