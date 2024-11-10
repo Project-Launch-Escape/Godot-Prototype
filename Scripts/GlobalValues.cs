@@ -1,18 +1,17 @@
 using Godot;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
-
 namespace GodotPrototype.Scripts;
 
 public partial class GlobalValues : Node
 {
-    [Export] public double TimeScale = 1;
+    public static double TimeScale = 864000;
     public static double Time;
     public const float G = 0.000000000066743f;
     public static readonly float[] Units = [1f, 281474976710656f, 4294967296f, 1024f];
     public const float Scale = 0.000000000232830643653869625849394142f; // 1/2^32
     public static readonly List<CelestialScript> AllCelestials = [];
-
-    public bool Paused = false;
+    public static bool Paused = false;
+    
     public static float GetRefConversionFactor(CoordinateSpace startingLayer, CoordinateSpace conversionLayer)
     {
         if ((int)startingLayer > Units.Length-1)
@@ -23,9 +22,9 @@ public partial class GlobalValues : Node
         {
             conversionLayer = (CoordinateSpace)(Units.Length-1);
         }
-
         return Units[(int)startingLayer] / Units[(int)conversionLayer];
     }
+    
     public static void ReceiveCelestials(CelestialScript celestial)
     {
         if (!AllCelestials.Contains(celestial))
@@ -33,10 +32,11 @@ public partial class GlobalValues : Node
             AllCelestials.Add(celestial);
         }
     }
+    
     public override void _Ready()
     {
     }
-
+    
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
@@ -44,7 +44,7 @@ public partial class GlobalValues : Node
         var dt = Convert.ToSingle(delta);
         Time += dt * TimeScale;
     }
-
+    
     public override void _Input(InputEvent @event)
     {
         if (@event is InputEventKey inputEventKey)
@@ -53,12 +53,12 @@ public partial class GlobalValues : Node
             {
                 Paused = !Paused;
             }
-
+            
             if (inputEventKey.Pressed && inputEventKey.Keycode == Key.Comma)
             {
                 TimeScale /= 1.5f;
             }
-
+            
             if (inputEventKey.Pressed && inputEventKey.Keycode == Key.Period)
             {
                 TimeScale *= 1.5f;
