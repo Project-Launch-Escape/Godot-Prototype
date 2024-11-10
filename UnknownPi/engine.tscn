@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://b255lhj0e72l7"]
+
+[ext_resource type="PackedScene" uid="uid://g6dapi7muo5g" path="res://UnknownPi/engine2.fbx" id="1_85g5s"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_x4wjh"]
+radius = 1.0
+
+[node name="Engine" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = SubResource("CylinderShape3D_x4wjh")
+
+[node name="engine2" parent="." instance=ExtResource("1_85g5s")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
