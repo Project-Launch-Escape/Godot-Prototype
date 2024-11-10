@@ -15,7 +15,7 @@ public partial class CelestialScript : StaticBody3D
 	[Export] public float i;
 	[Export] public float l;
 	private float tol = 0.00001f;
-	private float E;
+	private double E;
 	[Export] public float Radius;
 	[Export] public float SOIRadius;
 	[Export] public CoordinateSpace CoordLayer;
@@ -41,7 +41,7 @@ public partial class CelestialScript : StaticBody3D
 	{
 		if (ParentCelestial != null)
 		{
-			float E = CalculateEccentricAnomaly(-n * GlobalValues.Time + w);
+			float E = (float)CalculateEccentricAnomaly((-n * GlobalValues.Time + w) % Math.Tau);
 			float x = a * (Mathf.Cos(E)) - a + b;
 			float z = b * Mathf.Sin(E);
 
@@ -53,11 +53,11 @@ public partial class CelestialScript : StaticBody3D
 		}
 		Transform = new Transform3D(Transform.Basis, NestedPos.GetPositionAtLayer(CoordinateSpace.RenderSpace));
 	}
-	float CalculateEccentricAnomaly(float M)
+	double CalculateEccentricAnomaly(double M)
 	{
 		for (int i = 0; i < 10; i++)
 		{
-			float dE = (E - e * Mathf.Sin(E) - M) / (1 - e * Mathf.Cos(E));
+			double dE = (E - e * Mathf.Sin(E) - M) / (1 - e * Mathf.Cos(E));
 			E -= dE;
 			if (Mathf.Abs(dE) < tol)
 			{

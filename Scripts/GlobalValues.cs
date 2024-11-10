@@ -5,14 +5,14 @@ namespace GodotPrototype.Scripts;
 
 public partial class GlobalValues : Node
 {
-    [Export] public float TimeScale = 1;
-    public static float Time;
+    [Export] public double TimeScale = 1;
+    public static double Time;
     public const float G = 0.000000000066743f;
     public static readonly float[] Units = [1f, 281474976710656f, 4294967296f, 1024f];
     public const float Scale = 0.000000000232830643653869625849394142f; // 1/2^32
     public static readonly List<CelestialScript> AllCelestials = [];
 
-    private bool _paused = false;
+    public bool Paused = false;
     public static float GetRefConversionFactor(CoordinateSpace startingLayer, CoordinateSpace conversionLayer)
     {
         if ((int)startingLayer > Units.Length-1)
@@ -40,7 +40,7 @@ public partial class GlobalValues : Node
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        if (_paused) return;
+        if (Paused) return;
         var dt = Convert.ToSingle(delta);
         Time += dt * TimeScale;
     }
@@ -51,7 +51,7 @@ public partial class GlobalValues : Node
         {
             if (inputEventKey.Pressed && inputEventKey.Keycode == Key.Space)
             {
-                _paused = !_paused;
+                Paused = !Paused;
             }
 
             if (inputEventKey.Pressed && inputEventKey.Keycode == Key.Comma)

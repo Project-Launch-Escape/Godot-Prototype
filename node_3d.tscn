@@ -1,5 +1,6 @@
-[gd_scene load_steps=33 format=3 uid="uid://snj8ta1xythe"]
+[gd_scene load_steps=34 format=3 uid="uid://snj8ta1xythe"]
 
+[ext_resource type="Script" path="res://Scripts/UserInterface/DebugUiController.cs" id="1_en8d3"]
 [ext_resource type="Script" path="res://Scripts/CelestialScript.cs" id="1_sc8hu"]
 [ext_resource type="Script" path="res://Scripts/GlobalValues.cs" id="2_3rynr"]
 [ext_resource type="Script" path="res://Scripts/Freecam.cs" id="2_imltp"]
@@ -65,6 +66,43 @@ albedo_texture = ExtResource("15_42u8d")
 albedo_texture = ExtResource("16_ft715")
 
 [node name="Node3D" type="Node3D"]
+
+[node name="UI" type="Node" parent="."]
+
+[node name="Debug Interface" type="Panel" parent="UI" node_paths=PackedStringArray("GlobalValues", "CurrentTime", "CurrentRate", "Paused")]
+offset_right = 300.0
+offset_bottom = 133.0
+script = ExtResource("1_en8d3")
+GlobalValues = NodePath("../../Global")
+CurrentTime = NodePath("VBoxContainer/Current Time")
+CurrentRate = NodePath("VBoxContainer/Current Rate")
+Paused = NodePath("VBoxContainer/Paused")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Debug Interface"]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 133.0
+
+[node name="Title" type="Label" parent="UI/Debug Interface/VBoxContainer"]
+layout_mode = 2
+text = "Debug UI"
+horizontal_alignment = 1
+
+[node name="Separator" type="Label" parent="UI/Debug Interface/VBoxContainer"]
+layout_mode = 2
+text = "----------------------------------------------------------"
+
+[node name="Current Time" type="Label" parent="UI/Debug Interface/VBoxContainer"]
+layout_mode = 2
+text = "Current Time:"
+
+[node name="Current Rate" type="Label" parent="UI/Debug Interface/VBoxContainer"]
+layout_mode = 2
+text = "Current Rate:"
+
+[node name="Paused" type="Label" parent="UI/Debug Interface/VBoxContainer"]
+layout_mode = 2
+text = "Paused:"
 
 [node name="Global" type="Node" parent="."]
 script = ExtResource("2_3rynr")
