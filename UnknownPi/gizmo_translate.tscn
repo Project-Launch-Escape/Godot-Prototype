@@ -1,8 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://wdmru320mfw3"]
+[gd_scene load_steps=33 format=3 uid="uid://wdmru320mfw3"]
 
 [ext_resource type="Script" path="res://UnknownPi/GizmoTranslate.cs" id="1_vmmqn"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_af8px"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_esgeb"]
 size = Vector3(10, 10, 0.01)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mis80"]
@@ -10,7 +10,7 @@ transparency = 1
 cull_mode = 2
 albedo_color = Color(0.542489, 0.0176854, 0.00983225, 0.232)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ln5w6"]
+[sub_resource type="BoxMesh" id="BoxMesh_0cc0j"]
 size = Vector3(10, 10, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fhxye"]
@@ -68,6 +68,64 @@ no_depth_test = true
 shading_mode = 0
 albedo_color = Color(0.231373, 0.662745, 0.960784, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_3wky1"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qnm5x"]
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0.960784, 0.239216, 0.388235, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_168i6"]
+material = SubResource("StandardMaterial3D_qnm5x")
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_233wk"]
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0.513726, 0.803922, 0.0862745, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_w8mgu"]
+material = SubResource("StandardMaterial3D_233wk")
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dudna"]
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0.231373, 0.662745, 0.960784, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_w2qde"]
+material = SubResource("StandardMaterial3D_dudna")
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_af8px"]
+size = Vector3(0.01, 10, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ln5w6"]
+size = Vector3(0.01, 10, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pu8k2"]
+size = Vector3(10, 0.01, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b1sck"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.02844, 0.54, 0.0108, 0.231373)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gmpf4"]
+size = Vector3(10, 0.01, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t253n"]
+size = Vector3(10, 10, 0.01)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r6o2k"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.0108, 0.39888, 0.54, 0.231373)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xjhcg"]
+size = Vector3(10, 10, 0.01)
+
 [node name="GizmoTranslate" type="Node3D"]
 script = ExtResource("1_vmmqn")
 
@@ -76,12 +134,12 @@ collision_layer = 2
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RedPlane"]
-shape = SubResource("BoxShape3D_af8px")
+shape = SubResource("BoxShape3D_esgeb")
 
 [node name="MeshInstance3D7" type="MeshInstance3D" parent="RedPlane"]
 visible = false
 material_override = SubResource("StandardMaterial3D_mis80")
-mesh = SubResource("BoxMesh_ln5w6")
+mesh = SubResource("BoxMesh_0cc0j")
 skeleton = NodePath("../..")
 
 [node name="GreenPlane" type="StaticBody3D" parent="."]
@@ -184,4 +242,79 @@ skeleton = NodePath("../..")
 transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, 0.5)
 material_override = SubResource("StandardMaterial3D_2mac0")
 mesh = SubResource("CylinderMesh_qvgl2")
+skeleton = NodePath("../..")
+
+[node name="Rotation Handle Red" type="StaticBody3D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rotation Handle Red"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.75)
+shape = SubResource("BoxShape3D_3wky1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rotation Handle Red"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.75)
+mesh = SubResource("BoxMesh_168i6")
+
+[node name="Rotation Handle Green" type="StaticBody3D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rotation Handle Green"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+shape = SubResource("BoxShape3D_3wky1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rotation Handle Green"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+mesh = SubResource("BoxMesh_w8mgu")
+
+[node name="Rotation Handle Blue" type="StaticBody3D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rotation Handle Blue"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("BoxShape3D_3wky1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rotation Handle Blue"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("BoxMesh_w2qde")
+
+[node name="RedPlaneR" type="StaticBody3D" parent="."]
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RedPlaneR"]
+shape = SubResource("BoxShape3D_af8px")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="RedPlaneR"]
+visible = false
+material_override = SubResource("StandardMaterial3D_mis80")
+mesh = SubResource("BoxMesh_ln5w6")
+skeleton = NodePath("../..")
+
+[node name="GreenPlaneR" type="StaticBody3D" parent="."]
+collision_layer = 64
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreenPlaneR"]
+shape = SubResource("BoxShape3D_pu8k2")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="GreenPlaneR"]
+visible = false
+material_override = SubResource("StandardMaterial3D_b1sck")
+mesh = SubResource("BoxMesh_gmpf4")
+skeleton = NodePath("../..")
+
+[node name="BluePlaneR" type="StaticBody3D" parent="."]
+collision_layer = 128
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BluePlaneR"]
+shape = SubResource("BoxShape3D_t253n")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="BluePlaneR"]
+visible = false
+material_override = SubResource("StandardMaterial3D_r6o2k")
+mesh = SubResource("BoxMesh_xjhcg")
 skeleton = NodePath("../..")
