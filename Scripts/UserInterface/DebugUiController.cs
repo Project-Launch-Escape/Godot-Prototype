@@ -19,10 +19,10 @@ public partial class DebugUiController : Node
 
 
 
-    private const float Minute = 60;
-    private const float Hour = Minute * 60;
-    private const float Day = Hour * 24;
-    private const float Year = Day * 365;
+    private const double Minute = 60;
+    private const double Hour = Minute * 60;
+    private const double Day = Hour * 24;
+    private const double Year = Day * 365;
     public override void _Process(double delta)
     {
         UpdateCurrentTime(GlobalValues.Time);
@@ -33,14 +33,14 @@ public partial class DebugUiController : Node
     }
 
 
-    private void UpdateCurrentTime(float time)
+    private void UpdateCurrentTime(double time)
     {
         var days = time % Year;
         var years = (long)((time - days) / Year);
         CurrentTime.Text = $"Current Time: {years} yr, {days/Day:F1} d";
     }
 
-    private void UpdateTimeScale(float scale)
+    private void UpdateTimeScale(double scale)
     {
         if (scale < Minute)
         {

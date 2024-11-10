@@ -5,8 +5,8 @@ namespace GodotPrototype.Scripts;
 
 public partial class GlobalValues : Node
 {
-    [Export] public float TimeScale = 1;
-    public static float Time;
+    [Export] public double TimeScale = 1;
+    public static double Time;
     public const float G = 0.000000000066743f;
     public static readonly float[] Units = [1f, 281474976710656f, 4294967296f, 1024f];
     public const float Scale = 0.000000000232830643653869625849394142f; // 1/2^32
