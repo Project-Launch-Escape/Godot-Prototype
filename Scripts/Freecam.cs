@@ -1,6 +1,6 @@
 using Godot;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
-
+using GodotPrototype.Scripts.UserInterface;
 namespace GodotPrototype.Scripts;
 
 public partial class Freecam : Camera3D
@@ -9,6 +9,7 @@ public partial class Freecam : Camera3D
 	[Export] public CelestialScript StartingParentCelestial;
 	public static CoordinateSpace CoordLayer;
 	public static NestedPosition NestedPos;
+	[Export] private DebugUiController DebugUI;
 	[Export] public float VelocityMultiplier = 4;
 	[Export] public float Acceleration = 30;
 	[Export] public float Deceleration = 50;
@@ -44,10 +45,10 @@ public partial class Freecam : Camera3D
 	}
 
 	
-	private static CelestialScript GetHighestSoi()
+	private CelestialScript GetHighestSOI()
 	{
 		var celestials = GlobalValues.AllCelestials;
-		var currentSoIs = new List<CelestialScript>();
+		var currentSOIs = new List<CelestialScript>();
 
 		foreach (var t in celestials)
 		{
@@ -55,25 +56,24 @@ public partial class Freecam : Camera3D
 
 			if (dist <= t.SOIRadius)
 			{
-				currentSoIs.Add(t);
+				currentSOIs.Add(t);
 			}
 		}
-		
-		if (currentSoIs.Count == 0)
+		DebugUI.UpdateSOIs(currentSOIs);
+		if (currentSOIs.Count == 0)
 		{
 			return null;
 		}
-		GD.Print(currentSoIs.Count);
-		var highestSoiLayer = CoordinateSpace.GalaxySpace;
-		var highestSoiIndex = 0;
-		for (var i = 0; i < currentSoIs.Count; i++)
+		var highestSOILayer = CoordinateSpace.GalaxySpace;
+		var highestSOIIndex = 0;
+		for (var i = 0; i < currentSOIs.Count; i++)
 		{
-			if (currentSoIs[i].CoordLayer <= highestSoiLayer) continue;
-			highestSoiLayer = currentSoIs[i].CoordLayer;
-			highestSoiIndex = i;
+			if (currentSOIs[i].CoordLayer <= highestSOILayer) continue;
+			highestSOILayer = currentSOIs[i].CoordLayer;
+			highestSOIIndex = i;
 		}
-
-		return currentSoIs[highestSoiIndex];
+		
+		return currentSOIs[highestSOIIndex];
 	}
 	
 	//private void SOIChange(CelestialScript NewSOI)
@@ -85,7 +85,7 @@ public partial class Freecam : Camera3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		//	CelestialScript HighestSOI = GetHighestSOI();
+			CelestialScript HighestSOI = GetHighestSOI();
 		//	if (ParentCelestial != HighestSOI && HighestSOI != null)
 		//	{
 		//		
@@ -99,7 +99,7 @@ public partial class Freecam : Camera3D
 	{
 		var direction = new Vector3((Right ? 1f : 0f) - (Left ? 1f : 0f), (Up ? 1f : 0f) - (Down ? 1f : 0f), (Backwards ? 1f : 0f) - (Forwards ? 1f : 0f));
 		var offset = direction.Normalized() * Acceleration * VelocityMultiplier * delta +
-		             Velocity.Normalized() * Deceleration * VelocityMultiplier * delta;
+					 Velocity.Normalized() * Deceleration * VelocityMultiplier * delta;
 		var speedMulti = 1f;
 		if (Shift) speedMulti *= ModifierSpeedMultiplier;
 		if (Alt) speedMulti /= ModifierSpeedMultiplier;
