@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4ajfh7q5214k"]
+
+[ext_resource type="Script" path="res://Scripts/VesselEditor/VesselEditor.cs" id="1_a5mxq"]
+[ext_resource type="Script" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
+
+[node name="VesselEditor" type="Node3D"]
+script = ExtResource("1_a5mxq")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00630343, 0.679551, 2.27911)
+script = ExtResource("2_npby0")
+CameraSensitivity = 0.2
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.20706, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.629456, 0.777036, 0, -0.777036, 0.629456, 0, 0, 0)
