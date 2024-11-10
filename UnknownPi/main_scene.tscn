@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://dc1o2licp3k5t"]
 
 [ext_resource type="PackedScene" uid="uid://clm1jsaq53dd5" path="res://UnknownPi/player.tscn" id="1_2c62f"]
-[ext_resource type="PackedScene" path="res://UnknownPi/ground.tscn" id="2_gyfs4"]
-[ext_resource type="PackedScene" path="res://UnknownPi/rigidcube.tscn" id="3_gyfs4"]
+[ext_resource type="PackedScene" uid="uid://cuciw2jg0ra5g" path="res://UnknownPi/ground.tscn" id="2_gyfs4"]
+[ext_resource type="PackedScene" uid="uid://cv48vgmy5aj7a" path="res://UnknownPi/rigidcube.tscn" id="3_gyfs4"]
 [ext_resource type="PackedScene" uid="uid://wdmru320mfw3" path="res://UnknownPi/gizmo_translate.tscn" id="4_kf5oe"]
 
 [sub_resource type="Environment" id="Environment_xpv7k"]
@@ -39,6 +39,7 @@ transform = Transform3D(0.570571, -0.821248, 0, 0.821248, 0.570571, 0, 0, 0, 1, 
 
 [node name="GizmoTranslate" parent="." instance=ExtResource("4_kf5oe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+visible = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_xpv7k")

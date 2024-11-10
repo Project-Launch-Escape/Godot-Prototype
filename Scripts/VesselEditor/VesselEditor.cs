@@ -17,7 +17,6 @@ public partial class VesselEditor : Node3D
 	private Vector3 _currentOrigin = default;
 
 	private Node3D _currentPlacingPart = null;
-	
 	public override void _Process(double delta)
 	{
 		switch (_state)
@@ -33,7 +32,13 @@ public partial class VesselEditor : Node3D
 		switch (inputEvent)
 		{
 			case InputEventKey { Keycode: Key.Key1, Pressed: false }:
-				SelectPart();
+				SelectPart(0);
+				break;
+			case InputEventKey { Keycode: Key.Key2, Pressed: false }:
+				SelectPart(1);
+				break;
+			case InputEventKey { Keycode: Key.Key3, Pressed: false }:
+				SelectPart(2);
 				break;
 			case InputEventKey { Keycode: Key.Escape, Pressed: false }:
 				DeselectPart();
@@ -61,12 +66,22 @@ public partial class VesselEditor : Node3D
 	}
 
 	// TODO: All of this is temporary for now
-	private void SelectPart()
+	private void SelectPart(int n)
 	{
 		DeselectPart();
 		
 		_state = State.PlacingPart;
-		_currentPlacingPart = (Node3D)GD.Load<PackedScene>("res://Scenes/cube.tscn").Instantiate(); // "res://Scenes/sphere.tscn"
+		switch (n) {
+			case 0:
+				_currentPlacingPart = (Node3D)GD.Load<PackedScene>("res://UnknownPi/capsule.tscn").Instantiate();break;
+			
+			case 1:
+				_currentPlacingPart = (Node3D)GD.Load<PackedScene>("res://UnknownPi/tank.tscn").Instantiate();break;
+			
+			case 2:
+				_currentPlacingPart = (Node3D)GD.Load<PackedScene>("res://UnknownPi/engine.tscn").Instantiate();break;
+			
+		}
 		AddChild(_currentPlacingPart);
 	}
 
