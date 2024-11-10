@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6k67orhypxrf"]
+
+[ext_resource type="PackedScene" uid="uid://bnhvlw3lrhmrc" path="res://untitled.fbx" id="1_bwtnt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_anpxm"]
+emission_enabled = true
+emission = Color(0.315885, 0.534683, 1, 1)
+emission_energy_multiplier = 16.0
+
+[node name="untitled" instance=ExtResource("1_bwtnt")]
+
+[node name="Cube" parent="." index="0"]
+transform = Transform3D(-4.91453e-06, -112.431, -1.34029e-05, 4.76165e-20, -1.34029e-05, 112.431, -112.431, 4.91453e-06, 5.85857e-13, 0, 2, 0)
+layers = 2
+
+[node name="Cube_001" parent="." index="1"]
+transform = Transform3D(-4.37114e-06, -100, -1.19209e-05, 0, -1.19209e-05, 100, -100, 4.37114e-06, 5.2108e-13, 0, 2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_anpxm")
+
+[node name="Cube_002" parent="." index="2"]
+transform = Transform3D(3.55913e-06, 81.4233, 9.70642e-06, 0, 9.70642e-06, -81.4233, 81.4233, -3.55913e-06, -4.24281e-13, 0, 0.745, 0)
+layers = 2
+
+[node name="Cube_003" parent="." index="3"]
+transform = Transform3D(-4.95695e-07, -11.3402, -3.44907e-06, 0, -1.35185e-06, 28.9329, -11.3402, 4.95695e-07, 5.61925e-13, -0.2, 0.174, 0)
+layers = 2
+
+[node name="Cube_004" parent="." index="4"]
+transform = Transform3D(4.25232, -24.3923, -3.57291, 1.3352e-07, -14.8074, 7.71512, -7.62722, -13.5992, -1.99196, -0.534, 0.782, 0)
+layers = 2
