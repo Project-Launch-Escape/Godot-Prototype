@@ -12,8 +12,9 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pw2ib"]
 
-[node name="VesselEditor" type="Node3D"]
+[node name="VesselEditor" type="Node3D" node_paths=PackedStringArray("Camera")]
 script = ExtResource("1_a5mxq")
+Camera = NodePath("Camera")
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00630343, 0.679551, 2.27911)
