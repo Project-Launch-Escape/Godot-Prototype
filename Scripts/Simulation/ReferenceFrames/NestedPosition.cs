@@ -35,7 +35,7 @@ public class NestedPosition
 
 	public Vector3 GetPositionAtLayer(CoordinateSpace layer)
 	{
-		// Layer 0 is Renderspace, Layer 1 is GalaxySpace, 2 is StarSpace, 3 is PlanetSpace, 4 is MoonSpace and 5+ are levels of nested MoonSpace
+		// Layer 0 is RenderSpace, Layer 1 is GalaxySpace, 2 is StarSpace, 3 is PlanetSpace, 4 is MoonSpace and 5+ are levels of nested MoonSpace
 		if (layer == CoordinateSpace.RenderSpace)
 		{
 			var convertedPosition = new Vector3();
@@ -43,6 +43,7 @@ public class NestedPosition
 			{
 				convertedPosition += (GetPositionAtLayer((CoordinateSpace)i) - Freecam.NestedPos.GetPositionAtLayer((CoordinateSpace)i)) * ((CoordinateSpace)i).GetConversionFactor(0) * GlobalValues.Scale;
 			}
+
 			return convertedPosition;
 		}
 		if (layer == CoordLayer)
@@ -58,7 +59,7 @@ public class NestedPosition
 		return new Vector3();
 	}
 
-	public static Vector3 ConvertPositionReference(NestedPosition conversionPosition, NestedPosition newRefPosition)
+	public static Vector3 ConvertPositionReference(NestedPosition conversionPosition, NestedPosition newRefPosition, CoordinateSpace newCoordLayer)
 	{
 		var convertedPosition = new Vector3();
 		for (var i = 1; i < Mathf.Max((int)conversionPosition.CoordLayer, (int)newRefPosition.CoordLayer) + 1; i++)
@@ -66,7 +67,7 @@ public class NestedPosition
 			convertedPosition +=
 				(conversionPosition.GetPositionAtLayer((CoordinateSpace)i) -
 				 newRefPosition.GetPositionAtLayer((CoordinateSpace)i)) *
-				((CoordinateSpace)i).GetConversionFactor(newRefPosition.CoordLayer);
+				((CoordinateSpace)i).GetConversionFactor(newCoordLayer);
 		}
 		return convertedPosition;
 	}
