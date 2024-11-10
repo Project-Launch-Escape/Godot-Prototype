@@ -1,39 +1,40 @@
-[gd_scene load_steps=35 format=3 uid="uid://snj8ta1xythe"]
+[gd_scene load_steps=36 format=3 uid="uid://snj8ta1xythe"]
 
 [ext_resource type="Script" path="res://Scripts/UserInterface/DebugUiController.cs" id="1_en8d3"]
 [ext_resource type="Script" path="res://Scripts/CelestialScript.cs" id="1_sc8hu"]
 [ext_resource type="Script" path="res://Scripts/GlobalValues.cs" id="2_3rynr"]
 [ext_resource type="Script" path="res://Scripts/Freecam.cs" id="2_imltp"]
-[ext_resource type="Texture2D" uid="uid://4dsq8waa3sch" path="res://planet-textures/2k_sun.jpg" id="4_i0x5a"]
-[ext_resource type="Texture2D" uid="uid://dqgoiw8t1fo4a" path="res://planet-textures/2k_mercury.jpg" id="5_4uwb6"]
-[ext_resource type="Texture2D" uid="uid://c2s5v07v5k3en" path="res://planet-textures/2k_venus_atmosphere.jpg" id="6_pr1ok"]
-[ext_resource type="Texture2D" uid="uid://clv3wlcrse2ko" path="res://planet-textures/2k_earth_daymap.jpg" id="7_kj5p4"]
-[ext_resource type="Texture2D" uid="uid://b1dqj7tfexs58" path="res://planet-textures/2k_moon.jpg" id="8_3bx44"]
-[ext_resource type="PackedScene" uid="uid://c4i7rpopaxjue" path="res://Prefabs/node_tracker.tscn" id="9_4nc22"]
-[ext_resource type="Texture2D" uid="uid://cc4uf4hnocg5k" path="res://planet-textures/2k_mars.jpg" id="9_m7d2d"]
-[ext_resource type="Texture2D" uid="uid://bou6g0uf2yju0" path="res://planet-textures/2k_ceres_fictional.jpg" id="10_p2heh"]
-[ext_resource type="Texture2D" uid="uid://7uyxyu6e5nni" path="res://planet-textures/2k_jupiter.jpg" id="11_l17ju"]
-[ext_resource type="Texture2D" uid="uid://be6pgbxqt3fpn" path="res://planet-textures/2k_saturn.jpg" id="12_y1non"]
-[ext_resource type="Texture2D" uid="uid://jw8sl0ndyc2h" path="res://planet-textures/2k_uranus.jpg" id="13_kga75"]
-[ext_resource type="Texture2D" uid="uid://cc0lx6cqivyop" path="res://planet-textures/2k_neptune.jpg" id="14_ivybu"]
-[ext_resource type="Texture2D" uid="uid://bpi4x38k6pp6a" path="res://planet-textures/plutomap2k.jpg" id="15_42u8d"]
-[ext_resource type="Texture2D" uid="uid://qcfxk3ypww10" path="res://planet-textures/Charon.webp" id="16_ft715"]
+[ext_resource type="Texture2D" uid="uid://womn3vn07gov" path="res://planet-textures/2k_sun.jpg" id="4_i0x5a"]
+[ext_resource type="Texture2D" uid="uid://ch401mgypxvn6" path="res://planet-textures/2k_mercury.jpg" id="5_4uwb6"]
+[ext_resource type="Texture2D" uid="uid://cft7d73i3ru6v" path="res://planet-textures/2k_venus_atmosphere.jpg" id="6_pr1ok"]
+[ext_resource type="Texture2D" uid="uid://crcostayfxe6t" path="res://planet-textures/2k_earth_daymap.jpg" id="7_kj5p4"]
+[ext_resource type="Texture2D" uid="uid://iftvlf5gysb6" path="res://planet-textures/2k_moon.jpg" id="8_3bx44"]
+[ext_resource type="PackedScene" uid="uid://4m28yia5jkb1" path="res://Prefabs/node_tracker.tscn" id="9_4nc22"]
+[ext_resource type="Texture2D" uid="uid://47hu4c6bwasl" path="res://planet-textures/2k_mars.jpg" id="9_m7d2d"]
+[ext_resource type="Texture2D" uid="uid://cklvvryepyc8k" path="res://planet-textures/2k_ceres_fictional.jpg" id="10_p2heh"]
+[ext_resource type="Texture2D" uid="uid://bohv6gy5urkjq" path="res://planet-textures/2k_jupiter.jpg" id="11_l17ju"]
+[ext_resource type="Texture2D" uid="uid://beyosfxjxct2p" path="res://planet-textures/2k_saturn.jpg" id="12_y1non"]
+[ext_resource type="Texture2D" uid="uid://cit1gq6cti3wp" path="res://planet-textures/2k_uranus.jpg" id="13_kga75"]
+[ext_resource type="Texture2D" uid="uid://dd2of522sk5iv" path="res://planet-textures/2k_neptune.jpg" id="14_ivybu"]
+[ext_resource type="Texture2D" uid="uid://dnoqs2rhganw5" path="res://images/Saturn_Rings.png" id="15_38x7n"]
+[ext_resource type="Texture2D" uid="uid://bcc22vpk5oaos" path="res://planet-textures/plutomap2k.jpg" id="15_42u8d"]
+[ext_resource type="Texture2D" uid="uid://co3totwd3nkqo" path="res://planet-textures/Charon.webp" id="16_ft715"]
 
 [sub_resource type="Environment" id="Environment_om47e"]
 background_mode = 1
 background_color = Color(0.0430392, 0.0430392, 0.0430392, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yg3mq"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tkmdl"]
 albedo_texture = ExtResource("4_i0x5a")
 
 [sub_resource type="SphereMesh" id="SphereMesh_qocvl"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_u2bho"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lyljv"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p42bs"]
 albedo_texture = ExtResource("5_4uwb6")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_la8e8"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1gagu"]
 albedo_texture = ExtResource("6_pr1ok")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yj7gn"]
@@ -70,14 +71,16 @@ albedo_texture = ExtResource("16_ft715")
 
 [node name="UI" type="Node" parent="."]
 
-[node name="Debug Interface" type="Panel" parent="UI" node_paths=PackedStringArray("GlobalValues", "CurrentTime", "CurrentRate", "Paused")]
+[node name="Debug Interface" type="Panel" parent="UI" node_paths=PackedStringArray("CurrentTime", "CurrentRate", "Paused", "CurrentSOIs", "FPS", "DistanceToCelestial")]
 offset_right = 300.0
-offset_bottom = 133.0
+offset_bottom = 227.0
 script = ExtResource("1_en8d3")
-GlobalValues = NodePath("../../Global")
 CurrentTime = NodePath("VBoxContainer/Current Time")
 CurrentRate = NodePath("VBoxContainer/Current Rate")
 Paused = NodePath("VBoxContainer/Paused")
+CurrentSOIs = NodePath("VBoxContainer/Current SOIs")
+FPS = NodePath("VBoxContainer/FPS")
+DistanceToCelestial = NodePath("VBoxContainer/DistanceToCelestial")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/Debug Interface"]
 layout_mode = 0
@@ -93,6 +96,10 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "----------------------------------------------------------"
 
+[node name="FPS" type="Label" parent="UI/Debug Interface/VBoxContainer"]
+layout_mode = 2
+text = "FPS"
+
 [node name="Current Time" type="Label" parent="UI/Debug Interface/VBoxContainer"]
 layout_mode = 2
 text = "Current Time:"
@@ -105,14 +112,24 @@ text = "Current Rate:"
 layout_mode = 2
 text = "Paused:"
 
+[node name="Current SOIs" type="Label" parent="UI/Debug Interface/VBoxContainer"]
+layout_mode = 2
+text = "Current SOIs:
+"
+
+[node name="DistanceToCelestial" type="Label" parent="UI/Debug Interface/VBoxContainer"]
+layout_mode = 2
+text = "Distance To Celestial"
+
 [node name="Global" type="Node" parent="."]
 script = ExtResource("2_3rynr")
-TimeScale = 1e+06
 
-[node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("StartingParentCelestial")]
+[node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("StartingParentCelestial", "DebugUI")]
 environment = SubResource("Environment_om47e")
+near = 0.001
 script = ExtResource("2_imltp")
 StartingParentCelestial = NodePath("../Sol")
+DebugUI = NodePath("../UI/Debug Interface")
 Acceleration = 90.0
 
 [node name="Sol" type="StaticBody3D" parent="."]
@@ -120,12 +137,12 @@ collision_layer = 3
 collision_mask = 2
 script = ExtResource("1_sc8hu")
 Mass = 1.9891e+30
-Radius = 5.0
+Radius = 0.162
 SOIRadius = 32.0
 CoordLayer = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Sol"]
-material_override = SubResource("StandardMaterial3D_yg3mq")
+material_override = SubResource("StandardMaterial3D_tkmdl")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_qocvl")
 
@@ -199,11 +216,11 @@ e = 0.206
 w = 0.509
 i = 0.122
 l = 0.843
-Radius = 2.0
+Radius = 2381.84
 CoordLayer = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Mercury"]
-material_override = SubResource("StandardMaterial3D_lyljv")
+material_override = SubResource("StandardMaterial3D_p42bs")
 mesh = SubResource("SphereMesh_qocvl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mercury"]
@@ -222,11 +239,11 @@ e = 0.007
 w = 0.965
 i = 0.059
 l = 1.337
-Radius = 2.0
+Radius = 5910.16
 CoordLayer = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Venus"]
-material_override = SubResource("StandardMaterial3D_la8e8")
+material_override = SubResource("StandardMaterial3D_1gagu")
 mesh = SubResource("SphereMesh_qocvl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Venus"]
@@ -244,7 +261,7 @@ a = 34.848
 e = 0.017
 w = 5.032
 l = 3.096
-Radius = 2.0
+Radius = 6221.68
 CoordLayer = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Earth"]
@@ -264,7 +281,7 @@ Mass = 7.34767e+22
 ParentCelestial = NodePath("../Earth")
 a = 135644.0
 e = 0.1
-Radius = 0.25
+Radius = 1696.29
 CoordLayer = 3
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Luna"]
@@ -287,7 +304,7 @@ e = 0.093
 w = 5.004
 i = 0.032
 l = 0.864
-Radius = 2.0
+Radius = 3309.57
 CoordLayer = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Mars"]
@@ -310,7 +327,7 @@ e = 0.079
 w = 1.281
 i = 0.185
 l = 1.401
-Radius = 1.5
+Radius = 458.691
 CoordLayer = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ceres"]
@@ -333,7 +350,7 @@ e = 0.048
 w = 4.773
 i = 0.023
 l = 1.754
-Radius = 4.0
+Radius = 68271.5
 CoordLayer = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Jupiter"]
@@ -356,7 +373,7 @@ e = 0.055
 w = 5.857
 i = 0.043
 l = 1.984
-Radius = 4.0
+Radius = 56867.2
 CoordLayer = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Saturn"]
@@ -369,6 +386,10 @@ shape = SubResource("SphereShape3D_u2bho")
 [node name="Node Tracker" parent="Saturn" node_paths=PackedStringArray("CameraPosition") instance=ExtResource("9_4nc22")]
 CameraPosition = NodePath("../../Camera3D")
 
+[node name="Sprite3D" type="Sprite3D" parent="Saturn"]
+transform = Transform3D(0.246109, -0.0433956, 0.00687982, 0.0107333, 0.0214195, -0.248849, 0.0426064, 0.245271, 0.0229493, 0, 0, 0)
+texture = ExtResource("15_38x7n")
+
 [node name="Uranus" type="StaticBody3D" parent="." node_paths=PackedStringArray("ParentCelestial")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.353172, -0.00196075, -39.7427)
 script = ExtResource("1_sc8hu")
@@ -379,7 +400,7 @@ e = 0.045
 w = 1.584
 i = 0.013
 l = 1.292
-Radius = 4.0
+Radius = 24960.9
 CoordLayer = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Uranus"]
@@ -402,7 +423,7 @@ e = 0.014
 w = 4.543
 i = 0.031
 l = 2.299
-Radius = 4.0
+Radius = 24189.5
 CoordLayer = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Neptune"]
@@ -447,7 +468,7 @@ a = 2077.15
 n = 0.001
 i = 1.97
 l = 3.969
-Radius = 3.0
+Radius = 1160.16
 CoordLayer = 3
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Pluto"]
@@ -470,7 +491,7 @@ n = 0.001
 w = 3.142
 i = 1.97
 l = 3.969
-Radius = 2.0
+Radius = 589.453
 CoordLayer = 3
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Charon"]
