@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://b4ajfh7q5214k"]
+[gd_scene load_steps=8 format=3 uid="uid://b4ajfh7q5214k"]
 
 [ext_resource type="Script" path="res://Scripts/VesselEditor/VesselEditor.cs" id="1_a5mxq"]
 [ext_resource type="Script" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
+[ext_resource type="PackedScene" uid="uid://wdmru320mfw3" path="res://UnknownPi/gizmo_translate.tscn" id="3_xj6iy"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_k85bv"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dtjk6"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_28r6v"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pw2ib"]
 
 [node name="VesselEditor" type="Node3D"]
 script = ExtResource("1_a5mxq")
@@ -12,9 +21,28 @@ script = ExtResource("2_npby0")
 CameraSensitivity = 0.2
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
-
-[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.20706, 0)
+visible = false
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.629456, 0.777036, 0, -0.777036, 0.629456, 0, 0, 0)
+
+[node name="GizmoTranslate" parent="." instance=ExtResource("3_xj6iy")]
+
+[node name="Sphere" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sphere"]
+mesh = SubResource("SphereMesh_k85bv")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sphere"]
+shape = SubResource("SphereShape3D_dtjk6")
+
+[node name="Cube" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cube"]
+mesh = SubResource("BoxMesh_28r6v")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube"]
+shape = SubResource("BoxShape3D_pw2ib")
