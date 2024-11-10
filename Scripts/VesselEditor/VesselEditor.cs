@@ -66,8 +66,7 @@ public partial class VesselEditor : Node3D
 		DeselectPart();
 		
 		_state = State.PlacingPart;
-		_currentPlacingPart = new CsgBox3D();
-		
+		_currentPlacingPart = (Node3D)GD.Load<PackedScene>("res://Scenes/cube.tscn").Instantiate(); // "res://Scenes/sphere.tscn"
 		AddChild(_currentPlacingPart);
 	}
 
