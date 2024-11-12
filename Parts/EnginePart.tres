@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PartDefinition" load_steps=3 format=3 uid="uid://bk64asml6s1sr"]
+
+[ext_resource type="PackedScene" uid="uid://b255lhj0e72l7" path="res://UnknownPi/engine.tscn" id="1_cfpeu"]
+[ext_resource type="Script" path="res://Scripts/VesselEditor/Parts/PartDefinition.cs" id="1_vg3om"]
+
+[resource]
+script = ExtResource("1_vg3om")
+Asset = ExtResource("1_cfpeu")

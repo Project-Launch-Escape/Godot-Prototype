@@ -1,4 +1,5 @@
 using Godot;
+using GodotPrototype.Scripts.VesselEditor.Parts;
 
 namespace GodotPrototype.Scripts.VesselEditor;
 
@@ -13,10 +14,15 @@ public partial class VesselEditor : Node3D
 	[Export]
 	public Camera3D Camera;
 
+	[Export]
+	public PartDefinition[] PartDefinitions;
+
 	private State _state = State.Idle;
 	private Vector3 _currentOrigin = default;
 
-	private Node3D _currentPlacingPart = null;
+	private PartDefinition _currentPlacingPart = null;
+	private Node3D _currentPlacingPartNode = null;
+	
 	public override void _Process(double delta)
 	{
 		switch (_state)
@@ -62,32 +68,30 @@ public partial class VesselEditor : Node3D
 		if (rayIntersection == null)
 			return;
 		
-		_currentPlacingPart.Position = rayIntersection.Value;
+		_currentPlacingPartNode.Position = rayIntersection.Value;
 	}
 
 	// TODO: All of this is temporary for now
 	private void SelectPart(int n)
 	{
 		DeselectPart();
+
+		if (n < 0 || n >= PartDefinitions.Length)
+			return;
 		
 		_state = State.PlacingPart;
-		switch (n) {
-			case 0:
-				_currentPlacingPart = (Node3D)GD.Load<PackedScene>("res://UnknownPi/capsule.tscn").Instantiate();break;
-			
-			case 1:
-				_currentPlacingPart = (Node3D)GD.Load<PackedScene>("res://UnknownPi/tank.tscn").Instantiate();break;
-			
-			case 2:
-				_currentPlacingPart = (Node3D)GD.Load<PackedScene>("res://UnknownPi/engine.tscn").Instantiate();break;
-			
-		}
-		AddChild(_currentPlacingPart);
+		
+		_currentPlacingPart = PartDefinitions[n];
+		_currentPlacingPartNode = _currentPlacingPart.Asset.Instantiate<Node3D>();
+		
+		AddChild(_currentPlacingPartNode);
 	}
 
 	private void DeselectPart()
 	{
-		_currentPlacingPart?.QueueFree();
+		_currentPlacingPartNode?.QueueFree();
+		
+		_currentPlacingPartNode = null;
 		_currentPlacingPart = null;
 
 		_state = State.Idle;
@@ -95,6 +99,7 @@ public partial class VesselEditor : Node3D
 
 	private void PlacePart()
 	{
+		_currentPlacingPartNode = null;
 		_currentPlacingPart = null;
 		_state = State.Idle;
 	}
