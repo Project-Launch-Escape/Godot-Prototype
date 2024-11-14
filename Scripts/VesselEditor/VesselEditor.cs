@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using GodotPrototype.Scripts.VesselEditor.Parts;
 
@@ -22,6 +23,9 @@ public partial class VesselEditor : Node3D
 
 	private PartDefinition _currentPlacingPart = null;
 	private Node3D _currentPlacingPartNode = null;
+
+	private readonly List<VesselPart> _vesselParts = new();
+	private readonly Dictionary<VesselPart, Node3D> _vesselPartNodes = new();
 	
 	public override void _Process(double delta)
 	{
@@ -57,20 +61,81 @@ public partial class VesselEditor : Node3D
 
 	private void ProcessPlacingPartState()
 	{
-		var cameraPosition = Camera.Position;
-		var cameraPositionWithoutY = Camera.Position with { Y = 0 };
+		var partPosition = GetPartPosition();
+		
+		if(partPosition != null)
+			_currentPlacingPartNode.Position = partPosition!.Value;
+	}
+
+	// TODO: This needs refactoring
+	private Vector3? GetPartPosition()
+	{
+		var basePartPosition = GetPartBasePosition();
+
+		if (basePartPosition == null)
+			return null;
+
+		var globalTransform = _currentPlacingPartNode.GlobalTransform;
+		globalTransform.Origin = basePartPosition.Value;
+		
+		foreach (var placingPartSnapPoint in _currentPlacingPart.SnapPoints)
+		{
+			var selfWorldPosition = globalTransform * placingPartSnapPoint.Position;
+			var selfWorldForward = globalTransform * (placingPartSnapPoint.Orientation * Vector3.Forward);
+
+			foreach (var vesselPart in _vesselParts)
+			{
+				var otherPartNode = _vesselPartNodes[vesselPart];
+				var otherPartGlobalTransform = otherPartNode.GlobalTransform;
+
+				foreach (var vesselPartSnapPoint in vesselPart.Part.SnapPoints)
+				{
+					var otherWorldPosition = otherPartGlobalTransform * vesselPartSnapPoint.Position;
+					var otherWorldForward = otherPartGlobalTransform * (vesselPartSnapPoint.Orientation * Vector3.Forward);
+					var correctionVector = selfWorldPosition - otherWorldPosition;
+					
+					if(correctionVector.Length() > 0.5f || otherWorldForward.Dot(selfWorldForward) < 0)
+						continue;
+					
+					var newPartPos = basePartPosition.Value - correctionVector;
+					return newPartPos;
+				}
+			}
+		}
+		
+		return basePartPosition;
+	}
+
+	// TODO: This also needs refactoring
+	private Vector3? GetPartBasePosition()
+	{
+		var cameraPosition = Camera.GlobalPosition;
+		var cameraPositionWithoutY = Camera.GlobalPosition with { Y = 0 };
+		
+		var rayForward = Camera.ProjectRayNormal(GetViewport().GetMousePosition());
+
+		var physicsSpaceState = GetWorld3D().DirectSpaceState;
+		var partRid = ((CollisionObject3D)_currentPlacingPartNode).GetRid();
+		
+		var rayResult = physicsSpaceState.IntersectRay(new PhysicsRayQueryParameters3D
+		{
+			From = cameraPosition,
+			To = rayForward * 100,
+			Exclude = new Godot.Collections.Array<Rid>(new []{partRid})
+		});
+
+		if (rayResult.Count > 0)
+		{
+			return (Vector3) rayResult["position"];
+		}
 		
 		var planeNormal = -(cameraPositionWithoutY - _currentOrigin).Normalized();
 		var plane = new Plane(planeNormal, _currentOrigin);
-
-		var rayIntersection = plane.IntersectsRay(cameraPosition, Camera.ProjectRayNormal(GetViewport().GetMousePosition()));
-
-		if (rayIntersection == null)
-			return;
 		
-		_currentPlacingPartNode.Position = rayIntersection.Value;
+		var rayIntersection = plane.IntersectsRay(cameraPosition, rayForward);
+		return rayIntersection;
 	}
-
+	
 	// TODO: All of this is temporary for now
 	private void SelectPart(int n)
 	{
@@ -99,6 +164,13 @@ public partial class VesselEditor : Node3D
 
 	private void PlacePart()
 	{
+		var vesselPart = new VesselPart
+		{
+			Part = _currentPlacingPart,
+		};
+		_vesselParts.Add(vesselPart);
+		_vesselPartNodes.Add(vesselPart, _currentPlacingPartNode);
+		
 		_currentPlacingPartNode = null;
 		_currentPlacingPart = null;
 		_state = State.Idle;
