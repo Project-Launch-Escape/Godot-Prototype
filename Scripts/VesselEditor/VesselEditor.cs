@@ -121,6 +121,7 @@ public partial class VesselEditor : Node3D
 		{
 			From = cameraPosition,
 			To = rayForward * 100,
+			CollisionMask = 1,	
 			Exclude = new Godot.Collections.Array<Rid>(new []{partRid})
 		});
 

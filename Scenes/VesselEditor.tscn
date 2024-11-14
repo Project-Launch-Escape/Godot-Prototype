@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b4ajfh7q5214k"]
+[gd_scene load_steps=9 format=3 uid="uid://b4ajfh7q5214k"]
 
 [ext_resource type="Script" path="res://Scripts/VesselEditor/VesselEditor.cs" id="1_a5mxq"]
 [ext_resource type="Resource" uid="uid://c0vvvbxylk0du" path="res://Parts/CapsulePart.tres" id="2_3yrk2"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://0genpyip5sjc" path="res://Scenes/sphere.tscn" id="4_tshso"]
 [ext_resource type="Resource" uid="uid://bk64asml6s1sr" path="res://Parts/EnginePart.tres" id="4_xrjts"]
 [ext_resource type="PackedScene" uid="uid://d3t3v4jewjjhr" path="res://Scenes/cube.tscn" id="5_60qqo"]
+[ext_resource type="PackedScene" uid="uid://wdmru320mfw3" path="res://UnknownPi/gizmo_translate.tscn" id="8_txf6a"]
 
 [node name="VesselEditor" type="Node3D" node_paths=PackedStringArray("Camera")]
 script = ExtResource("1_a5mxq")
@@ -24,3 +25,5 @@ transform = Transform3D(1, 0, 0, 0, 0.629456, 0.777036, 0, -0.777036, 0.629456, 
 [node name="Sphere" parent="." instance=ExtResource("4_tshso")]
 
 [node name="Cube" parent="." instance=ExtResource("5_60qqo")]
+
+[node name="GizmoTranslate" parent="." instance=ExtResource("8_txf6a")]
