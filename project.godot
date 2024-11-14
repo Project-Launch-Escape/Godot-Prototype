@@ -15,6 +15,10 @@ run/main_scene="res://node_3d.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/vsync/vsync_mode=0
+
 [dotnet]
 
 project/assembly_name="Godot-Prototype"
@@ -22,3 +26,6 @@ project/assembly_name="Godot-Prototype"
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+anti_aliasing/quality/msaa_3d=1
+anti_aliasing/quality/screen_space_aa=1
+anti_aliasing/quality/use_taa=true
