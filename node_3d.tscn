@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://snj8ta1xythe"]
+[gd_scene load_steps=40 format=3 uid="uid://snj8ta1xythe"]
 
 [ext_resource type="Script" path="res://Scripts/UserInterface/DebugUiController.cs" id="1_en8d3"]
 [ext_resource type="Script" path="res://Scripts/CelestialScript.cs" id="1_sc8hu"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://iftvlf5gysb6" path="res://planet-textures/2k_moon.jpg" id="8_3bx44"]
 [ext_resource type="PackedScene" uid="uid://4m28yia5jkb1" path="res://Prefabs/node_tracker.tscn" id="9_4nc22"]
 [ext_resource type="Texture2D" uid="uid://47hu4c6bwasl" path="res://planet-textures/2k_mars.jpg" id="9_m7d2d"]
+[ext_resource type="Script" path="res://Scripts/UserInterface/OrbitLineMeshGenerator.cs" id="9_so1rv"]
 [ext_resource type="Texture2D" uid="uid://cklvvryepyc8k" path="res://planet-textures/2k_ceres_fictional.jpg" id="10_p2heh"]
 [ext_resource type="Texture2D" uid="uid://bohv6gy5urkjq" path="res://planet-textures/2k_jupiter.jpg" id="11_l17ju"]
 [ext_resource type="Texture2D" uid="uid://beyosfxjxct2p" path="res://planet-textures/2k_saturn.jpg" id="12_y1non"]
@@ -19,6 +20,15 @@
 [ext_resource type="Texture2D" uid="uid://dnoqs2rhganw5" path="res://images/Saturn_Rings.png" id="15_38x7n"]
 [ext_resource type="Texture2D" uid="uid://bcc22vpk5oaos" path="res://planet-textures/plutomap2k.jpg" id="15_42u8d"]
 [ext_resource type="Texture2D" uid="uid://co3totwd3nkqo" path="res://planet-textures/Charon.webp" id="16_ft715"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_asf7a"]
+shading_mode = 0
+disable_receive_shadows = true
+fixed_size = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y55in"]
+
+[sub_resource type="Skin" id="Skin_pk7o7"]
 
 [sub_resource type="Environment" id="Environment_om47e"]
 background_mode = 1
@@ -67,7 +77,7 @@ albedo_texture = ExtResource("15_42u8d")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_38wr7"]
 albedo_texture = ExtResource("16_ft715")
 
-[node name="Node3D" type="Node3D"]
+[node name="Game Scene" type="Node3D"]
 
 [node name="UI" type="Node" parent="."]
 
@@ -163,6 +173,17 @@ text = "Change Celestial for Dist: '-'+'='"
 
 [node name="Global" type="Node" parent="."]
 script = ExtResource("2_3rynr")
+
+[node name="OrbitMeshGenerator" type="MeshInstance3D" parent="." node_paths=PackedStringArray("CameraPosition")]
+material_override = SubResource("StandardMaterial3D_asf7a")
+material_overlay = SubResource("StandardMaterial3D_y55in")
+cast_shadow = 0
+extra_cull_margin = 1.0
+skin = SubResource("Skin_pk7o7")
+skeleton = NodePath("../Mercury")
+script = ExtResource("9_so1rv")
+_orbitVerticesCount = 5000
+CameraPosition = NodePath("../Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("StartingParentCelestial", "DebugUI")]
 environment = SubResource("Environment_om47e")
@@ -265,6 +286,7 @@ i = 0.122
 l = 0.843
 Radius = 2381.84
 CoordLayer = 2
+CelestialColor = Color(0.337115, 0.358516, 0.340688, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Mercury"]
 material_override = SubResource("StandardMaterial3D_p42bs")
@@ -288,6 +310,7 @@ i = 0.059
 l = 1.337
 Radius = 5910.16
 CoordLayer = 2
+CelestialColor = Color(1.08235, 0.772549, 0.0980392, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Venus"]
 material_override = SubResource("StandardMaterial3D_1gagu")
@@ -310,6 +333,7 @@ w = 5.032
 l = 3.096
 Radius = 6221.68
 CoordLayer = 2
+CelestialColor = Color(0.203922, 0.878431, 0.537255, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Earth"]
 material_override = SubResource("StandardMaterial3D_yj7gn")
@@ -333,6 +357,7 @@ i = 0.091
 l = 2.998
 Radius = 1696.29
 CoordLayer = 3
+CelestialColor = Color(0.446777, 0.446777, 0.446777, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Luna"]
 material_override = SubResource("StandardMaterial3D_xlxwt")
@@ -356,6 +381,7 @@ i = 0.032
 l = 0.864
 Radius = 3309.57
 CoordLayer = 2
+CelestialColor = Color(0.882353, 0.254902, 0.160784, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Mars"]
 material_override = SubResource("StandardMaterial3D_0elb4")
@@ -379,6 +405,7 @@ i = 0.185
 l = 1.401
 Radius = 458.691
 CoordLayer = 2
+CelestialColor = Color(0.247059, 0.247059, 0.247059, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ceres"]
 material_override = SubResource("StandardMaterial3D_5rw7i")
@@ -402,6 +429,7 @@ i = 0.023
 l = 1.754
 Radius = 68271.5
 CoordLayer = 2
+CelestialColor = Color(0.843137, 0.513726, 0.254902, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Jupiter"]
 material_override = SubResource("StandardMaterial3D_ywrxh")
@@ -425,6 +453,7 @@ i = 0.043
 l = 1.984
 Radius = 56867.2
 CoordLayer = 2
+CelestialColor = Color(0.890196, 0.772549, 0.486275, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Saturn"]
 material_override = SubResource("StandardMaterial3D_xqww8")
@@ -452,6 +481,7 @@ i = 0.013
 l = 1.292
 Radius = 24960.9
 CoordLayer = 2
+CelestialColor = Color(0.193628, 0.699983, 0.795074, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Uranus"]
 material_override = SubResource("StandardMaterial3D_vg1dx")
@@ -475,6 +505,7 @@ i = 0.031
 l = 2.299
 Radius = 24189.5
 CoordLayer = 2
+CelestialColor = Color(0, 0.341176, 1, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Neptune"]
 material_override = SubResource("StandardMaterial3D_17xnb")
@@ -498,6 +529,7 @@ i = 0.299
 l = 1.925
 Radius = 0.01
 CoordLayer = 2
+CelestialColor = Color(0.768627, 0.788235, 1, 1)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Pluto-Charon Barycenter"]
 shape = SubResource("SphereShape3D_u2bho")
@@ -520,6 +552,7 @@ i = 1.97
 l = 3.969
 Radius = 1160.16
 CoordLayer = 3
+CelestialColor = Color(0.886275, 0.87451, 0.862745, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Pluto"]
 material_override = SubResource("StandardMaterial3D_pg7qk")
@@ -543,6 +576,7 @@ i = 1.97
 l = 3.969
 Radius = 589.453
 CoordLayer = 3
+CelestialColor = Color(0.862745, 0.698039, 0.545098, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Charon"]
 material_override = SubResource("StandardMaterial3D_38wr7")
