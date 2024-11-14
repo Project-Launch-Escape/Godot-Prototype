@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PartDefinition" load_steps=6 format=3 uid="uid://c0vvvbxylk0du"]
+[gd_resource type="Resource" load_steps=6 format=3 uid="uid://c0vvvbxylk0du"]
 
 [ext_resource type="PackedScene" uid="uid://sy4kdr7r0khc" path="res://UnknownPi/capsule.tscn" id="1_6wh03"]
 [ext_resource type="Script" path="res://Scripts/VesselEditor/Parts/PartDefinition.cs" id="1_oweqg"]

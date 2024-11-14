@@ -41,13 +41,13 @@ public partial class GizmoTranslate : Node3D
 			Node3D p = (Node3D)res.GetParent();
 			switch (res.Name)
 			{
-			case "RED"  :ispressed = 0;break;
-			case "GREEN":ispressed = 1;break;
-			case "BLUE" :ispressed = 2;break;
+			case "RED T Handle"  :ispressed = 0;break;
+			case "GREEN T Handle":ispressed = 1;break;
+			case "BLUE T Handle" :ispressed = 2;break;
 			
-			case "Rotation Handle Red"  :ispressedR = 0;break;
-			case "Rotation Handle Green"  :ispressedR = 1;break;
-			case "Rotation Handle Blue"  :ispressedR = 2;break;
+			case "RED R Handle"  :ispressedR = 0;break;
+			case "GREEN R Handle"  :ispressedR = 1;break;
+			case "BLUE R Handle"  :ispressedR = 2;break;
 			}
 			
 		}
@@ -67,34 +67,29 @@ public partial class GizmoTranslate : Node3D
 			if (ispressed == 0){ A = Vector3.Right;} // Red
 			if (ispressed == 1){ A = Vector3.Up;} // Green
 			if (ispressed == 2){ A = Vector3.Back;} // Blue
-			Vector3 G = Gizmos.Position;
-			Vector3 R = G+A;
-			
-			Vector3 C = Camera.GlobalPosition;
-			C = C.Rotated(Vector3.Right, Mathf.Pi / 2);
-			// The Plan formed by GRC is the one is which the gizmo is and is facing camera
+			Vector3 G = Gizmos.GlobalPosition;			
+			Vector3 C = Camera.GlobalPosition; // This might need to change according to reference frame or something like that idk,
 			Vector3 N = (C-G).Normalized(); // Normal Vector of the plane,
 			
-			StaticBody3D plane = ((StaticBody3D)Gizmos.GetChild(ispressed));
-			plane.LookAt(Gizmos.Position+Camera.ProjectRayNormal(eve.Position).Normalized(),A);
+			/*
+			Node3D plane = ((Node3D)Gizmos.GetChild(ispressed));
+			plane.LookAt(Gizmos.Position+Camera.ProjectRayNormal(eve.Position).Normalized(),A); // this is now purely esthetic if you want to show what the plane should look like (need to activate the plane's visual which might get deleted in future version since this is now useless)
 			Vector3 r = plane.Rotation * A;
-			plane.Rotation = r;
+			plane.Rotation = r;*/
 			
 			var from = Camera.ProjectRayOrigin(eve.Position);
 			var to = from + Camera.ProjectRayNormal(eve.Position) * RayLength;
-			var spaceState = GetWorld3D().DirectSpaceState;
-			var query = PhysicsRayQueryParameters3D.Create(from, to);
-			query.CollideWithBodies =true;
-			if (ispressed == 0){query.CollisionMask =  0b0010; }//0b00000000_00000000_00000000_00000010
-			if (ispressed == 1){query.CollisionMask =  0b0100; } // Raycast Mask , so that it only collides with the right plane
-			if (ispressed == 2){query.CollisionMask =  0b1000; }
-			var result = GetWorld3D().DirectSpaceState.IntersectRay(query);
-			if (((StaticBody3D)result["collider"]).Name=="RedPlane" || ((StaticBody3D)result["collider"]).Name=="GreenPlane" || ((StaticBody3D)result["collider"]).Name=="BluePlane"){
-				Vector3 p = (Vector3)result["position"]-Gizmos.Position; // Change Of Position
+			
+			// UnknownDude's Idea to not have a physical plane (TKS A LOT)
+			var virtualPlane = new Plane(N, G);
+			var rayIntersection = virtualPlane.IntersectsRay(from, to);
+			if (rayIntersection!=null){
+				Vector3 p = (Vector3)rayIntersection-Gizmos.Position; // Change Of Position
 				p*=A; // Only Change Position On Axis
 				Gizmos.Position += p ; // Apply Change of Position
 				((Node3D)collider).GlobalPosition = Gizmos.Position;
-			}
+			}else{GD.Print("Didn't Hit Translation Plane");}
+			
 		}
 		if (ispressedR != -1){
 			Node3D Gizmos = this;//((Node3D)GetNode("../GizmoTranslate"));
@@ -104,31 +99,18 @@ public partial class GizmoTranslate : Node3D
 			if (ispressedR == 0){ A = Vector3.Right;} // Red
 			if (ispressedR == 1){ A = Vector3.Up;} // Green
 			if (ispressedR == 2){ A = Vector3.Back;} // Blue
-			Vector3 G = Gizmos.Position;
-			Vector3 R = G+A;
-			
+			Vector3 G = Gizmos.Position;			
 			Vector3 C = Camera.GlobalPosition;
-			//C = C.Rotated(Vector3.Right, Mathf.Pi / 2);
-			// The Plan formed by GRC is the one is which the gizmo is and is facing camera
-			//Vector3 N = (C-G).Normalized(); // Normal Vector of the plane,
-			
-			StaticBody3D plane = ((StaticBody3D)Gizmos.GetChild(ispressed));
-			//plane.LookAt(Gizmos.Position+Camera.ProjectRayNormal(eve.Position).Normalized(),A);
-			//Vector3 r = plane.Rotation * A;
-			//plane.Rotation = r;
 			
 			var from = Camera.ProjectRayOrigin(eve.Position);
 			var to = from + Camera.ProjectRayNormal(eve.Position) * RayLength;
-			var spaceState = GetWorld3D().DirectSpaceState;
-			var query = PhysicsRayQueryParameters3D.Create(from, to);
-			query.CollideWithBodies =true;
-			if (ispressedR == 0){query.CollisionMask =  0b00100000; }
-			if (ispressedR == 1){query.CollisionMask =  0b01000000; }
-			if (ispressedR == 2){query.CollisionMask =  0b10000000; }
-			var result = GetWorld3D().DirectSpaceState.IntersectRay(query);
-			if (((StaticBody3D)result["collider"]).Name=="RedPlaneR" || ((StaticBody3D)result["collider"]).Name=="GreenPlaneR" || ((StaticBody3D)result["collider"]).Name=="BluePlaneR"){
-				Vector3 p = (Vector3)result["position"]-Gizmos.Position; // Change Of Position
-				p= ((A - new Vector3(1,1,1))*new Vector3(-1,-1,-1)*p).Normalized(); // Only Change Position On Axis
+			
+			// UnknownDude's Idea to not have a physical plane (TKS A LOT)
+			var virtualPlane = new Plane(A, G);
+			var rayIntersection = virtualPlane.IntersectsRay(from, to);
+			if (rayIntersection!=null){
+				Vector3 p = (Vector3)rayIntersection-Gizmos.Position; // Change Of Position
+				p= ((new Vector3(1,1,1) - A)*p).Normalized(); // Only Change Position On Anti-Axis (the 2 others Axis)
 				float a = 0;
 				if (ispressedR == 0){a=-(Mathf.Atan2(p.Y, p.Z));}
 				if (ispressedR == 1){a=-(Mathf.Atan2(p.Z, p.X));}
@@ -136,8 +118,9 @@ public partial class GizmoTranslate : Node3D
 				Gizmos.Rotation = A*a; // Apply Change of Position
 				((Node3D)collider).Rotation = startRotation;
 				((Node3D)collider).Rotate(A, a);;//= startRotation + A*a;
-				}
+			}else{GD.Print("Didn't Hit Rotation Plane");}
+			
 		}
-		}
+	}
 }
 }
