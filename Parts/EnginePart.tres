@@ -1,8 +1,20 @@
-[gd_resource type="Resource" script_class="PartDefinition" load_steps=3 format=3 uid="uid://bk64asml6s1sr"]
+[gd_resource type="Resource" script_class="PartDefinition" load_steps=6 format=3 uid="uid://bk64asml6s1sr"]
 
 [ext_resource type="PackedScene" uid="uid://b255lhj0e72l7" path="res://UnknownPi/engine.tscn" id="1_cfpeu"]
 [ext_resource type="Script" path="res://Scripts/VesselEditor/Parts/PartDefinition.cs" id="1_vg3om"]
+[ext_resource type="Script" path="res://Scripts/VesselEditor/Parts/SnapPoint.cs" id="2_1fgf4"]
+
+[sub_resource type="Resource" id="Resource_wap4f"]
+script = ExtResource("2_1fgf4")
+Position = Vector3(0, 0.5, 0)
+Rotation = Vector3(0, 0, 0)
+
+[sub_resource type="Resource" id="Resource_82jkx"]
+script = ExtResource("2_1fgf4")
+Position = Vector3(0, -0.5, 0)
+Rotation = Vector3(0, 0, 180)
 
 [resource]
 script = ExtResource("1_vg3om")
 Asset = ExtResource("1_cfpeu")
+SnapPoints = Array[Object]([SubResource("Resource_wap4f"), SubResource("Resource_82jkx")])

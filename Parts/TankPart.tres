@@ -1,8 +1,20 @@
-[gd_resource type="Resource" script_class="PartDefinition" load_steps=3 format=3 uid="uid://bky68m4toj1s7"]
+[gd_resource type="Resource" script_class="PartDefinition" load_steps=6 format=3 uid="uid://bky68m4toj1s7"]
 
 [ext_resource type="PackedScene" uid="uid://bp0y71wbm8kj" path="res://UnknownPi/tank.tscn" id="1_hlnfj"]
 [ext_resource type="Script" path="res://Scripts/VesselEditor/Parts/PartDefinition.cs" id="1_nanvv"]
+[ext_resource type="Script" path="res://Scripts/VesselEditor/Parts/SnapPoint.cs" id="2_kua20"]
+
+[sub_resource type="Resource" id="Resource_87g3o"]
+script = ExtResource("2_kua20")
+Position = Vector3(0, 1, 0)
+Rotation = Vector3(0, 0, 0)
+
+[sub_resource type="Resource" id="Resource_c01u1"]
+script = ExtResource("2_kua20")
+Position = Vector3(0, -1, 0)
+Rotation = Vector3(0, 0, 180)
 
 [resource]
 script = ExtResource("1_nanvv")
 Asset = ExtResource("1_hlnfj")
+SnapPoints = Array[Object]([SubResource("Resource_87g3o"), SubResource("Resource_c01u1")])
