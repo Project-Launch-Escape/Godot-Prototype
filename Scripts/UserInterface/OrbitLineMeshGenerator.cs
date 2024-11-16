@@ -77,4 +77,14 @@ public partial class OrbitLineMeshGenerator : MeshInstance3D
 			_orbitMeshNodes[i].Position = _celestials[i].ParentCelestial.Position;
 		}
 	}
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventKey inputEventKey)
+		{
+			if (inputEventKey.Pressed && inputEventKey.Keycode == Key.M)
+			{
+				Visible = !Visible;
+			}
+		}
+	}
 }
