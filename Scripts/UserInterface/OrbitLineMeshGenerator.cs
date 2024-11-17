@@ -49,7 +49,7 @@ public partial class OrbitLineMeshGenerator : MeshInstance3D
 			
 			for (int j = 0; j < _orbitVerticesCount; j++)
 			{
-				var coordLayer = _orbitVertices[i][j].ParentCelestial.CoordLayer.Increment();
+				var coordLayer = _orbitVertices[i][j].ParentPosition.CoordLayer.Increment();
 				orbitMesh.SurfaceAddVertex(_orbitVertices[i][j].GetPositionAtLayer(coordLayer) * GlobalValues.Scale * coordLayer.GetConversionFactor(0));
 			}
 
@@ -74,7 +74,7 @@ public partial class OrbitLineMeshGenerator : MeshInstance3D
 		
 		for (int i = 0; i < _orbitMeshNodes.Count; i++)
 		{
-			_orbitMeshNodes[i].Position = _celestials[i].ParentCelestial.Position;
+			_orbitMeshNodes[i].Position = _celestials[i].ParentCelestial.NestedPos.GetPositionAtLayer(0);
 		}
 	}
 	public override void _Input(InputEvent @event)
