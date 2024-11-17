@@ -55,12 +55,12 @@ fixed_size = true
 background_mode = 1
 background_color = Color(0.0430392, 0.0430392, 0.0430392, 1)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_u2bho"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tkmdl"]
 albedo_texture = ExtResource("4_i0x5a")
 
 [sub_resource type="SphereMesh" id="SphereMesh_qocvl"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_u2bho"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p42bs"]
 albedo_texture = ExtResource("5_4uwb6")
@@ -275,18 +275,197 @@ CameraPosition = NodePath("../Camera3D")
 [node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("StartingParentCelestial", "DebugUI")]
 environment = SubResource("Environment_om47e")
 near = 0.001
+far = 20000.0
 script = ExtResource("2_imltp")
 StartingParentCelestial = NodePath("../Sol")
 DebugUI = NodePath("../UI/Debug Interface")
 Acceleration = 90.0
 
+[node name="Alpha Centauri System" type="Node" parent="."]
+
+[node name="Alpha Centauri Barycenter" type="StaticBody3D" parent="Alpha Centauri System"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 142.734, 0, 0)
+visible = false
+collision_layer = 3
+collision_mask = 2
+script = ExtResource("1_sc8hu")
+Mass = 3.9782e+30
+Radius = 0.162
+SOIRadius = 1.0
+CoordLayer = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Alpha Centauri System/Alpha Centauri Barycenter"]
+shape = SubResource("SphereShape3D_u2bho")
+
+[node name="Node Tracker" parent="Alpha Centauri System/Alpha Centauri Barycenter" node_paths=PackedStringArray("CameraPosition") instance=ExtResource("9_4nc22")]
+CameraPosition = NodePath("../../../Camera3D")
+
+[node name="Alpha Centauri A" type="StaticBody3D" parent="Alpha Centauri System" node_paths=PackedStringArray("ParentCelestial")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 142.734, 0, 0)
+collision_layer = 3
+collision_mask = 2
+script = ExtResource("1_sc8hu")
+Mass = 2.18801e+29
+ParentCelestial = NodePath("../Alpha Centauri Barycenter")
+a = 620.494
+e = 0.52
+Radius = 12976.1
+CoordLayer = 2
+CelestialColor = Color(0.772549, 0.784314, 1, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Alpha Centauri System/Alpha Centauri A"]
+layers = 3
+material_override = SubResource("StandardMaterial3D_tkmdl")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_qocvl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Alpha Centauri System/Alpha Centauri A"]
+shape = SubResource("SphereShape3D_u2bho")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri A"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294967294
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri A"]
+transform = Transform3D(1, 0, 0, 0, 0.000383988, -1, 0, 1, 0.000383988, 0, -2, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294967294
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri A"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294967294
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri A"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, -2)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294967294
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="SpotLight3D5" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri A"]
+transform = Transform3D(4.37114e-08, -3.82137e-15, 1, -8.74228e-08, -1, 2.5411e-21, 1, -8.74228e-08, -4.37114e-08, 2, 0, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294967294
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="SpotLight3D6" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri A"]
+transform = Transform3D(4.37114e-08, 3.82137e-15, -1, 8.74228e-08, -1, 2.5411e-21, -1, -8.74228e-08, -4.37114e-08, -2, 0, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294967294
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="Node Tracker" parent="Alpha Centauri System/Alpha Centauri A" node_paths=PackedStringArray("CameraPosition") instance=ExtResource("9_4nc22")]
+CameraPosition = NodePath("../../../Camera3D")
+
+[node name="Alpha Centauri B" type="StaticBody3D" parent="Alpha Centauri System" node_paths=PackedStringArray("ParentCelestial")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 142.734, 0, 0)
+collision_layer = 3
+collision_mask = 2
+script = ExtResource("1_sc8hu")
+Mass = 1.79019e+29
+ParentCelestial = NodePath("../Alpha Centauri Barycenter")
+a = 620.494
+e = 0.52
+w = 3.14
+Radius = 9109.5
+CoordLayer = 2
+CelestialColor = Color(1, 0.956863, 0.733333, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Alpha Centauri System/Alpha Centauri B"]
+layers = 3
+material_override = SubResource("StandardMaterial3D_tkmdl")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_qocvl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Alpha Centauri System/Alpha Centauri B"]
+shape = SubResource("SphereShape3D_u2bho")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri B"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294966274
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri B"]
+transform = Transform3D(1, 0, 0, 0, 0.000383988, -1, 0, 1, 0.000383988, 0, -2, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294967294
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri B"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294967294
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri B"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, -2)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294967294
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="SpotLight3D5" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri B"]
+transform = Transform3D(4.37114e-08, -3.82137e-15, 1, -8.74228e-08, -1, 0, 1, -8.74228e-08, -4.37114e-08, 2, 0, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294967294
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="SpotLight3D6" type="SpotLight3D" parent="Alpha Centauri System/Alpha Centauri B"]
+transform = Transform3D(4.37114e-08, 3.82137e-15, -1, 8.74228e-08, -1, 0, -1, -8.74228e-08, -4.37114e-08, -2, 0, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="Node Tracker" parent="Alpha Centauri System/Alpha Centauri B" node_paths=PackedStringArray("CameraPosition") instance=ExtResource("9_4nc22")]
+CameraPosition = NodePath("../../../Camera3D")
+
 [node name="Sol" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.001, 0)
 collision_layer = 3
 collision_mask = 2
 script = ExtResource("1_sc8hu")
 Mass = 1.9891e+30
 Radius = 0.162
-SOIRadius = 100.0
+SOIRadius = 1.0
 CoordLayer = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Sol"]
@@ -305,9 +484,9 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 
 light_energy = 0.05
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Sol"]
-light_energy = 0.731
-light_size = 0.485
-omni_range = 4096.0
+light_energy = 0.03
+shadow_enabled = true
+omni_range = 16.0
 omni_attenuation = 0.0
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Sol"]
@@ -347,6 +526,7 @@ transform = Transform3D(4.37114e-08, -3.82137e-15, 1, -8.74228e-08, -1, 0, 1, -8
 layers = 2
 light_energy = 16.0
 light_indirect_energy = 16.0
+light_cull_mask = 4294966371
 spot_range = 10.0
 spot_attenuation = 0.0
 
@@ -355,6 +535,7 @@ transform = Transform3D(4.37114e-08, 3.82137e-15, -1, 8.74228e-08, -1, 0, -1, -8
 layers = 2
 light_energy = 16.0
 light_indirect_energy = 16.0
+light_cull_mask = 4294966274
 spot_range = 10.0
 spot_attenuation = 0.0
 
@@ -442,7 +623,6 @@ ParentCelestial = NodePath("../Earth")
 a = 2119.0
 e = 0.055
 w = 5.032
-i = 0.091
 l = 2.998
 Radius = 26.505
 CoordLayer = 3
@@ -704,7 +884,7 @@ shape = SubResource("SphereShape3D_u2bho")
 CameraPosition = NodePath("../../../Camera3D")
 
 [node name="Sprite3D" type="Sprite3D" parent="Saturn System/Saturn"]
-transform = Transform3D(0.246109, -0.0433956, 0.00687982, 0.0107333, 0.0214195, -0.248849, 0.0426064, 0.245271, 0.0229493, 0, 0, 0)
+transform = Transform3D(0.242162, -0.0512, -0.0351573, -0.0547814, -0.109396, -0.218017, 0.0292658, 0.218886, -0.117185, 0, 0, 0)
 gi_mode = 2
 texture = ExtResource("15_38x7n")
 
