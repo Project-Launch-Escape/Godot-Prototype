@@ -6,14 +6,14 @@ public partial class CelestialScript : StaticBody3D
 {
 	[Export] public float Mass;
 	[Export] public CelestialScript ParentCelestial;
-	[Export] public float a;
+	[Export] private float a;
 	private float b;
-	[Export] public float e;
-	[Export] public float n;
-	[Export] public float w;
-	[Export] public float i;
-	[Export] public float l;
-	private float tol = 0.00001f;
+	[Export] private float e;
+	[Export] private float n;
+	[Export] private float w;
+	[Export] private float i;
+	[Export] private float l;
+	private static float tol = 0.00001f;
 	private double E;
 	[Export] public float Radius;
 	[Export] public float SOIRadius;
@@ -30,7 +30,8 @@ public partial class CelestialScript : StaticBody3D
 			{
 				n = Mathf.Sqrt(GlobalValues.G * ParentCelestial.Mass /( a * GlobalValues.GetRefConversionFactor(CoordLayer, 0))) / (a * GlobalValues.GetRefConversionFactor(CoordLayer, 0));
 			}
-			
+
+			NestedPos = new NestedPosition(GetPositionAtE(E),ParentCelestial);
 			SOIRadius = a * Mathf.Pow(Mass / ParentCelestial.Mass, 0.4f);
 		}
 		else
@@ -44,10 +45,16 @@ public partial class CelestialScript : StaticBody3D
 	{
 		if (ParentCelestial != null)
 		{
-			CalculateEccentricAnomaly((n * GlobalValues.Time + w) % Math.Tau);
-			NestedPos = new NestedPosition(GetPositionAtE(E), ParentCelestial);
+			CalculateEccentricAnomaly((n * GlobalValues.Time) % Math.Tau);
+			NestedPos.LocalPosition = GetPositionAtE(E);
 		}
-		Transform = new Transform3D(Transform.Basis, NestedPos.GetPositionAtLayer(CoordinateSpace.RenderSpace));
+
+		var desiredCameraDist = 1;
+		var renderSpacePos = NestedPos.GetPositionAtLayer(CoordinateSpace.RenderSpace);
+		var newRadius = Radius * desiredCameraDist * CoordLayer.Increment().GetConversionFactor(CoordinateSpace.RenderSpace) * GlobalValues.Scale / renderSpacePos.Length();
+		var newBasis = Basis.Identity.Scaled(new Vector3(1,1,1) * newRadius);
+		
+		Transform = new Transform3D(newBasis, renderSpacePos.Normalized() * desiredCameraDist);
 	}
 
 	public Vector3 GetPositionAtE(double E)
