@@ -6,30 +6,40 @@ public class NestedPosition
 {
 	public CoordinateSpace CoordLayer;
 	public Vector3 LocalPosition;
-	public CelestialScript ParentCelestial;
+	public NestedPosition ParentPosition;
 
 	public NestedPosition(Vector3 localPosition, CelestialScript parentCelestial)
 	{
 		LocalPosition = localPosition;
-		ParentCelestial = parentCelestial;
+		ParentPosition = parentCelestial.NestedPos;
 		CoordLayer = parentCelestial.CoordLayer.Increment();
 	}
+	
+	public NestedPosition(Vector3 localPosition, NestedPosition parentPosition)
+	{
+		LocalPosition = localPosition;
+		ParentPosition = parentPosition;
+		CoordLayer = parentPosition.CoordLayer.Increment();
+	}
+	
 	public NestedPosition(NestedPosition nestedPosition)
 	{
 		LocalPosition = nestedPosition.LocalPosition;
-		ParentCelestial = nestedPosition.ParentCelestial;
+		ParentPosition = nestedPosition.ParentPosition;
 		CoordLayer = nestedPosition.CoordLayer;
 	}
+	
 	public NestedPosition(Vector3 localPosition)
 	{
 		LocalPosition = localPosition;
-		ParentCelestial = null;
+		ParentPosition = null;
 		CoordLayer = CoordinateSpace.GalaxySpace;
 	}
+	
 	public NestedPosition() // Base Case
 	{
 		LocalPosition = new Vector3(0, 0, 0);
-		ParentCelestial = null;
+		ParentPosition = null;
 		CoordLayer = CoordinateSpace.GalaxySpace;
 	}
 
@@ -46,15 +56,9 @@ public class NestedPosition
 
 			return convertedPosition;
 		}
-		if (layer == CoordLayer)
-		{
-			return LocalPosition;
-		}
-
-		if (layer < CoordLayer)
-		{
-			return ParentCelestial.NestedPos.GetPositionAtLayer(layer);
-		}
+		if (layer == CoordLayer) return LocalPosition;
+		
+		if (layer < CoordLayer && ParentPosition != null) return ParentPosition.GetPositionAtLayer(layer);
 
 		return new Vector3();
 	}
