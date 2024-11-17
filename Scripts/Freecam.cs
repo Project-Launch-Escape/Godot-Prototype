@@ -12,7 +12,7 @@ public partial class Freecam : Camera3D
 	public static CoordinateSpace CoordLayer;
 	public static NestedPosition NestedPos;
 	
-	public static float VelocityMultiplier = 100f;
+	public static float VelocityMultiplier = 10000000000f;
 	[Export] public float Acceleration = 50;
 	[Export] public float Deceleration = 80;
 	[Export] public float ModifierSpeedMultiplier = 2.5f;
@@ -54,7 +54,6 @@ public partial class Freecam : Camera3D
 		foreach (var t in celestials)
 		{
 			var dist = NestedPosition.ConvertPositionReference(NestedPos, t.NestedPos, t.CoordLayer).Length();
-
 			if (dist <= t.SOIRadius)
 			{
 				currentSOIs.Add(t);
@@ -90,9 +89,12 @@ public partial class Freecam : Camera3D
 		}
 
 		var newPosition = NestedPosition.ConvertPositionReference(NestedPos, newRefPosition, newCoordLayer);
-		NestedPos = new NestedPosition(newPosition, newSOI);
+		
+		NestedPos.LocalPosition = newPosition;
+		NestedPos.CoordLayer = newCoordLayer;
+		NestedPos.ParentPosition = newSOI?.NestedPos;
 		CoordLayer = newCoordLayer;
-		ParentCelestial = newSOI;	
+		ParentCelestial = newSOI;
 	}
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -125,7 +127,7 @@ public partial class Freecam : Camera3D
 			Velocity.Z = Mathf.Clamp(Velocity.Z + offset.Z, -VelocityMultiplier, VelocityMultiplier);
 			Vector3 velocityRotated = Velocity.Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-TotalYaw));
 			velocityRotated = velocityRotated.Rotated((new Vector3(1f,0f,0f).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-TotalYaw))).Normalized(), Mathf.DegToRad(-TotalPitch));
-			NestedPos = new NestedPosition(NestedPos.LocalPosition + (velocityRotated * delta * speedMulti * GlobalValues.GetRefConversionFactor(0,CoordLayer)), ParentCelestial);
+			NestedPos.LocalPosition += velocityRotated * delta * speedMulti * GlobalValues.GetRefConversionFactor(0,CoordLayer);
 		}
 
 	}
