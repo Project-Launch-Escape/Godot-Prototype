@@ -8,7 +8,6 @@ public partial class GlobalValues : Node
     public static double Time;
     public const float G = 0.000000000066743f;
     public static readonly float[] Units = [1f, 281474976710656f, 4294967296f, 65536f];
-    public const float Scale = 0.000000000232830643653869625849394142f; // 1/2^32
     public static readonly List<CelestialScript> AllCelestials = [];
     public static bool Paused = false;
     
