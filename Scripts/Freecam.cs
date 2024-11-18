@@ -1,3 +1,4 @@
+using System.Collections;
 using Godot;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 using GodotPrototype.Scripts.UserInterface;
@@ -7,19 +8,22 @@ public partial class Freecam : Camera3D
 {
 	public static CelestialScript ParentCelestial;
 	[Export] public CelestialScript StartingParentCelestial;
-	[Export] private DebugUiController DebugUI;
+	[Export] private DebugUiController _debugUI;
 	
 	public static CoordinateSpace CoordLayer;
 	public static NestedPosition NestedPos;
+
+	private static List<float> _celestialDists;
+	private static SortedList<float,CelestialScript> _sortedCelestialDists = new ();
 	
 	public static float VelocityMultiplier = 10000000000f;
 	[Export] public float Acceleration = 50;
 	[Export] public float Deceleration = 80;
-	[Export] public float ModifierSpeedMultiplier = 2.5f;
+	[Export] public float ModifierSpeedMultiplier = 10f;
 
 	[Export(PropertyHint.Range, "0.0,1.0")] public float Sensitivity = 0.25f;
 
-	[Export] public Vector2 MousePosition;
+	public Vector2 MousePosition;
 
 	public bool Right;
 	public bool Left;
@@ -42,24 +46,58 @@ public partial class Freecam : Camera3D
 	{
 		ParentCelestial = StartingParentCelestial;
 		CoordLayer = ParentCelestial.CoordLayer.Increment();
-		NestedPos = new NestedPosition(new Vector3(0, 0, 0), ParentCelestial);
+		NestedPos = new NestedPosition(new Vector3(), ParentCelestial);
 	}
 
+	private static List<float> GetCelestialDistances()
+	{
+		var distances = new List<float>();
+		foreach (var celestial in GlobalValues.AllCelestials)
+		{
+			distances.Add(NestedPosition.ConvertPositionReference(NestedPos, celestial.NestedPos, celestial.CoordLayer).Length());
+		}
+
+		return distances;
+	}
+
+	private static SortedList<float, CelestialScript> GetSortedCelestialDistances()
+	{
+		var sortedDists = new SortedList<float, CelestialScript>();
+		var celestials = GlobalValues.AllCelestials;
+		for (int i = 0; i < celestials.Count; i++)
+		{
+			if (!celestials[i].Visible) continue;
+			sortedDists.Add(_celestialDists[i] * celestials[i].CoordLayer.GetConversionFactor(0), GlobalValues.AllCelestials[i]);
+		}
+		return sortedDists;
+	}
+
+	public static int GetDistanceIndex(CelestialScript celestial)
+	{
+		for (int i = 0; i < _sortedCelestialDists.Count; i++)
+		{
+			if (_sortedCelestialDists.GetValueAtIndex(i) == celestial)
+			{
+				return i;
+			}
+		}
+		return 0;
+	}
 	
 	private CelestialScript GetHighestSOI()
 	{
 		var celestials = GlobalValues.AllCelestials;
 		var currentSOIs = new List<CelestialScript>();
 
-		foreach (var t in celestials)
+		for (int i = 0; i < _celestialDists.Count; i++)
 		{
-			var dist = NestedPosition.ConvertPositionReference(NestedPos, t.NestedPos, t.CoordLayer).Length();
-			if (dist <= t.SOIRadius)
+			if (_celestialDists[i] <= celestials[i].SOIRadius)
 			{
-				currentSOIs.Add(t);
+				currentSOIs.Add(celestials[i]);
 			}
 		}
-		DebugUI.UpdateSOIs(currentSOIs);
+		
+		_debugUI.UpdateSOIs(currentSOIs);
 		if (currentSOIs.Count == 0)
 		{
 			return null;
@@ -100,6 +138,9 @@ public partial class Freecam : Camera3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		_celestialDists = GetCelestialDistances();
+		_sortedCelestialDists = GetSortedCelestialDistances();
+		
 		var highestSOI = GetHighestSOI();
 		if (ParentCelestial != highestSOI) SOIChange(highestSOI);
 
@@ -107,7 +148,8 @@ public partial class Freecam : Camera3D
 		UpdateMovement((float)delta);
 	}
 
-	public void UpdateMovement(float delta)
+	
+	private void UpdateMovement(float delta)
 	{
 		var direction = new Vector3((Right ? 1f : 0f) - (Left ? 1f : 0f), (Up ? 1f : 0f) - (Down ? 1f : 0f), (Backwards ? 1f : 0f) - (Forwards ? 1f : 0f));
 		var offset = direction.Normalized() * Acceleration * VelocityMultiplier * delta +
