@@ -38,7 +38,7 @@ public partial class CelestialScript : StaticBody3D
 		{
 			NestedPos = new NestedPosition(Transform.Origin);
 		}
-		Transform = Transform.Scaled(new Vector3(1,1,1) * Radius * CoordLayer.Increment().GetConversionFactor(CoordinateSpace.RenderSpace) * GlobalValues.Scale);
+		Transform = Transform.Scaled(Vector3.One * Radius * CoordLayer.Increment().GetConversionFactor(CoordinateSpace.RenderSpace));
 		GlobalValues.ReceiveCelestials(this);
 	}
 	public override void _Process(double dt)
@@ -51,10 +51,14 @@ public partial class CelestialScript : StaticBody3D
 
 		var desiredCameraDist = 1;
 		var renderSpacePos = NestedPos.GetPositionAtLayer(CoordinateSpace.RenderSpace);
-		var newRadius = Radius * desiredCameraDist * CoordLayer.Increment().GetConversionFactor(CoordinateSpace.RenderSpace) * GlobalValues.Scale / renderSpacePos.Length();
-		var newBasis = Basis.Identity.Scaled(new Vector3(1,1,1) * newRadius);
+		var newRadius = Radius * desiredCameraDist * CoordLayer.Increment().GetConversionFactor(CoordinateSpace.RenderSpace) / renderSpacePos.Length();
 		
-		Transform = new Transform3D(newBasis, renderSpacePos.Normalized() * desiredCameraDist);
+		Visible = newRadius > 1e-4;
+
+		var extraScale = Visible ? Freecam.GetDistanceIndex(this) + 1 : 1;
+		
+		Position = renderSpacePos.Normalized() * desiredCameraDist * extraScale;
+		Scale = Vector3.One * newRadius * extraScale;
 	}
 
 	public Vector3 GetPositionAtE(double E)
