@@ -6,12 +6,12 @@ public partial class GlobalValues : Node
 {
     public static double TimeScale = 864000;
     public static double Time;
-    public const float G = 0.000000000066743f;
-    public static readonly float[] Units = [1f, 281474976710656f, 4294967296f, 65536f];
+    public const double G = 0.000000000066743f;
+    public static readonly double[] Units = [1f, 281474976710656f, 4294967296f, 65536f];
     public static readonly List<CelestialScript> AllCelestials = [];
-    public static bool Paused = false;
+    public static bool Paused;
     
-    public static float GetRefConversionFactor(CoordinateSpace startingLayer, CoordinateSpace conversionLayer)
+    public static double GetRefConversionFactor(CoordinateSpace startingLayer, CoordinateSpace conversionLayer)
     {
         if ((int)startingLayer > Units.Length-1)
         {
@@ -32,15 +32,10 @@ public partial class GlobalValues : Node
         }
     }
     
-    public override void _Ready()
-    {
-    }
-    
     public override void _Process(double delta)
     {
         if (Paused) return;
-        var dt = Convert.ToSingle(delta);
-        Time += dt * TimeScale;
+        Time += delta * TimeScale;
     }
     
     public override void _Input(InputEvent @event)
