@@ -1,22 +1,24 @@
 using Godot;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
+using GodotPrototype.Scripts.Simulation.DoublePrecision;
+
 namespace GodotPrototype.Scripts;
 
 public partial class CelestialScript : StaticBody3D
 {
-	[Export] public float Mass;
+	[Export] public double Mass;
 	[Export] public CelestialScript ParentCelestial;
-	[Export] private float a;
-	private float b;
-	[Export] private float e;
-	[Export] private float n;
-	[Export] private float w;
-	[Export] private float i;
-	[Export] private float l;
-	private static float tol = 0.00001f;
+	[Export] private double a;
+	private double b;
+	[Export] private double e;
+	[Export] private double n;
+	[Export] private double w;
+	[Export] private double i;
+	[Export] private double l;
+	private static double tol = 0.00001f;
 	private double E;
-	[Export] public float Radius;
-	[Export] public float SOIRadius;
+	[Export] public double Radius;
+	[Export] public double SOIRadius;
 	[Export] public CoordinateSpace CoordLayer;
 	public NestedPosition NestedPos;
 	[Export] public Color CelestialColor;
@@ -26,10 +28,8 @@ public partial class CelestialScript : StaticBody3D
 		b = a * (1 - Mathf.Pow(e, 2));
 		if (ParentCelestial != null)
 		{
-			if (n == 0)
-			{
-				n = Mathf.Sqrt(GlobalValues.G * ParentCelestial.Mass /( a * GlobalValues.GetRefConversionFactor(CoordLayer, 0))) / (a * GlobalValues.GetRefConversionFactor(CoordLayer, 0));
-			}
+			if (n == 0) n = Mathf.Sqrt(GlobalValues.G * ParentCelestial.Mass / ( a * CoordLayer.GetConversionFactor(0)))
+							/ (a * CoordLayer.GetConversionFactor(0));
 
 			NestedPos = new NestedPosition(GetPositionAtE(E),ParentCelestial);
 			SOIRadius = a * Mathf.Pow(Mass / ParentCelestial.Mass, 0.4f);
@@ -38,7 +38,7 @@ public partial class CelestialScript : StaticBody3D
 		{
 			NestedPos = new NestedPosition(Transform.Origin);
 		}
-		Transform = Transform.Scaled(Vector3.One * Radius * CoordLayer.Increment().GetConversionFactor(CoordinateSpace.RenderSpace));
+		Transform = Transform.Scaled(Vector3.One * (float)Radius * (float)CoordLayer.Increment().GetConversionFactor(CoordinateSpace.RenderSpace));
 		GlobalValues.ReceiveCelestials(this);
 	}
 	public override void _Process(double dt)
@@ -48,20 +48,19 @@ public partial class CelestialScript : StaticBody3D
 			CalculateEccentricAnomaly((n * GlobalValues.Time) % Math.Tau);
 			NestedPos.LocalPosition = GetPositionAtE(E);
 		}
-
-		var desiredCameraDist = 1;
-		var renderSpacePos = NestedPos.GetPositionAtLayer(CoordinateSpace.RenderSpace);
-		var newRadius = Radius * desiredCameraDist * CoordLayer.Increment().GetConversionFactor(CoordinateSpace.RenderSpace) / renderSpacePos.Length();
+		
+		var renderSpacePos = NestedPos[CoordinateSpace.RenderSpace];
+		var newRadius = Radius * CoordLayer.Increment().GetConversionFactor(CoordinateSpace.RenderSpace) / renderSpacePos.Magnitude();
 		
 		Visible = newRadius > 1e-4;
 
 		var extraScale = Visible ? Freecam.GetDistanceIndex(this) + 1 : 1;
-		
-		Position = renderSpacePos.Normalized() * desiredCameraDist * extraScale;
-		Scale = Vector3.One * newRadius * extraScale;
+
+		Position = (Vector3)renderSpacePos.Normalized() * extraScale;
+		Scale = Vector3.One * (float)newRadius * extraScale;
 	}
 
-	public Vector3 GetPositionAtE(double E)
+	public Vector3d GetPositionAtE(double E)
 	{
 		var x = a * Mathf.Cos(E) - a + b;
 		var z = b * Mathf.Sin(E);
@@ -69,7 +68,7 @@ public partial class CelestialScript : StaticBody3D
 		var x_Rot = x * (Mathf.Cos(w) * Mathf.Cos(l) - Mathf.Sin(w) * Mathf.Sin(l) * Mathf.Cos(i)) + z * (-Mathf.Sin(w) * Mathf.Cos(l) - Mathf.Cos(w) * Mathf.Sin(l) * Mathf.Cos(i));
 		var y_Rot = x * (Mathf.Sin(w) * Mathf.Sin(i)) + z * (Mathf.Cos(w) * Mathf.Sin(i));
 		var z_Rot = x * (Mathf.Cos(w) * Mathf.Sin(l) + Mathf.Sin(w) * Mathf.Cos(l) * Mathf.Cos(i)) + z * (-Mathf.Sin(w) * Mathf.Sin(l) + Mathf.Cos(w) * Mathf.Cos(l) * Mathf.Cos(i));
-		return new Vector3((float)x_Rot, (float)y_Rot, (float)z_Rot);
+		return new Vector3d((float)x_Rot, (float)y_Rot, (float)z_Rot);
 	}
 	private double CalculateEccentricAnomaly(double M)
 	{
