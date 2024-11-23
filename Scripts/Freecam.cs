@@ -2,6 +2,8 @@ using System.Collections;
 using Godot;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 using GodotPrototype.Scripts.UserInterface;
+using GodotPrototype.Scripts.Simulation.DoublePrecision;
+
 namespace GodotPrototype.Scripts;
 
 public partial class Freecam : Camera3D
@@ -13,56 +15,52 @@ public partial class Freecam : Camera3D
 	public static CoordinateSpace CoordLayer;
 	public static NestedPosition NestedPos;
 
-	private static List<float> _celestialDists;
-	private static SortedList<float,CelestialScript> _sortedCelestialDists = new ();
+	private static List<double> _celestialDists;
+	private static SortedList<double,CelestialScript> _sortedCelestialDists = new ();
 	
-	public static float VelocityMultiplier = 10000000000f;
-	[Export] public float Acceleration = 50;
-	[Export] public float Deceleration = 80;
+	public static double VelocityMultiplier = 100000000000f;
 	[Export] public float ModifierSpeedMultiplier = 10f;
 
 	[Export(PropertyHint.Range, "0.0,1.0")] public float Sensitivity = 0.25f;
 
-	public Vector2 MousePosition;
+	private Vector2 _mousePosition;
 
-	public bool Right;
-	public bool Left;
-	public bool Forwards;
-	public bool Backwards;
-	public bool Up;
-	public bool Down;
+	private bool _right;
+	private bool _left;
+	private bool _forwards;
+	private bool _backwards;
+	private bool _up;
+	private bool _down;
 
-	public bool Shift;
-	public bool Alt;
+	private bool _shift;
+	private bool _alt;
 
-	public bool DoRotation;
+	private float _totalPitch;
+	private float _totalYaw;
 
-	public float TotalPitch;
-	public float TotalYaw;
-
-	public Vector3 Velocity;
+	private Vector3d _velocity = new ();
 
 	public override void _Ready()
 	{
 		ParentCelestial = StartingParentCelestial;
 		CoordLayer = ParentCelestial.CoordLayer.Increment();
-		NestedPos = new NestedPosition(new Vector3(), ParentCelestial);
+		NestedPos = new NestedPosition(new Vector3d(), ParentCelestial);
 	}
 
-	private static List<float> GetCelestialDistances()
+	private static List<double> GetCelestialDistances()
 	{
-		var distances = new List<float>();
+		var distances = new List<double>();
 		foreach (var celestial in GlobalValues.AllCelestials)
 		{
-			distances.Add(NestedPosition.ConvertPositionReference(NestedPos, celestial.NestedPos, celestial.CoordLayer).Length());
+			distances.Add(NestedPos.ConvertPositionReference(celestial.NestedPos, celestial.CoordLayer).Magnitude());
 		}
 
 		return distances;
 	}
 
-	private static SortedList<float, CelestialScript> GetSortedCelestialDistances()
+	private static SortedList<double, CelestialScript> GetSortedCelestialDistances()
 	{
-		var sortedDists = new SortedList<float, CelestialScript>();
+		var sortedDists = new SortedList<double, CelestialScript>();
 		var celestials = GlobalValues.AllCelestials;
 		for (int i = 0; i < celestials.Count; i++)
 		{
@@ -126,7 +124,7 @@ public partial class Freecam : Camera3D
 			newCoordLayer = newSOI.CoordLayer.Increment();
 		}
 
-		var newPosition = NestedPosition.ConvertPositionReference(NestedPos, newRefPosition, newCoordLayer);
+		var newPosition = NestedPos.ConvertPositionReference(newRefPosition, newCoordLayer);
 		
 		NestedPos.LocalPosition = newPosition;
 		NestedPos.CoordLayer = newCoordLayer;
@@ -145,31 +143,27 @@ public partial class Freecam : Camera3D
 		if (ParentCelestial != highestSOI) SOIChange(highestSOI);
 
 		UpdateMouseLook();
-		UpdateMovement((float)delta);
+		UpdateMovement(delta);
 	}
 
 	
-	private void UpdateMovement(float delta)
+	private void UpdateMovement(double delta)
 	{
-		var direction = new Vector3((Right ? 1f : 0f) - (Left ? 1f : 0f), (Up ? 1f : 0f) - (Down ? 1f : 0f), (Backwards ? 1f : 0f) - (Forwards ? 1f : 0f));
-		var offset = direction.Normalized() * Acceleration * VelocityMultiplier * delta +
-					 Velocity.Normalized() * Deceleration * VelocityMultiplier * delta;
+		var direction = new Vector3d((_right ? 1f : 0f) - (_left ? 1f : 0f), (_up ? 1f : 0f) - (_down ? 1f : 0f), (_backwards ? 1f : 0f) - (_forwards ? 1f : 0f));
 		var speedMulti = 1f;
-		if (Shift) speedMulti *= ModifierSpeedMultiplier;
-		if (Alt) speedMulti /= ModifierSpeedMultiplier;
+		if (_shift) speedMulti *= ModifierSpeedMultiplier;
+		if (_alt) speedMulti /= ModifierSpeedMultiplier;
 
-		if (direction == Vector3.Zero)
+		if (direction == Vector3d.Zero)
 		{
-			Velocity = Vector3.Zero;
+			_velocity = Vector3d.Zero;
 		}
 		else
 		{
-			Velocity.X = Mathf.Clamp(Velocity.X + offset.X, -VelocityMultiplier, VelocityMultiplier);
-			Velocity.Y = Mathf.Clamp(Velocity.Y + offset.Y, -VelocityMultiplier, VelocityMultiplier);
-			Velocity.Z = Mathf.Clamp(Velocity.Z + offset.Z, -VelocityMultiplier, VelocityMultiplier);
-			Vector3 velocityRotated = Velocity.Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-TotalYaw));
-			velocityRotated = velocityRotated.Rotated((new Vector3(1f,0f,0f).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-TotalYaw))).Normalized(), Mathf.DegToRad(-TotalPitch));
-			NestedPos.LocalPosition += velocityRotated * delta * speedMulti * GlobalValues.GetRefConversionFactor(0,CoordLayer);
+			_velocity = direction * VelocityMultiplier;
+			Vector3 velocityRotated = ((Vector3)_velocity).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-_totalYaw));
+			velocityRotated = velocityRotated.Rotated(new Vector3(1f,0f,0f).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-_totalYaw)).Normalized(), Mathf.DegToRad(-_totalPitch));
+			NestedPos.LocalPosition += (Vector3d)velocityRotated * delta * speedMulti * GlobalValues.GetRefConversionFactor(0,CoordLayer);
 		}
 
 	}
@@ -177,14 +171,14 @@ public partial class Freecam : Camera3D
 	private void UpdateMouseLook()
 	{
 		if (Input.GetMouseMode() != Input.MouseModeEnum.Captured) return;
-		MousePosition *= Sensitivity;
-		var yaw = MousePosition.X;
-		var pitch = MousePosition.Y;
-		MousePosition = new Vector2(0, 0);
-		pitch = Mathf.Clamp(pitch, -90 - TotalPitch, 90 - TotalPitch);
-		TotalPitch += pitch;
+		_mousePosition *= Sensitivity;
+		var yaw = _mousePosition.X;
+		var pitch = _mousePosition.Y;
+		_mousePosition = new Vector2(0, 0);
+		pitch = Mathf.Clamp(pitch, -90 - _totalPitch, 90 - _totalPitch);
+		_totalPitch += pitch;
 		RotateY(Mathf.DegToRad(-yaw));
-		TotalYaw += yaw;
+		_totalYaw += yaw;
 		RotateObjectLocal(new Vector3(1, 0, 0), Mathf.DegToRad(-pitch));
 	}
 
@@ -193,7 +187,7 @@ public partial class Freecam : Camera3D
 		switch (@event)
 		{
 			case InputEventMouseMotion inputEventMouseMotion:
-				MousePosition = inputEventMouseMotion.Relative;
+				_mousePosition = inputEventMouseMotion.Relative;
 				break;
 			case InputEventMouseButton inputEventMouseButton:
 				switch (inputEventMouseButton.ButtonIndex)
@@ -214,28 +208,28 @@ public partial class Freecam : Camera3D
 				switch (inputEventKey.Keycode)
 				{
 					case Key.W:
-						Forwards = inputEventKey.Pressed;
+						_forwards = inputEventKey.Pressed;
 						break;
 					case Key.A:
-						Left = inputEventKey.Pressed;
+						_left = inputEventKey.Pressed;
 						break;
 					case Key.S:
-						Backwards = inputEventKey.Pressed;
+						_backwards = inputEventKey.Pressed;
 						break;
 					case Key.D:
-						Right = inputEventKey.Pressed;
+						_right = inputEventKey.Pressed;
 						break;
 					case Key.Q:
-						Up = inputEventKey.Pressed;
+						_up = inputEventKey.Pressed;
 						break;
 					case Key.E:
-						Down = inputEventKey.Pressed;
+						_down = inputEventKey.Pressed;
 						break;
 					case Key.Shift:
-						Shift = inputEventKey.Pressed;
+						_shift = inputEventKey.Pressed;
 						break;
 					case Key.Alt:
-						Alt = inputEventKey.Pressed;
+						_alt = inputEventKey.Pressed;
 						break;
 				}
 
