@@ -1,6 +1,7 @@
 using Godot;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 using MeshInstance3D = Godot.MeshInstance3D;
+using GodotPrototype.Scripts.Simulation.DoublePrecision;
 
 namespace GodotPrototype.Scripts.UserInterface;
 public partial class OrbitLineMeshGenerator : MeshInstance3D
@@ -50,7 +51,7 @@ public partial class OrbitLineMeshGenerator : MeshInstance3D
 			for (int j = 0; j < _orbitVerticesCount; j++)
 			{
 				var coordLayer = _orbitVertices[i][j].ParentPosition.CoordLayer.Increment();
-				orbitMesh.SurfaceAddVertex(_orbitVertices[i][j].GetPositionAtLayer(coordLayer) * coordLayer.GetConversionFactor(0));
+				orbitMesh.SurfaceAddVertex((Vector3)(_orbitVertices[i][j].GetPositionAtLayer(coordLayer) * coordLayer.GetConversionFactor(0)));
 			}
 
 			orbitMesh.SurfaceEnd();
@@ -75,8 +76,8 @@ public partial class OrbitLineMeshGenerator : MeshInstance3D
 		for (int i = 0; i < _orbitMeshNodes.Count; i++)
 		{
 			var renderSpacePos = _celestials[i].ParentCelestial.NestedPos.GetPositionAtLayer(0);
-			_orbitMeshNodes[i].Position = renderSpacePos.Normalized();
-			_orbitMeshNodes[i].Scale = Vector3.One / renderSpacePos.Length();
+			_orbitMeshNodes[i].Position = (Vector3)renderSpacePos.Normalized();
+			_orbitMeshNodes[i].Scale = (Vector3)(Vector3d.One / renderSpacePos.Magnitude());
 		}
 	}
 	public override void _Input(InputEvent @event)
