@@ -1,21 +1,22 @@
 using Godot;
+using GodotPrototype.Scripts.Simulation.DoublePrecision;
 
 namespace GodotPrototype.Scripts.Simulation.ReferenceFrames;
 
 public class NestedPosition
 {
 	public CoordinateSpace CoordLayer;
-	public Vector3 LocalPosition;
+	public Vector3d LocalPosition;
 	public NestedPosition ParentPosition;
 
-	public NestedPosition(Vector3 localPosition, CelestialScript parentCelestial)
+	public NestedPosition(Vector3d localPosition, CelestialScript parentCelestial)
 	{
 		LocalPosition = localPosition;
 		ParentPosition = parentCelestial.NestedPos;
 		CoordLayer = parentCelestial.CoordLayer.Increment();
 	}
 	
-	public NestedPosition(Vector3 localPosition, NestedPosition parentPosition)
+	public NestedPosition(Vector3d localPosition, NestedPosition parentPosition)
 	{
 		LocalPosition = localPosition;
 		ParentPosition = parentPosition;
@@ -29,7 +30,7 @@ public class NestedPosition
 		CoordLayer = nestedPosition.CoordLayer;
 	}
 	
-	public NestedPosition(Vector3 localPosition)
+	public NestedPosition(Vector3d localPosition)
 	{
 		LocalPosition = localPosition;
 		ParentPosition = null;
@@ -38,34 +39,41 @@ public class NestedPosition
 	
 	public NestedPosition() // Base Case
 	{
-		LocalPosition = new Vector3();
+		LocalPosition = new Vector3d();
 		ParentPosition = null;
 		CoordLayer = CoordinateSpace.GalaxySpace;
 	}
 
-	public Vector3 GetPositionAtLayer(CoordinateSpace layer)
+	public Vector3d this[CoordinateSpace coordLayer]
+	{
+		get
+		{
+			if (coordLayer < 0) throw new IndexOutOfRangeException();
+			return GetPositionAtLayer(coordLayer);
+		}
+	} 
+
+	public Vector3d GetPositionAtLayer(CoordinateSpace layer)
 	{
 		// Layer 0 is RenderSpace, Layer 1 is GalaxySpace, 2 is StarSpace, 3 is PlanetSpace, 4 is MoonSpace and 5+ are levels of nested MoonSpace
 		if (layer == CoordinateSpace.RenderSpace)
 		{
-			return ConvertPositionReference(this, Freecam.NestedPos, CoordinateSpace.RenderSpace);
+			return ConvertPositionReference(Freecam.NestedPos, CoordinateSpace.RenderSpace);
 		}
 		if (layer == CoordLayer) return LocalPosition;
 		
 		if (layer < CoordLayer && ParentPosition != null) return ParentPosition.GetPositionAtLayer(layer);
 
-		return new Vector3();
+		return new Vector3d();
 	}
 
-	public static Vector3 ConvertPositionReference(NestedPosition conversionPosition, NestedPosition newRefPosition, CoordinateSpace newCoordLayer)
+	public Vector3d ConvertPositionReference(NestedPosition newRefPosition, CoordinateSpace newCoordLayer)
 	{
-		var convertedPosition = new Vector3();
-		for (var i = 1; i < Mathf.Max((int)conversionPosition.CoordLayer, (int)newRefPosition.CoordLayer) + 1; i++)
+		var convertedPosition = new Vector3d();
+		for (var i = 1; i < Mathf.Max((int)CoordLayer, (int)newRefPosition.CoordLayer) + 1; i++)
 		{
-			convertedPosition +=
-				(conversionPosition.GetPositionAtLayer((CoordinateSpace)i) -
-				 newRefPosition.GetPositionAtLayer((CoordinateSpace)i)) *
-				((CoordinateSpace)i).GetConversionFactor(newCoordLayer);
+			var coordLayer = (CoordinateSpace)i;
+			convertedPosition += (this[coordLayer] - newRefPosition[coordLayer]) * coordLayer.GetConversionFactor(newCoordLayer);
 		}
 		return convertedPosition;
 	}
