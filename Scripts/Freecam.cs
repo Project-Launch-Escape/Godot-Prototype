@@ -1,8 +1,8 @@
-using System.Collections;
 using Godot;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 using GodotPrototype.Scripts.UserInterface;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
+using GodotPrototype.Scripts.Simulation.Physics;
 
 namespace GodotPrototype.Scripts;
 
@@ -11,9 +11,11 @@ public partial class Freecam : Camera3D
 	public static CelestialScript ParentCelestial;
 	[Export] public CelestialScript StartingParentCelestial;
 	[Export] private DebugUiController _debugUI;
+	[Export] public Color OrbitColor;
 	
 	public static CoordinateSpace CoordLayer;
 	public static NestedPosition NestedPos;
+	public static Orbit Orbit;
 
 	private static List<double> _celestialDists;
 	private static SortedList<double,CelestialScript> _sortedCelestialDists = new ();
@@ -163,9 +165,12 @@ public partial class Freecam : Camera3D
 			_velocity = direction * VelocityMultiplier;
 			Vector3 velocityRotated = ((Vector3)_velocity).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-_totalYaw));
 			velocityRotated = velocityRotated.Rotated(new Vector3(1f,0f,0f).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-_totalYaw)).Normalized(), Mathf.DegToRad(-_totalPitch));
+			
 			NestedPos.LocalPosition += (Vector3d)velocityRotated * delta * speedMulti * GlobalValues.GetRefConversionFactor(0,CoordLayer);
+			
+			Orbit = new Orbit(NestedPos.LocalPosition * CoordLayer.GetConversionFactor(0), velocityRotated, ParentCelestial, OrbitColor);
+			GD.Print($"a:{Orbit.a:F3}, b:{Orbit.b:F3}, e:{Orbit.e:F2}, w:{Orbit.w:F2}, i:{Orbit.i:F2}, l:{Orbit.l:F2}, n:{Orbit.n:F20}");
 		}
-
 	}
 
 	private void UpdateMouseLook()
@@ -175,7 +180,6 @@ public partial class Freecam : Camera3D
 		var yaw = _mousePosition.X;
 		var pitch = _mousePosition.Y;
 		_mousePosition = new Vector2(0, 0);
-		pitch = Mathf.Clamp(pitch, -90 - _totalPitch, 90 - _totalPitch);
 		_totalPitch += pitch;
 		RotateY(Mathf.DegToRad(-yaw));
 		_totalYaw += yaw;
@@ -230,6 +234,9 @@ public partial class Freecam : Camera3D
 						break;
 					case Key.Alt:
 						_alt = inputEventKey.Pressed;
+						break;
+					case Key.O:
+						OrbitLineMeshGenerator.CreateOrbitLine(Orbit);
 						break;
 				}
 
