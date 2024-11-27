@@ -1,6 +1,4 @@
 using Godot;
-using System;
-using System.Runtime.Intrinsics;
 
 namespace GodotPrototype.Scripts.Simulation.DoublePrecision;
 
@@ -28,24 +26,15 @@ public class Vector3d
 	public double Y;
 	public double Z;
 	
-	public static Vector3d Zero = new Vector3d(0, 0, 0);
+	public static Vector3d Zero = new (0, 0, 0);
+	public static Vector3d One { get; } = new (1, 1, 1);
+	public static Vector3d Up { get; } = new (0, 1, 0);
+	public static Vector3d Down { get; } = new (0, -1, 0);
+	public static Vector3d Left { get; } = new (-1, 0, 0);
+	public static Vector3d Right { get; } = new (1, 0, 0);
+	public static Vector3d Forward { get; } = new (0, 0, 1);
+	public static Vector3d Backward { get; } = new (0, 0, -1);
 
-	private static readonly Vector3d _one = new Vector3d(1, 1, 1);
-	private static readonly Vector3d _up = new Vector3d(0, 1, 0);
-	private static readonly Vector3d _down = new Vector3d(0, -1, 0);
-	private static readonly Vector3d _left = new Vector3d(-1, 0, 0);
-	private static readonly Vector3d _right = new Vector3d(1, 0, 0);
-	private static readonly Vector3d _forward = new Vector3d(0, 0, 1);
-	private static readonly Vector3d _backward = new Vector3d(0, 0, -1);
-	
-	public static Vector3d One => _one;
-	public static Vector3d Up => _up;
-	public static Vector3d Down => _down;
-	public static Vector3d Left => _left;
-	public static Vector3d Right => _right;
-	public static Vector3d Forward => _forward;
-	public static Vector3d Backward => _backward;
-	
 	public Vector3d(double x, double y, double z)
 	{
 		X = x;
@@ -90,6 +79,15 @@ public class Vector3d
 		return (this - v2).Magnitude();
 	}
 
+	public Vector3d Cross(Vector3d with)
+	{
+		return new Vector3d(Y * with.Z - Z * with.Y, Z * with.X - X * with.Z, X * with.Y - Y * with.X);
+	}
+	public double Dot(Vector3d with)
+	{
+		return X * with.X + Y * with.Y + Z * with.Z;
+	}
+	
 	public static implicit operator string(Vector3d vector3d)
 	{
 		return $"{vector3d.X}, {vector3d.Y}, {vector3d.Z}";
