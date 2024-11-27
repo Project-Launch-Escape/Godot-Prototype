@@ -2,80 +2,59 @@ using Godot;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 using MeshInstance3D = Godot.MeshInstance3D;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
+using GodotPrototype.Scripts.Simulation.Physics;
 
 namespace GodotPrototype.Scripts.UserInterface;
+
 public partial class OrbitLineMeshGenerator : MeshInstance3D
 {
-	private List<CelestialScript> _celestials = [];
+	private static List<Orbit> _orbits = [];
 	
-	[Export] private int _orbitVerticesCount;
-	private List<NestedPosition[]> _orbitVertices = [];
-
-	[Export] public Camera3D CameraPosition;
-	private List<MeshInstance3D> _orbitMeshNodes = [];
-	private bool _calculatedPositions;
-
-	private void InitializeMeshes()
+	private const int OrbitVerticesCount = 5000;
+	private static Node _meshParent;
+	private static List<MeshInstance3D> _orbitMeshNodes = [];
+	
+	public override void _Ready()
 	{
-		foreach (var celestial in GlobalValues.AllCelestials)
-		{
-			if (celestial.ParentCelestial == null) continue;
-			_celestials.Add(celestial);
-		}
-
-		foreach (var celestial in _celestials)
-		{
-			var orbitVertexArray = new NestedPosition[_orbitVerticesCount];
-			for (int i = 0; i < _orbitVerticesCount; i++)
-			{
-				orbitVertexArray[i] = new NestedPosition(celestial.GetPositionAtE(i*(float)Math.Tau/(_orbitVerticesCount-1)), celestial.ParentCelestial);
-			}
-			_orbitVertices.Add(orbitVertexArray);
-		}
+		_meshParent = this;
+	}
+	
+	public static void CreateOrbitLine(Orbit orbit)
+	{
+		if (orbit.ParentCelestial == null) return;
+		_orbits.Add(orbit);
 		
-	}
-
-	private void CreateOrbitMeshNodes()
-	{
-		for (int i = 0; i < _celestials.Count; i++)
-		{
-			var orbitMesh = new ImmediateMesh();
-			var orbitMaterial = new StandardMaterial3D();
+		var orbitMesh = new ImmediateMesh();
+		var orbitMaterial = new StandardMaterial3D();
 			
-			orbitMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
-			orbitMaterial.AlbedoColor = _celestials[i].CelestialColor;
+		orbitMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
+		orbitMaterial.AlbedoColor = orbit.Color;
 				
-			orbitMesh.SurfaceBegin(Mesh.PrimitiveType.LineStrip, orbitMaterial);
-			orbitMesh.SurfaceSetColor(_celestials[i].CelestialColor);
-			
-			for (int j = 0; j < _orbitVerticesCount; j++)
-			{
-				var coordLayer = _orbitVertices[i][j].ParentPosition.CoordLayer.Increment();
-				orbitMesh.SurfaceAddVertex((Vector3)(_orbitVertices[i][j].GetPositionAtLayer(coordLayer) * coordLayer.GetConversionFactor(0)));
-			}
-
-			orbitMesh.SurfaceEnd();
-			var orbitMeshNode = new MeshInstance3D();
-			orbitMeshNode.Mesh = orbitMesh;
-			
-			AddChild(orbitMeshNode);
-			_orbitMeshNodes.Add(orbitMeshNode);
+		orbitMesh.SurfaceBegin(Mesh.PrimitiveType.LineStrip, orbitMaterial);
+		orbitMesh.SurfaceSetColor(orbit.Color);
+		
+		var coordLayer = orbit.ParentCelestial.NestedPos.CoordLayer.Increment();
+		
+		for (int i = 0; i < OrbitVerticesCount; i++)
+		{
+			var vertexPosition = orbit.GetPositionAtE(i * Math.Tau / (OrbitVerticesCount - 1));
+			orbitMesh.SurfaceAddVertex((Vector3)(vertexPosition * coordLayer.GetConversionFactor(0)));
 		}
+
+		orbitMesh.SurfaceEnd();
+		var orbitMeshNode = new MeshInstance3D();
+		orbitMeshNode.Mesh = orbitMesh;
+		
+		_meshParent.AddChild(orbitMeshNode);
+		_orbitMeshNodes.Add(orbitMeshNode);
 	}
-	
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (!_calculatedPositions)
-		{
-			_calculatedPositions = true;
-			InitializeMeshes();
-			CreateOrbitMeshNodes();
-		}
-		
 		for (int i = 0; i < _orbitMeshNodes.Count; i++)
 		{
-			var renderSpacePos = _celestials[i].ParentCelestial.NestedPos.GetPositionAtLayer(0);
+			var renderSpacePos = _orbits[i].ParentCelestial.NestedPos[0];
 			_orbitMeshNodes[i].Position = (Vector3)renderSpacePos.Normalized();
 			_orbitMeshNodes[i].Scale = (Vector3)(Vector3d.One / renderSpacePos.Magnitude());
 		}
