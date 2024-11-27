@@ -1,6 +1,8 @@
 using Godot;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
+using GodotPrototype.Scripts.Simulation.Physics;
+using GodotPrototype.Scripts.UserInterface;
 
 namespace GodotPrototype.Scripts;
 
@@ -9,29 +11,31 @@ public partial class CelestialScript : StaticBody3D
 	[Export] public double Mass;
 	[Export] public CelestialScript ParentCelestial;
 	[Export] private double a;
-	private double b;
 	[Export] private double e;
 	[Export] private double n;
 	[Export] private double w;
 	[Export] private double i;
 	[Export] private double l;
-	private static double tol = 0.00001f;
+	[Export] private double mAtEpoch;
+	[Export] private double epoch;
 	private double E;
+	
 	[Export] public double Radius;
 	[Export] public double SOIRadius;
 	[Export] public CoordinateSpace CoordLayer;
+	public Orbit CelestialOrbit;
 	public NestedPosition NestedPos;
 	[Export] public Color CelestialColor;
 
 	public override void _Ready()
 	{
-		b = a * (1 - Mathf.Pow(e, 2));
 		if (ParentCelestial != null)
 		{
-			if (n == 0) n = Mathf.Sqrt(GlobalValues.G * ParentCelestial.Mass / ( a * CoordLayer.GetConversionFactor(0)))
-							/ (a * CoordLayer.GetConversionFactor(0));
-
-			NestedPos = new NestedPosition(GetPositionAtE(E),ParentCelestial);
+			if (n == 0) n = Mathf.Sqrt(GlobalValues.G * ParentCelestial.Mass / ( a * CoordLayer.GetConversionFactor(0)) ) / (a * CoordLayer.GetConversionFactor(0));
+			CelestialOrbit = new Orbit(a, e, w, i, l, n, mAtEpoch, epoch, ParentCelestial, CelestialColor);
+			OrbitLineMeshGenerator.CreateOrbitLine(CelestialOrbit);
+			
+			NestedPos = new NestedPosition(GetPosition(),ParentCelestial);
 			SOIRadius = a * Mathf.Pow(Mass / ParentCelestial.Mass, 0.4f);
 		}
 		else
@@ -45,8 +49,7 @@ public partial class CelestialScript : StaticBody3D
 	{
 		if (ParentCelestial != null)
 		{
-			CalculateEccentricAnomaly((n * GlobalValues.Time) % Math.Tau);
-			NestedPos.LocalPosition = GetPositionAtE(E);
+			NestedPos.LocalPosition = CelestialOrbit.GetPosition();
 		}
 		
 		var renderSpacePos = NestedPos[CoordinateSpace.RenderSpace];
@@ -56,31 +59,8 @@ public partial class CelestialScript : StaticBody3D
 
 		var extraScale = Visible ? Freecam.GetDistanceIndex(this) + 1 : 1;
 
-		Position = (Vector3)renderSpacePos.Normalized() * extraScale;
+		Position = ((Vector3)renderSpacePos).Normalized() * extraScale;
 		Scale = Vector3.One * (float)newRadius * extraScale;
 	}
 
-	public Vector3d GetPositionAtE(double E)
-	{
-		var x = a * Mathf.Cos(E) - a + b;
-		var z = b * Mathf.Sin(E);
-
-		var x_Rot = x * (Mathf.Cos(w) * Mathf.Cos(l) - Mathf.Sin(w) * Mathf.Sin(l) * Mathf.Cos(i)) + z * (-Mathf.Sin(w) * Mathf.Cos(l) - Mathf.Cos(w) * Mathf.Sin(l) * Mathf.Cos(i));
-		var y_Rot = x * (Mathf.Sin(w) * Mathf.Sin(i)) + z * (Mathf.Cos(w) * Mathf.Sin(i));
-		var z_Rot = x * (Mathf.Cos(w) * Mathf.Sin(l) + Mathf.Sin(w) * Mathf.Cos(l) * Mathf.Cos(i)) + z * (-Mathf.Sin(w) * Mathf.Sin(l) + Mathf.Cos(w) * Mathf.Cos(l) * Mathf.Cos(i));
-		return new Vector3d((float)x_Rot, (float)y_Rot, (float)z_Rot);
-	}
-	private double CalculateEccentricAnomaly(double M)
-	{
-		for (int i = 0; i < 10; i++)
-		{
-			var dE = (E - e * Mathf.Sin(E) - M) / (1 - e * Mathf.Cos(E));
-			E -= dE;
-			if (Mathf.Abs(dE) < tol)
-			{
-				break;
-			}
-		}
-		return E;
-	}
 }
