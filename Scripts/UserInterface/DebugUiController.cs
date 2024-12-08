@@ -67,27 +67,27 @@ public partial class DebugUiController : Node
 		}
 	}
 	
-	private void UpdateSpeed(float speed)
+	private void UpdateSpeed(double speed)
 	{
-		CurrentSpeed.Text = $"Current Speed: {speed/1000:F1} km/s";
+		CurrentSpeed.Text = $"Current Speed: {speed/1000:F2} km/s";
 	}
 	
 	public void UpdateSOIs(List<CelestialScript> currentSOIs)
 	{
-		var sOIText = "Current SOIs: ";
+		var soiText = "Current SOIs: ";
 		for (int i = 0; i < currentSOIs.Count; i++)
 		{
-			sOIText += currentSOIs[i].Name + ", ";
+			soiText += currentSOIs[i].Name + ", ";
 		}
-
-		CurrentSOIs.Text = sOIText;
+		
+		CurrentSOIs.Text = soiText;
 	}
 
 	private void UpdateDistance()
 	{
 		var targetCelestial = GlobalValues.AllCelestials[_celestialIndex];
-		var dist = targetCelestial.NestedPos.LocalPosition.DistanceTo(NestedPosition.ConvertPositionReference(Freecam.NestedPos, targetCelestial.NestedPos, CoordinateSpace.RenderSpace));
-		DistanceToCelestial.Text = $"Distance to {targetCelestial.Name}: {dist/1000}km";
+		var dist = targetCelestial.NestedPos[0].Magnitude();
+		DistanceToCelestial.Text = $"Distance to {targetCelestial.Name}: {dist/1000:F4}km";
 	}
 	public override void _Input(InputEvent @event)
 	{
