@@ -5,30 +5,32 @@ namespace GodotPrototype.Scripts.UserInterface;
 public partial class TransformTracker : Control
 {
 
-	[Export]
-	public Camera3D CameraPosition;
-	[Export]
-	public Label TransformName;
+	private Camera3D _camera;
+	private Label _transformName;
 
 	private bool _visible = true;
 		
 	private Node3D _toTrack;
 	
-	private static float[] _scaleAtCoordLayer = [0.01f, 1.125f, 1f, 0.7f];
+	private static readonly float[] ScaleAtCoordLayer = [0.01f, 1.125f, 1f, 0.7f];
+	
 	public override void _Ready()
 	{
-
+		_camera = (Camera3D)GetNode("/root/GameScene/Camera");
+		_transformName = (Label)FindChild("Label");
+		
 		_toTrack = (Node3D)GetParent();
-		TransformName.Text = _toTrack.Name;
-		Scale = new Vector2(1f,1f) * _scaleAtCoordLayer[(int)((CelestialScript)_toTrack).CoordLayer];
+		_transformName.Text = _toTrack.Name;
+
+		Scale = new Vector2(1f,1f) * ScaleAtCoordLayer[(int)((CelestialScript)_toTrack).NestedPos.CoordLayer];
 	}
 
 	public override void _Process(double delta)
 	{
-		var behind = CameraPosition.IsPositionBehind(_toTrack.GlobalPosition);
+		var behind = _camera.IsPositionBehind(_toTrack.GlobalPosition);
 		Visible = !behind && _visible;
 		if (behind) return;
-		Position = CameraPosition.UnprojectPosition(_toTrack.GlobalPosition);
+		Position = _camera.UnprojectPosition(_toTrack.GlobalPosition);
 	}
 	public override void _Input(InputEvent @event)
 	{
