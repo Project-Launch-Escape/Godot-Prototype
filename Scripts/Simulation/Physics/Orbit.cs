@@ -8,9 +8,9 @@ public class Orbit
 {
 	public CelestialScript ParentCelestial;
 	public Color Color;
+	public ConicType OrbitType;
 	
-	public double a;
-	public double b;
+	public double p;
 	public double e;
 
 	public double w;
@@ -18,90 +18,130 @@ public class Orbit
 	public double l;
 
 	public double n;
-	public double E;
+	public double Anomaly;
 
 	public double MAtEpoch;
 	public double Epoch;
 	
-	private static double tol = 0.00001f;
+	private const double Tol = 0.00001f;
 
-	public Orbit(double _a, double _e, double _w, double _i, double _l, double _n, double _mepoch, double _epoch, CelestialScript _ParentCelestial, Color color)
+	public Orbit(double _p, double _e, double _w, double _i, double _l, double _n, double _mAtEpoch, double _epoch, CelestialScript _ParentCelestial, Color color)
 	{
-		a = _a;
-		b = _a * Mathf.Sqrt(1 - _e * _e);
+		p = _p;
 		e = _e;
 		w = _w;
 		i = _i;
 		l = _l;
 		n = _n;
-		MAtEpoch = _mepoch;
+		MAtEpoch = _mAtEpoch;
 		Epoch = _epoch;
 		ParentCelestial = _ParentCelestial;
 		Color = color;
+		OrbitType = GetConicType();
 	}
 
 	public Orbit(Vector3d position, Vector3d velocity, CelestialScript _ParentCelestial, Color color)
 	{
-		var coordLayer = _ParentCelestial.CoordLayer.Increment();
+		var coordLayer = _ParentCelestial.NestedPos.CoordLayer.Increment();
 		var angularMomentumVector = position.Cross(velocity);
 		var standardGravity = GlobalValues.G * _ParentCelestial.Mass;
 		
 		var eccentricityVector = velocity.Cross(angularMomentumVector) / standardGravity - position.Normalized();
 		e = eccentricityVector.Magnitude();
-
-		var orbitEnergy = Mathf.Abs(velocity.MagnitudeSquared() / 2 - standardGravity / position.Magnitude());
-		if (e < 1)
-		{
-			a = standardGravity / (2 * orbitEnergy);
-			b = a * Mathf.Sqrt(1 - e * e);
-		}
-		else
-		{
-			a = double.PositiveInfinity;
-			b = angularMomentumVector.MagnitudeSquared() / standardGravity;
-		}
+		OrbitType = GetConicType();
 		
-		var nodeVector = new Vector3d(0, -1, 0).Cross(angularMomentumVector);
-		i = Mathf.Acos(angularMomentumVector.Y / angularMomentumVector.Magnitude());
-		l = Mathf.Acos(nodeVector.X / nodeVector.Magnitude());
-		l = l < 0 ? l + Math.Tau : l;
-		w = Mathf.Atan2(eccentricityVector.Z, eccentricityVector.X) - l;
+		var orbitEnergy = Math.Abs(velocity.MagnitudeSquared() / 2 - standardGravity / position.Magnitude());
+		
+		p = angularMomentumVector.MagnitudeSquared() / standardGravity;
+
+		var K = new Vector3d(0, 1, 0);
+		var nodeVector = K.Cross(angularMomentumVector);
+		
+		i = Math.Acos(K.Dot(angularMomentumVector) / angularMomentumVector.Magnitude());
+		
+		l = Math.Acos(nodeVector.X / nodeVector.Magnitude());
+		l = nodeVector.Y < 0 ? Math.Tau - l : l;
+		
+		w = Math.Atan2(eccentricityVector.Z, eccentricityVector.X) - l;
 		w = w < 0 ? w + Math.Tau : w;
 		
-		n = Mathf.Sqrt(GlobalValues.G * _ParentCelestial.Mass / a) / a;
-		ParentCelestial = _ParentCelestial;
-		a *= CoordinateSpace.RenderSpace.GetConversionFactor(coordLayer);
-		b *= CoordinateSpace.RenderSpace.GetConversionFactor(coordLayer);
+		n = OrbitType != ConicType.Parabolic? Math.Sqrt(standardGravity / Math.Pow(p / (1 - e * e) ,3)) : 2 * Math.Sqrt(standardGravity / Math.Pow(p,3));
+		
 		Color = color;
+		ParentCelestial = _ParentCelestial;
 	}
 	
 	public Vector3d GetPosition()
 	{
-		return GetPositionAtE(CalculateEccentricAnomaly((n * (GlobalValues.Time - Epoch) + MAtEpoch - l - w)  % Math.Tau));
+		return GetPositionAtV(CalculateTrueAnomaly(n * (GlobalValues.Time - Epoch) + MAtEpoch - l - w));
 	}
-	public Vector3d GetPositionAtE(double E)
+	public Vector3d GetPositionAtV(double v)
 	{
-		var x = a * (Mathf.Cos(E) - e);
-		var z = b * Mathf.Sin(E);
-
-		var xRot = x * (Mathf.Cos(w) * Mathf.Cos(l) - Mathf.Sin(w) * Mathf.Sin(l) * Mathf.Cos(i)) + z * (-Mathf.Sin(w) * Mathf.Cos(l) - Mathf.Cos(w) * Mathf.Sin(l) * Mathf.Cos(i));
-		var yRot = x * (Mathf.Sin(w) * Mathf.Sin(i)) + z * (Mathf.Cos(w) * Mathf.Sin(i));
-		var zRot = x * (Mathf.Cos(w) * Mathf.Sin(l) + Mathf.Sin(w) * Mathf.Cos(l) * Mathf.Cos(i)) + z * (-Mathf.Sin(w) * Mathf.Sin(l) + Mathf.Cos(w) * Mathf.Cos(l) * Mathf.Cos(i));
+		var x = p * Math.Cos(v) / (1 + e * Math.Cos(v));
+		var z = p * Math.Sin(v) / (1 + e * Math.Cos(v));
+		
+		var xRot = x * (Math.Cos(w) * Math.Cos(l) - Math.Sin(w) * Math.Sin(l) * Math.Cos(i)) + z * (-Math.Sin(w) * Math.Cos(l) - Math.Cos(w) * Math.Sin(l) * Math.Cos(i));
+		var yRot = x * (Math.Sin(w) * Math.Sin(i)) + z * (Math.Cos(w) * Math.Sin(i));
+		var zRot = x * (Math.Cos(w) * Math.Sin(l) + Math.Sin(w) * Math.Cos(l) * Math.Cos(i)) + z * (-Math.Sin(w) * Math.Sin(l) + Math.Cos(w) * Math.Cos(l) * Math.Cos(i));
 		
 		return new Vector3d(xRot, yRot, zRot);
 	}
 	
-	private double CalculateEccentricAnomaly(double M)
+	private double CalculateTrueAnomaly(double M)
 	{
-		for (int i = 0; i < 10; i++)
+		if (OrbitType == ConicType.Circular)
 		{
-			var dE = (E - e * Mathf.Sin(E) - M) / (1 - e * Mathf.Cos(E));
-			E -= dE;
-			if (Mathf.Abs(dE) < tol)
-			{
-				break;
-			}
+			return M % Math.Tau;
 		}
-		return E;
+		if (OrbitType == ConicType.Elliptical)
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				var dE = (M - Anomaly + e * Math.Sin(Anomaly)) / (1 - e * Math.Cos(Anomaly));
+				Anomaly += dE;
+				if (Mathf.Abs(dE) < Tol)
+				{
+					break;
+				}
+			}
+			var sinv = Math.Sqrt(1 - e * e) * Math.Sin(Anomaly) / (1 - e * Math.Cos(Anomaly));
+			var cosv = (Math.Cos(Anomaly) - e) / (1 - e * Math.Cos(Anomaly));
+			return Math.Atan2(sinv, cosv);
+		}
+		if (OrbitType == ConicType.Hyperbolic)
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				var dH = (M - e * Mathf.Sinh(Anomaly) + Anomaly) / (e * Mathf.Cosh(Anomaly) - 1);
+				Anomaly += dH;
+				if (Mathf.Abs(dH) < Tol)
+				{
+					break;
+				}
+			}
+			var sinv = -(Math.Sqrt(e * e - 1) * Math.Sinh(Anomaly)) / (1 - e * Math.Cosh(Anomaly));
+			var cosv = (Math.Cosh(Anomaly) - e) / (1 - e * Math.Cosh(Anomaly));
+			GD.Print(Math.Atan2(sinv, cosv));
+			return Math.Atan2(sinv, cosv);
+		}
+		
+		return 2 * Math.Atan(2 * Math.Tan(Math.PI / 2 - 2 * Math.Atan(Math.Pow(Math.Tan((Math.PI / 2 - Math.Atan(1.5 * M)) / 2), 1d / 3d))));
+	}
+	
+	private ConicType GetConicType()
+	{
+		if (e < Tol)
+		{
+			return ConicType.Circular;
+		}
+		if (Mathf.Abs(e - 1) < Tol)
+		{
+			return ConicType.Parabolic;
+		}
+		if (e < 1)
+		{
+			return ConicType.Elliptical;
+		}
+		return ConicType.Hyperbolic;
 	}
 }
