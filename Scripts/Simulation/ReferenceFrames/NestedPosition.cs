@@ -13,7 +13,7 @@ public class NestedPosition
 	{
 		LocalPosition = localPosition;
 		ParentPosition = parentCelestial.NestedPos;
-		CoordLayer = parentCelestial.CoordLayer.Increment();
+		CoordLayer = parentCelestial.NestedPos.CoordLayer.Increment();
 	}
 	
 	public NestedPosition(Vector3d localPosition, NestedPosition parentPosition)
@@ -58,7 +58,7 @@ public class NestedPosition
 		// Layer 0 is RenderSpace, Layer 1 is GalaxySpace, 2 is StarSpace, 3 is PlanetSpace, 4 is MoonSpace and 5+ are levels of nested MoonSpace
 		if (layer == CoordinateSpace.RenderSpace)
 		{
-			return ConvertPositionReference(Freecam.NestedPos, CoordinateSpace.RenderSpace);
+			return ConvertPositionReference(Freecam.NestedPos);
 		}
 		if (layer == CoordLayer) return LocalPosition;
 		
@@ -67,15 +67,19 @@ public class NestedPosition
 		return new Vector3d();
 	}
 
-	public Vector3d ConvertPositionReference(NestedPosition newRefPosition, CoordinateSpace newCoordLayer)
+	public Vector3d ConvertPositionReference(NestedPosition newRefPosition)
 	{
 		var convertedPosition = new Vector3d();
-		for (var i = 1; i < Mathf.Max((int)CoordLayer, (int)newRefPosition.CoordLayer) + 1; i++)
+		for (var i = 1; i < Math.Max((int)CoordLayer, (int)newRefPosition.CoordLayer) + 1; i++)
 		{
 			var coordLayer = (CoordinateSpace)i;
-			convertedPosition += (this[coordLayer] - newRefPosition[coordLayer]) * coordLayer.GetConversionFactor(newCoordLayer);
+			convertedPosition += (this[coordLayer] - newRefPosition[coordLayer]);
 		}
 		return convertedPosition;
 	}
-
+	
+	public static implicit operator string(NestedPosition nestedPos)
+	{
+		return $"LocalPosition: ({(string)nestedPos.LocalPosition}), CoordLayer: {nestedPos.CoordLayer}";
+	}
 }
