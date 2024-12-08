@@ -13,8 +13,8 @@ public partial class Freecam : Camera3D
 	[Export] private DebugUiController _debugUI;
 	[Export] public Color OrbitColor;
 	
-	public static CoordinateSpace CoordLayer;
-	public static NestedPosition NestedPos;
+
+	public static NestedPosition NestedPos = new ();
 	public static Orbit Orbit;
 
 	private static List<double> _celestialDists;
@@ -45,7 +45,6 @@ public partial class Freecam : Camera3D
 	public override void _Ready()
 	{
 		ParentCelestial = StartingParentCelestial;
-		CoordLayer = ParentCelestial.CoordLayer.Increment();
 		NestedPos = new NestedPosition(new Vector3d(), ParentCelestial);
 	}
 
@@ -54,7 +53,7 @@ public partial class Freecam : Camera3D
 		var distances = new List<double>();
 		foreach (var celestial in GlobalValues.AllCelestials)
 		{
-			distances.Add(NestedPos.ConvertPositionReference(celestial.NestedPos, celestial.CoordLayer).Magnitude());
+			distances.Add(celestial.NestedPos[0].Magnitude());
 		}
 
 		return distances;
@@ -67,7 +66,7 @@ public partial class Freecam : Camera3D
 		for (int i = 0; i < celestials.Count; i++)
 		{
 			if (!celestials[i].Visible) continue;
-			sortedDists.Add(_celestialDists[i] * celestials[i].CoordLayer.GetConversionFactor(0), GlobalValues.AllCelestials[i]);
+			sortedDists.Add(_celestialDists[i], GlobalValues.AllCelestials[i]);
 		}
 		return sortedDists;
 	}
@@ -108,8 +107,8 @@ public partial class Freecam : Camera3D
 		
 		for (var i = 0; i < currentSOIs.Count; i++)
 		{
-			if (currentSOIs[i].CoordLayer <= highestSOILayer) continue;
-			highestSOILayer = currentSOIs[i].CoordLayer;
+			if (currentSOIs[i].NestedPos.CoordLayer <= highestSOILayer) continue;
+			highestSOILayer = currentSOIs[i].NestedPos.CoordLayer;
 			highestSOIIndex = i;
 		}
 		
@@ -123,15 +122,14 @@ public partial class Freecam : Camera3D
 		if (newSOI != null)
 		{
 			newRefPosition = newSOI.NestedPos;
-			newCoordLayer = newSOI.CoordLayer.Increment();
+			newCoordLayer = newSOI.NestedPos.CoordLayer.Increment();
 		}
 
-		var newPosition = NestedPos.ConvertPositionReference(newRefPosition, newCoordLayer);
+		var newPosition = NestedPos.ConvertPositionReference(newRefPosition);
 		
 		NestedPos.LocalPosition = newPosition;
 		NestedPos.CoordLayer = newCoordLayer;
 		NestedPos.ParentPosition = newSOI?.NestedPos;
-		CoordLayer = newCoordLayer;
 		ParentCelestial = newSOI;
 	}
 	
@@ -166,10 +164,10 @@ public partial class Freecam : Camera3D
 			Vector3 velocityRotated = ((Vector3)_velocity).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-_totalYaw));
 			velocityRotated = velocityRotated.Rotated(new Vector3(1f,0f,0f).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-_totalYaw)).Normalized(), Mathf.DegToRad(-_totalPitch));
 			
-			NestedPos.LocalPosition += (Vector3d)velocityRotated * delta * speedMulti * GlobalValues.GetRefConversionFactor(0,CoordLayer);
+			NestedPos.LocalPosition += (Vector3d)velocityRotated * delta * speedMulti;
 			
-			Orbit = new Orbit(NestedPos.LocalPosition * CoordLayer.GetConversionFactor(0), velocityRotated, ParentCelestial, OrbitColor);
-			GD.Print($"a:{Orbit.a:F3}, b:{Orbit.b:F3}, e:{Orbit.e:F2}, w:{Orbit.w:F2}, i:{Orbit.i:F2}, l:{Orbit.l:F2}, n:{Orbit.n:F20}");
+			Orbit = new Orbit(NestedPos.LocalPosition, velocityRotated, ParentCelestial, OrbitColor);
+			//GD.Print($"a:{Orbit.a:F3}, b:{Orbit.b:F3}, e:{Orbit.e:F2}, w:{Orbit.w:F2}, i:{Orbit.i:F2}, l:{Orbit.l:F2}, n:{Orbit.n:F20}");
 		}
 	}
 
