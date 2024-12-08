@@ -6,7 +6,7 @@ using GodotPrototype.Scripts.Simulation.Physics;
 
 namespace GodotPrototype.Scripts.UserInterface;
 
-public partial class OrbitLineMeshGenerator : MeshInstance3D
+public partial class OrbitLineMeshGenerator : Node3D
 {
 	private static List<Orbit> _orbits = [];
 	
@@ -32,13 +32,14 @@ public partial class OrbitLineMeshGenerator : MeshInstance3D
 				
 		orbitMesh.SurfaceBegin(Mesh.PrimitiveType.LineStrip, orbitMaterial);
 		orbitMesh.SurfaceSetColor(orbit.Color);
-		
-		var coordLayer = orbit.ParentCelestial.NestedPos.CoordLayer.Increment();
+
+		var conicRange = orbit.OrbitType is ConicType.Circular or ConicType.Elliptical ?
+			Math.PI : Math.Abs(Math.Asin(1 / orbit.e) - Math.PI);
 		
 		for (int i = 0; i < OrbitVerticesCount; i++)
 		{
-			var vertexPosition = orbit.GetPositionAtE(i * Math.Tau / (OrbitVerticesCount - 1));
-			orbitMesh.SurfaceAddVertex((Vector3)(vertexPosition * coordLayer.GetConversionFactor(0)));
+			var vertexPosition = orbit.GetPositionAtV(Mathf.Lerp(-conicRange, conicRange, (double)i / OrbitVerticesCount));
+			orbitMesh.SurfaceAddVertex((Vector3)vertexPosition);
 		}
 
 		orbitMesh.SurfaceEnd();
