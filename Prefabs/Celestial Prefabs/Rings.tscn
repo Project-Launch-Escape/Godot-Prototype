@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://ocodmq28vw5m"]
+
+[node name="RingTexture" type="Sprite3D"]
+gi_mode = 2
+axis = 1

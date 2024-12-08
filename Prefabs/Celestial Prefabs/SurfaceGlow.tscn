@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://en1t4lwqhbx6"]
+
+[node name="SurfaceGlow" type="Node3D"]
+
+[node name="StarLighter 1" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="StarLighter 2" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.000383988, -1, 0, 1, 0.000383988, 0, -2, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="StarLighter 3" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="StarLighter 4" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, -2)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="StarLighter 5" type="SpotLight3D" parent="."]
+transform = Transform3D(4.37114e-08, -3.82137e-15, 1, -8.74228e-08, -1, 0, 1, -8.74228e-08, -4.37114e-08, 2, 0, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_cull_mask = 4294966371
+spot_range = 10.0
+spot_attenuation = 0.0
+
+[node name="StarLighter 6" type="SpotLight3D" parent="."]
+transform = Transform3D(4.37114e-08, 3.82137e-15, -1, 8.74228e-08, -1, 2.5411e-21, -1, -8.74228e-08, -4.37114e-08, -2.0457, 0, 0)
+layers = 2
+light_energy = 16.0
+light_indirect_energy = 16.0
+spot_range = 10.0
+spot_attenuation = 0.0
