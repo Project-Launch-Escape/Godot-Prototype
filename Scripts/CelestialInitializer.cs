@@ -25,7 +25,7 @@ public partial class CelestialInitializer : Node
 
 		for (int i = 0; i < _configs.Count; i++)
 		{
-			_celestialNames[i] = (string)_configs[i].GetValue("PhysicalParameters", "Name");
+			_celestialNames[i] = (string)_configs[i].GetValue("Properties", "Name");
 		}
 
 		for (int i = 0; i < _configs.Count; i++)
@@ -38,11 +38,11 @@ public partial class CelestialInitializer : Node
 	private static List<ConfigFile> GetConfigs()
 	{
 		var cfgs = new List<ConfigFile>();
-		var fileNames = DirAccess.GetFilesAt("res://PlanetConfigs");
+		var fileNames = DirAccess.GetFilesAt("res://CelestialConfigs");
 		foreach (var fileName in fileNames)
 		{
 			var cfg = new ConfigFile();
-			var filePath = "res://PlanetConfigs/" + fileName;
+			var filePath = "res://CelestialConfigs/" + fileName;
 			cfg.Load(filePath);
 			cfgs.Add(cfg);
 		}
@@ -66,13 +66,13 @@ public partial class CelestialInitializer : Node
 			}
 		}
 		var celestial = (Node3D)_celestialPrefab.Instantiate();
-		((CelestialScript)celestial).Mass = (double)cfg.GetValue("PhysicalParameters", "Mass");
-		celestial.Name = (string)cfg.GetValue("PhysicalParameters", "Name");
+		((CelestialScript)celestial).Mass = (double)cfg.GetValue("Properties", "Mass");
+		celestial.Name = (string)cfg.GetValue("Properties", "Name");
 		
 		if (cfg.HasSection("Orbit")) AddOrbit(cfg,celestial);
-		else celestial.Position = (Vector3)cfg.GetValue("PhysicalParameters", "GalaxyPosition");
-		if (cfg.HasSectionKey("PhysicalParameters", "SOIRadius"))
-			((CelestialScript)celestial).SOIRadius = (double)cfg.GetValue("PhysicalParameters", "SOIRadius");
+		else celestial.Position = (Vector3)cfg.GetValue("Properties", "GalaxyPosition");
+		if (cfg.HasSectionKey("Properties", "SOIRadius"))
+			((CelestialScript)celestial).SOIRadius = (double)cfg.GetValue("Properties", "SOIRadius");
 		if (cfg.HasSection("Surface")) AddSurface(cfg,celestial);
 		if (cfg.HasSection("Rings")) AddRings(cfg,celestial);
 		if (cfg.HasSection("LightEmission")) AddLightEmitter(cfg,celestial);
@@ -80,7 +80,7 @@ public partial class CelestialInitializer : Node
 		
 		_celestialNodes.Add(celestial);
 		AddChild(celestial);
-		if (cfg.HasSection("PhysicalParameters")) AddNodeTracker(cfg,celestial);
+		if (cfg.HasSection("Properties")) AddNodeTracker(celestial);
 		for (int i = 0; i < _configs.Count; i++)
 		{
 			if (_celestialNames[i] != celestial.Name) continue;
@@ -118,7 +118,7 @@ public partial class CelestialInitializer : Node
 		var color = (Color)cfg.GetValue("Orbit", "Color");
 		((CelestialScript)celestial).CelestialOrbit = new Orbit(p, e, w, i, l, n, mAtEpoch, epoch, parentCelestial, color);
 		
-		if (!cfg.HasSectionKey("PhysicalParameters", "SOIRadius"))
+		if (!cfg.HasSectionKey("Properties", "SOIRadius"))
 			((CelestialScript)celestial).SOIRadius = p * Math.Pow(((CelestialScript)celestial).Mass / parentCelestial.Mass, 0.4f);
 	}
 	
@@ -132,7 +132,7 @@ public partial class CelestialInitializer : Node
 		
 		mesh.SetMaterialOverride(material);
 		celestial.AddChild(surface);
-		((CelestialScript)celestial).Radius = (double)cfg.GetValue("PhysicalParameters", "Radius");
+		((CelestialScript)celestial).Radius = (double)cfg.GetValue("Surface", "Radius");
 	}
 	
 	private void AddRings(ConfigFile cfg, Node celestial)
@@ -167,7 +167,7 @@ public partial class CelestialInitializer : Node
 		}
 	}
 	
-	private void AddNodeTracker(ConfigFile cfg, Node celestial)
+	private void AddNodeTracker(Node celestial)
 	{
 		var nodeTracker = _nodeTrackerPrefab.Instantiate();
 		celestial.AddChild(nodeTracker);
