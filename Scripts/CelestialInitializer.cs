@@ -1,5 +1,6 @@
 using Godot;
 using GodotPrototype.Scripts.Simulation.Physics;
+using GodotPrototype.Scripts.UserInterface;
 
 namespace GodotPrototype.Scripts;
 
@@ -16,7 +17,13 @@ public partial class CelestialInitializer : Node
 	[Export] private PackedScene _lightEmitterPrefab;
 	[Export] private PackedScene _surfaceGlowPrefab;
 	[Export] private PackedScene _nodeTrackerPrefab;
-	
+
+	public override void _EnterTree()
+	{
+		OrbitMesh.DefaultMeshParent = this;
+		TransformTracker.Camera = (Camera3D)GetNode("/root/GameScene/Camera");
+	}
+
 	public override void _Ready()
 	{
 		_configs = GetConfigs();
@@ -66,21 +73,21 @@ public partial class CelestialInitializer : Node
 			}
 		}
 		var celestial = (Node3D)_celestialPrefab.Instantiate();
-		((CelestialScript)celestial).Mass = (double)cfg.GetValue("Properties", "Mass");
+		((Celestial)celestial).Mass = (double)cfg.GetValue("Properties", "Mass");
 		celestial.Name = (string)cfg.GetValue("Properties", "Name");
 		
 		if (cfg.HasSection("Orbit")) AddOrbit(cfg,celestial);
 		else celestial.Position = (Vector3)cfg.GetValue("Properties", "GalaxyPosition");
 		if (cfg.HasSectionKey("Properties", "SOIRadius"))
-			((CelestialScript)celestial).SOIRadius = (double)cfg.GetValue("Properties", "SOIRadius");
+			((Celestial)celestial).SOIRadius = (double)cfg.GetValue("Properties", "SOIRadius");
 		if (cfg.HasSection("Surface")) AddSurface(cfg,celestial);
 		if (cfg.HasSection("Rings")) AddRings(cfg,celestial);
 		if (cfg.HasSection("LightEmission")) AddLightEmitter(cfg,celestial);
-		if (cfg.HasSection("SurfaceGlow")) AddSurfaceGlow(cfg,celestial);
 		
 		_celestialNodes.Add(celestial);
 		AddChild(celestial);
 		if (cfg.HasSection("Properties")) AddNodeTracker(celestial);
+		
 		for (int i = 0; i < _configs.Count; i++)
 		{
 			if (_celestialNames[i] != celestial.Name) continue;
@@ -91,17 +98,17 @@ public partial class CelestialInitializer : Node
 	
 	private void AddOrbit(ConfigFile cfg, Node celestial)
 	{
-		CelestialScript parentCelestial = null;
+		Celestial parentCelestial = null;
 		
 		var parentName = (string)cfg.GetValue("Orbit", "ParentBody");
 		
 		foreach (var celestialNode in _celestialNodes)
 		{
-			if (celestialNode.Name == parentName)
-			{
-				parentCelestial = (CelestialScript)celestialNode;
-			}
+			if (celestialNode.Name != parentName) continue;
+			parentCelestial = (Celestial)celestialNode;
+			parentCelestial.ChildCelestials.Add((Celestial)celestial);
 		}
+		
 		var a = (double)cfg.GetValue("Orbit", "SemiMajorAxis", 0d);
 		var e = (double)cfg.GetValue("Orbit", "Eccentricity");
 		var p = cfg.HasSectionKey("Orbit","SemiParameter") ? (double)cfg.GetValue("Orbit","SemiParameter") : a * (1 - e * e);
@@ -116,10 +123,11 @@ public partial class CelestialInitializer : Node
 		var epoch = (double)cfg.GetValue("Orbit", "Epoch");
 		
 		var color = (Color)cfg.GetValue("Orbit", "Color");
-		((CelestialScript)celestial).CelestialOrbit = new Orbit(p, e, w, i, l, n, mAtEpoch, epoch, parentCelestial, color);
+		((Celestial)celestial).CelestialOrbit = new Orbit(p, e, w, i, l, n, mAtEpoch, epoch, parentCelestial, color);
 		
 		if (!cfg.HasSectionKey("Properties", "SOIRadius"))
-			((CelestialScript)celestial).SOIRadius = p * Math.Pow(((CelestialScript)celestial).Mass / parentCelestial.Mass, 0.4f);
+			((Celestial)celestial).SOIRadius = p * Math.Pow(((Celestial)celestial).Mass / parentCelestial.Mass, 0.4f);
+
 	}
 	
 	private void AddSurface(ConfigFile cfg, Node celestial)
@@ -129,10 +137,14 @@ public partial class CelestialInitializer : Node
 		
 		var material = new StandardMaterial3D();
 		material.AlbedoTexture = (Texture2D)GD.Load((string)cfg.GetValue("Surface","SurfaceTexture"));
+		var radius = (double)cfg.GetValue("Surface", "Radius");
+		((Celestial)celestial).Radius = radius;
+		((Celestial)celestial).SurfaceNode = (Node3D)surface;
 		
+		((Node3D)surface).Scale = Vector3.One * (float)radius * 2;
 		mesh.SetMaterialOverride(material);
 		celestial.AddChild(surface);
-		((CelestialScript)celestial).Radius = (double)cfg.GetValue("Surface", "Radius");
+		if (cfg.HasSection("SurfaceGlow")) AddSurfaceGlow(cfg, surface);
 	}
 	
 	private void AddRings(ConfigFile cfg, Node celestial)
@@ -141,7 +153,7 @@ public partial class CelestialInitializer : Node
 		rings.Texture = (Texture2D)GD.Load((string)cfg.GetValue("Rings","Texture"));
 
 		var ringRot = (Vector3)cfg.GetValue("Rings", "Axis");
-		var ringScale = (float)cfg.GetValue("Rings", "Radius") / ((float)((CelestialScript)celestial).Radius * 2 * 4.5f);
+		var ringScale = (float)cfg.GetValue("Rings", "Radius") / ((float)((Celestial)celestial).Radius * 2 * 4.5f);
 		
 		rings.Basis = new Basis(Quaternion.FromEuler(ringRot));
 		rings.Basis = rings.Basis.Scaled(Vector3.One * ringScale);
@@ -158,12 +170,12 @@ public partial class CelestialInitializer : Node
 		}
 	}
 	
-	private void AddSurfaceGlow(ConfigFile cfg, Node celestial)
+	private void AddSurfaceGlow(ConfigFile cfg, Node surface)
 	{
 		if ((bool)cfg.GetValue("SurfaceGlow", "Enabled"))
 		{
 			var surfaceGlow = _surfaceGlowPrefab.Instantiate();
-			celestial.AddChild(surfaceGlow);
+			surface.AddChild(surfaceGlow);
 		}
 	}
 	
