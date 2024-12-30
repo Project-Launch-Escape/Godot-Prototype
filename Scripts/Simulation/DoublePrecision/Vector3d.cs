@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Godot;
 
 namespace GodotPrototype.Scripts.Simulation.DoublePrecision;
@@ -140,6 +141,31 @@ public class Vector3d
 		return new Vector3d(v1.X * scalar, v1.Y * scalar, v1.Z * scalar);
 	}
 	public static Vector3d operator /(Vector3d v1, int scalar)
+	{
+		return new Vector3d(v1.X / scalar, v1.Y / scalar, v1.Z / scalar);
+	}
+	
+	public static Vector3d operator *(double scalar, Vector3d v1)
+	{
+		return new Vector3d(v1.X * scalar, v1.Y * scalar, v1.Z * scalar);
+	}
+	public static Vector3d operator /(double scalar, Vector3d v1)
+	{
+		return new Vector3d(v1.X / scalar, v1.Y / scalar, v1.Z / scalar);
+	}
+	public static Vector3d operator *(float scalar, Vector3d v1)
+	{
+		return new Vector3d(v1.X * scalar, v1.Y * scalar, v1.Z * scalar);
+	}
+	public static Vector3d operator /(float scalar, Vector3d v1)
+	{
+		return new Vector3d(v1.X / scalar, v1.Y / scalar, v1.Z / scalar);
+	}
+	public static Vector3d operator *(int scalar, Vector3d v1)
+	{
+		return new Vector3d(v1.X * scalar, v1.Y * scalar, v1.Z * scalar);
+	}
+	public static Vector3d operator /(int scalar, Vector3d v1)
 	{
 		return new Vector3d(v1.X / scalar, v1.Y / scalar, v1.Z / scalar);
 	}
