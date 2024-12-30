@@ -1,3 +1,4 @@
+using System.Runtime.ConstrainedExecution;
 using Godot;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 using GodotPrototype.Scripts.UserInterface;
@@ -8,22 +9,21 @@ namespace GodotPrototype.Scripts;
 
 public partial class Freecam : Camera3D
 {
-	public static CelestialScript ParentCelestial;
-	[Export] public CelestialScript StartingParentCelestial;
+	public static Celestial ParentCelestial;
 	[Export] private DebugUiController _debugUI;
-	[Export] public Color OrbitColor;
+	[Export] private Color _orbitColor;
 	
 
 	public static NestedPosition NestedPos = new ();
-	public static Orbit Orbit;
+	private static Orbit _vesselOrbit = new ();
 
 	private static List<double> _celestialDists;
-	private static SortedList<double,CelestialScript> _sortedCelestialDists = new ();
+	private static SortedList<double,Celestial> _sortedCelestialDists = new ();
 	
 	public static double VelocityMultiplier = 100000000000f;
-	[Export] public float ModifierSpeedMultiplier = 10f;
+	[Export] private float _modifierSpeedMultiplier = 10f;
 
-	[Export(PropertyHint.Range, "0.0,1.0")] public float Sensitivity = 0.25f;
+	[Export(PropertyHint.Range, "0.0,1.0")] private float _mouseSensitivity = 0.25f;
 
 	private Vector2 _mousePosition;
 
@@ -44,8 +44,7 @@ public partial class Freecam : Camera3D
 
 	public override void _Ready()
 	{
-		ParentCelestial = StartingParentCelestial;
-		NestedPos = new NestedPosition(new Vector3d(), ParentCelestial);
+		_vesselOrbit = new Orbit(NestedPos.LocalPosition, _velocity, ParentCelestial, _orbitColor);
 	}
 
 	private static List<double> GetCelestialDistances()
@@ -59,9 +58,9 @@ public partial class Freecam : Camera3D
 		return distances;
 	}
 
-	private static SortedList<double, CelestialScript> GetSortedCelestialDistances()
+	private static SortedList<double, Celestial> GetSortedCelestialDistances()
 	{
-		var sortedDists = new SortedList<double, CelestialScript>();
+		var sortedDists = new SortedList<double, Celestial>();
 		var celestials = GlobalValues.AllCelestials;
 		for (int i = 0; i < celestials.Count; i++)
 		{
@@ -71,7 +70,7 @@ public partial class Freecam : Camera3D
 		return sortedDists;
 	}
 
-	public static int GetDistanceIndex(CelestialScript celestial)
+	public static int GetDistanceIndex(Celestial celestial)
 	{
 		for (int i = 0; i < _sortedCelestialDists.Count; i++)
 		{
@@ -83,10 +82,10 @@ public partial class Freecam : Camera3D
 		return 0;
 	}
 	
-	private CelestialScript GetHighestSOI()
+	private Celestial GetHighestSOI()
 	{
 		var celestials = GlobalValues.AllCelestials;
-		var currentSOIs = new List<CelestialScript>();
+		var currentSOIs = new List<Celestial>();
 
 		for (int i = 0; i < _celestialDists.Count; i++)
 		{
@@ -115,7 +114,7 @@ public partial class Freecam : Camera3D
 		return currentSOIs[highestSOIIndex];
 	}
 	
-	private void SOIChange(CelestialScript newSOI)
+	private void SOIChange(Celestial newSOI)
 	{
 		var newRefPosition = new NestedPosition();
 		var newCoordLayer = CoordinateSpace.GalaxySpace;
@@ -144,37 +143,83 @@ public partial class Freecam : Camera3D
 
 		UpdateMouseLook();
 		UpdateMovement(delta);
+		
+		/* Code for finding encounters (In Progress):
+		var relevantCelestials = GetRelevantCelestials();
+		_debugUI.UpdateRelevantCelestials(relevantCelestials);
+		var encounterTime = 0d;
+		if (relevantCelestials.Count != 0) encounterTime = FindEncounterTime(_vesselOrbit, relevantCelestials[0].CelestialOrbit, relevantCelestials[0].SOIRadius);
+		GD.PrintT(_vesselOrbit.TrueAnomalyFromTime(encounterTime), GlobalValues.TimeToYearDayString(encounterTime));
+		*/ 
 	}
 
 	
 	private void UpdateMovement(double delta)
 	{
 		var direction = new Vector3d((_right ? 1f : 0f) - (_left ? 1f : 0f), (_up ? 1f : 0f) - (_down ? 1f : 0f), (_backwards ? 1f : 0f) - (_forwards ? 1f : 0f));
+		if (direction == Vector3d.Zero) return;
+		
 		var speedMulti = 1f;
-		if (_shift) speedMulti *= ModifierSpeedMultiplier;
-		if (_alt) speedMulti /= ModifierSpeedMultiplier;
-
-		if (direction == Vector3d.Zero)
-		{
-			_velocity = Vector3d.Zero;
-		}
-		else
-		{
-			_velocity = direction * VelocityMultiplier;
-			Vector3 velocityRotated = ((Vector3)_velocity).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-_totalYaw));
-			velocityRotated = velocityRotated.Rotated(new Vector3(1f,0f,0f).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-_totalYaw)).Normalized(), Mathf.DegToRad(-_totalPitch));
+		if (_shift) speedMulti *= _modifierSpeedMultiplier;
+		if (_alt) speedMulti /= _modifierSpeedMultiplier;
+		
+		_velocity = direction * VelocityMultiplier;
+		var velocityRotated = ((Vector3)_velocity).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-_totalYaw));
+		velocityRotated = velocityRotated.Rotated(new Vector3(1f,0f,0f).Rotated(new Vector3(0f,1f,0f), Mathf.DegToRad(-_totalYaw)).Normalized(), Mathf.DegToRad(-_totalPitch));
 			
-			NestedPos.LocalPosition += (Vector3d)velocityRotated * delta * speedMulti;
+		NestedPos.LocalPosition += (Vector3d)velocityRotated * delta * speedMulti;
 			
-			Orbit = new Orbit(NestedPos.LocalPosition, velocityRotated, ParentCelestial, OrbitColor);
-			//GD.Print($"a:{Orbit.a:F3}, b:{Orbit.b:F3}, e:{Orbit.e:F2}, w:{Orbit.w:F2}, i:{Orbit.i:F2}, l:{Orbit.l:F2}, n:{Orbit.n:F20}");
-		}
+		_vesselOrbit.SetOrbitFromStateVectors(NestedPos.LocalPosition, velocityRotated, ParentCelestial);
 	}
 
+	private List<Celestial> GetRelevantCelestials()
+	{
+		var relevantCelestials = new List<Celestial>();
+		if (ParentCelestial == null) return relevantCelestials;
+		
+		foreach (var celestial in ParentCelestial.ChildCelestials)
+		{
+			var periapsisInRange = celestial.CelestialOrbit.Periapsis > _vesselOrbit.Periapsis - celestial.SOIRadius && 
+								   celestial.CelestialOrbit.Periapsis < _vesselOrbit.Apoapsis + celestial.SOIRadius;
+			var apoapsisInRange = celestial.CelestialOrbit.Apoapsis > _vesselOrbit.Periapsis - celestial.SOIRadius &&
+								   celestial.CelestialOrbit.Apoapsis < _vesselOrbit.Apoapsis + celestial.SOIRadius;
+			
+			if (periapsisInRange || apoapsisInRange)
+			{
+				relevantCelestials.Add(celestial);
+			}
+		}
+		return relevantCelestials;
+	}
+
+	private double GetCelestialDistanceAtTime(Orbit orbit1, Orbit orbit2, double time)
+	{
+		return orbit1.GetPositionAtTime(time, false).DistanceTo(orbit2.GetPositionAtTime(time, false));
+	}
+
+	private double FindEncounterTime(Orbit veselOrbit, Orbit celestialOrbit, double encounterDist)
+	{
+		var encounterTime = GlobalValues.Time;
+		const double tolerance = 1E-4;
+		var derivativeDelta = 1E-3 / celestialOrbit.n;
+		// Solve for encounter time using Newtons Method
+		
+		for (int i = 0; i < 10; i++)
+		{
+			var y = GetCelestialDistanceAtTime(veselOrbit, celestialOrbit, encounterTime) - encounterDist;
+			var yDerivative = (y - GetCelestialDistanceAtTime(veselOrbit, celestialOrbit, encounterTime + derivativeDelta)) / derivativeDelta;
+			
+			var dt = y / yDerivative;
+			encounterTime -= dt;
+			if (dt < tolerance) break;
+		}
+		return encounterTime;
+	}
+	
 	private void UpdateMouseLook()
 	{
 		if (Input.GetMouseMode() != Input.MouseModeEnum.Captured) return;
-		_mousePosition *= Sensitivity;
+		_mousePosition *= _mouseSensitivity;
 		var yaw = _mousePosition.X;
 		var pitch = _mousePosition.Y;
 		_mousePosition = new Vector2(0, 0);
@@ -234,7 +279,7 @@ public partial class Freecam : Camera3D
 						_alt = inputEventKey.Pressed;
 						break;
 					case Key.O:
-						OrbitLineMeshGenerator.CreateOrbitLine(Orbit);
+						OrbitMesh.CreateOrbitLine(_vesselOrbit);
 						break;
 				}
 
