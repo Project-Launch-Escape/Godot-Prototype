@@ -1,8 +1,5 @@
 [gd_scene format=3 uid="uid://dxd4rsywbsrei"]
 
-[node name="LightEmitter" type="Node3D"]
-
-[node name="LightEmitter" type="OmniLight3D" parent="."]
+[node name="LightEmitter" type="DirectionalLight3D"]
 light_energy = 0.01
-omni_range = 10.0
-omni_attenuation = 0.0
+sky_mode = 1

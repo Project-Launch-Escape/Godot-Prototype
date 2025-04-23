@@ -1,0 +1,189 @@
+[gd_scene load_steps=22 format=3 uid="uid://snj8ta1xythe"]
+
+[ext_resource type="Script" uid="uid://cvok1dj0ebw4u" path="res://Scripts/Debug/DebugUIController.cs" id="1_h1rdg"]
+[ext_resource type="Script" uid="uid://oip12nppa2ed" path="res://Scripts/Other/CelestialInitializer.cs" id="2_w6rvl"]
+[ext_resource type="Texture2D" uid="uid://cvjlw25rj6tcu" path="res://images/Skybox.jpg" id="3_hkkrm"]
+[ext_resource type="PackedScene" uid="uid://dqf5a2rfarxtd" path="res://Prefabs/Celestial Prefabs/Celestial.tscn" id="3_w467i"]
+[ext_resource type="PackedScene" uid="uid://bkrfit3g50xg7" path="res://Prefabs/DebugUISection.tscn" id="3_yvigm"]
+[ext_resource type="PackedScene" uid="uid://djknjwgwmfp2x" path="res://Prefabs/Celestial Prefabs/Surface.tscn" id="4_ivqjn"]
+[ext_resource type="PackedScene" uid="uid://ocodmq28vw5m" path="res://Prefabs/Celestial Prefabs/Rings.tscn" id="5_iysnn"]
+[ext_resource type="PackedScene" uid="uid://dxd4rsywbsrei" path="res://Prefabs/Celestial Prefabs/LightEmitter.tscn" id="6_51oi5"]
+[ext_resource type="PackedScene" uid="uid://en1t4lwqhbx6" path="res://Prefabs/Celestial Prefabs/SurfaceGlow.tscn" id="7_ffj58"]
+[ext_resource type="PackedScene" uid="uid://4m28yia5jkb1" path="res://Prefabs/node_tracker.tscn" id="8_g2isg"]
+[ext_resource type="Script" uid="uid://dmaih72r5wu61" path="res://Scripts/Other/GlobalValues.cs" id="9_vqxbk"]
+[ext_resource type="Script" uid="uid://chyyvqft35nvh" path="res://Scripts/Simulation/FlightCamera.cs" id="11_v5twj"]
+[ext_resource type="Script" uid="uid://c0t5h0y2wo8ya" path="res://Scripts/Simulation/Physics/Vessel.cs" id="13_1prhh"]
+[ext_resource type="Script" uid="uid://dv5t83e3vek0b" path="res://Scripts/Other/VesselViewport.cs" id="13_cg2kh"]
+[ext_resource type="Script" uid="uid://bqkvcyw0qftag" path="res://Scripts/Simulation/LocalSurface.cs" id="15_cg2kh"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_85c52"]
+panorama = ExtResource("3_hkkrm")
+
+[sub_resource type="Sky" id="Sky_wb00f"]
+sky_material = SubResource("PanoramaSkyMaterial_85c52")
+
+[sub_resource type="Environment" id="Environment_om47e"]
+background_mode = 2
+background_color = Color(0.0430392, 0.0430392, 0.0430392, 1)
+background_energy_multiplier = 0.15
+background_intensity = 1.0
+sky = SubResource("Sky_wb00f")
+tonemap_mode = 3
+
+[sub_resource type="Environment" id="Environment_ex6dp"]
+
+[sub_resource type="World3D" id="World3D_cg2kh"]
+environment = SubResource("Environment_ex6dp")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ui7iy"]
+
+[node name="GameScene" type="Node3D"]
+
+[node name="ViewportContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+script = ExtResource("13_cg2kh")
+
+[node name="RenderSpaceView" type="SubViewport" parent="ViewportContainer"]
+handle_input_locally = false
+msaa_3d = 2
+screen_space_aa = 1
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Global" type="Node" parent="ViewportContainer/RenderSpaceView" node_paths=PackedStringArray("_renderSpaceCamera", "_localSpaceCamera")]
+script = ExtResource("9_vqxbk")
+_renderSpaceCamera = NodePath("../Camera")
+_localSpaceCamera = NodePath("../../VesselSpaceView/LocalCamera")
+
+[node name="Camera" type="Camera3D" parent="ViewportContainer/RenderSpaceView"]
+environment = SubResource("Environment_om47e")
+current = true
+fov = 69.5
+script = ExtResource("11_v5twj")
+_orbitColor = Color(0.517647, 0.00392157, 0.976471, 1)
+
+[node name="Celestial Initializer" type="Node" parent="ViewportContainer/RenderSpaceView"]
+process_priority = -10
+script = ExtResource("2_w6rvl")
+_celestialPrefab = ExtResource("3_w467i")
+_surfacePrefab = ExtResource("4_ivqjn")
+_ringsPrefab = ExtResource("5_iysnn")
+_lightEmitterPrefab = ExtResource("6_51oi5")
+_surfaceGlowPrefab = ExtResource("7_ffj58")
+_nodeTrackerPrefab = ExtResource("8_g2isg")
+
+[node name="VesselSpaceView" type="SubViewport" parent="ViewportContainer"]
+world_3d = SubResource("World3D_cg2kh")
+transparent_bg = true
+handle_input_locally = false
+msaa_3d = 1
+screen_space_aa = 1
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="UI" type="Node" parent="ViewportContainer/VesselSpaceView"]
+
+[node name="Debug Interface" type="Panel" parent="ViewportContainer/VesselSpaceView/UI" node_paths=PackedStringArray("_sectionContainerSetter")]
+anchors_preset = -1
+anchor_bottom = 0.0268519
+offset_left = 5.0
+offset_right = 305.0
+offset_bottom = 243.0
+size_flags_vertical = 3
+script = ExtResource("1_h1rdg")
+_sectionContainerSetter = NodePath("VBoxContainer")
+_sectionPrefabSetter = ExtResource("3_yvigm")
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ViewportContainer/VesselSpaceView/UI/Debug Interface"]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 128.0
+
+[node name="Title" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Debug Interface/VBoxContainer"]
+layout_mode = 2
+text = "                          Debug UI"
+vertical_alignment = 1
+
+[node name="Separator" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Debug Interface/VBoxContainer"]
+layout_mode = 2
+text = "----------------------------------------------------------"
+
+[node name="Controls" type="Panel" parent="ViewportContainer/VesselSpaceView/UI"]
+anchors_preset = -1
+anchor_bottom = 0.075
+offset_left = 305.0
+offset_right = 605.0
+offset_bottom = 191.0
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ViewportContainer/VesselSpaceView/UI/Controls"]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 248.0
+
+[node name="Title" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Controls"
+horizontal_alignment = 1
+
+[node name="Separator" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Controls/VBoxContainer"]
+layout_mode = 2
+text = "----------------------------------------------------------"
+
+[node name="Pause" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Pause/Unpause: Spacebar"
+
+[node name="Scale Action" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Scale Action up/down: 'Shift'/'Alt'"
+
+[node name="Timewarp" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Timewarp down/up: ','/'.'"
+
+[node name="UI Toggle" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Toggle Celestial UI: 'M'"
+
+[node name="Freecam mode" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Orbit Cam Toggle: 'F'"
+
+[node name="Vessel Focus" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Focus Vessel: 'V'"
+
+[node name="Point Vessel" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Point Vessel: 'W' / 'S'"
+
+[node name="Throttle" type="Label" parent="ViewportContainer/VesselSpaceView/UI/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Forwards/Reverse Thrust: 'Z'/'X'"
+
+[node name="LocalTerrain" type="MeshInstance3D" parent="ViewportContainer/VesselSpaceView"]
+script = ExtResource("15_cg2kh")
+
+[node name="Vessel" type="Node3D" parent="ViewportContainer/VesselSpaceView"]
+process_priority = 5
+script = ExtResource("13_1prhh")
+Mass = 100.0
+Thrust = 500.0
+
+[node name="Mesh" type="MeshInstance3D" parent="ViewportContainer/VesselSpaceView/Vessel"]
+layers = 7
+mesh = SubResource("CylinderMesh_ui7iy")
+skeleton = NodePath("../../../..")
+
+[node name="Node Tracker" parent="ViewportContainer/VesselSpaceView/Vessel" instance=ExtResource("8_g2isg")]
+
+[node name="LocalCamera" type="Camera3D" parent="ViewportContainer/VesselSpaceView"]
+current = true
+far = 400000.0

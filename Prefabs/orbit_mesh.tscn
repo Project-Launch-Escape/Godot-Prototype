@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dfpr2acgqmwig"]
 
-[ext_resource type="Script" path="res://Scripts/UserInterface/OrbitMesh.cs" id="1_tkly8"]
+[ext_resource type="Script" uid="uid://cps5kbq7wntop" path="res://Scripts/UserInterface/OrbitMesh.cs" id="1_tkly8"]
 
 [node name="OrbitLine" type="MeshInstance3D"]
 script = ExtResource("1_tkly8")

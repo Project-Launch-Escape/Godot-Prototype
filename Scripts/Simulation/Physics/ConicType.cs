@@ -1,8 +1,6 @@
-using Godot;
-using System;
 namespace GodotPrototype.Scripts.Simulation.Physics;
 
-public enum ConicType : byte
+public enum ConicType
 {
 	Circular,
 	Elliptical,

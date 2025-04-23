@@ -1,170 +1,198 @@
 using Godot;
-using GodotPrototype.Scripts.Simulation.ReferenceFrames;
+using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
 using GodotPrototype.Scripts.UserInterface;
 
 namespace GodotPrototype.Scripts.Simulation.Physics;
 
-public class Orbit
+public class Orbit : OrbitalElements
 {
-	public Celestial ParentCelestial;
+	public Celestial Primary;
 	public Color Color;
-	public ConicType OrbitType;
 
-	public double p;
-	public double e;
+	private OrbitMesh _orbitLineNode;
 
-	public double Apoapsis;
-	public double Periapsis;
+	public bool IsEscapeTrajectory => FindIfIsEscapeTrajectory();
+	public Range TrueAnomalyRange => GetTrueAnomalyRange();
 
-	public double w;
-	public double i;
-	public double l;
-
-	public double n;
-	
-	public double MAtEpoch;
-	public double Epoch;
-	
-	public double Anomaly;
-
-	public OrbitMesh OrbitLineNode;
-	
-	private const double Tolerance = 0.00001f;
 
 	public Orbit()
 	{
 		
 	}
 	
-	public Orbit(double _p, double _e, double _w, double _i, double _l, double _n, double _mAtEpoch, double _epoch, Celestial _ParentCelestial, Color color)
+	public Orbit(double p, double e, double w, double i, double l, double n, double t, Celestial primary, Color color)
 	{
-		p = _p;
-		e = _e;
-		w = _w;
-		i = _i;
-		l = _l;
-		n = _n;
-		MAtEpoch = _mAtEpoch;
-		Epoch = _epoch;
-		ParentCelestial = _ParentCelestial;
+		this.p = p;
+		this.e = e;
+		this.w = w;
+		this.i = i;
+		this.l = l;
+		this.n = n;
+		T = t;
+		Primary = primary;
 		Color = color;
 		OrbitType = GetConicType();
-		CreateOrbitLine();
-		Apoapsis = GetApoapsis();
-		Periapsis = GetPeriapsis();
 	}
 
 	public Orbit(Orbit orbit)
 	{
+		SetFromOrbit(orbit);
+	}
+	
+	public Orbit(Vector3d position, Vector3d velocity, Celestial primary, Color color, double? epoch = null)
+	{
+		SetFromStateVectors(position, velocity, primary, epoch);
+		Color = color;
+	}
+
+	public void SetFromOrbit(Orbit orbit)
+	{
 		p = orbit.p;
-		e = orbit.p;
+		e = orbit.e;
 		w = orbit.w;
 		i = orbit.i;
 		l = orbit.l;
 		n = orbit.n;
-		MAtEpoch = orbit.MAtEpoch;
-		Epoch = orbit.Epoch;
-		ParentCelestial = orbit.ParentCelestial;
+		T = orbit.T;
+		Primary = orbit.Primary;
 		Color = orbit.Color;
 		OrbitType = orbit.OrbitType;
-		Apoapsis = GetApoapsis();
-		Periapsis = GetPeriapsis();
 	}
 	
-	public Orbit(Vector3d position, Vector3d velocity, Celestial parentCelestial, Color color)
+	public void SetFromStateVectors(Vector3d position, Vector3d velocity, Celestial primary, double? epoch = null)
 	{
-		SetOrbitFromStateVectors(position, velocity, parentCelestial);
-		Color = color;
-		CreateOrbitLine();
-	}
-
-	private double GetApoapsis()
-	{
-		if (OrbitType is ConicType.Parabolic or ConicType.Hyperbolic)
-		{
-			return double.PositiveInfinity;
-		}
-		return p / (1 - e);
-	}
-
-	private double GetPeriapsis() { return p / (1 + e); }
-
-	public void SetOrbitFromStateVectors(Vector3d position, Vector3d velocity, Celestial parentCelestial)
-	{
-		if (parentCelestial == null) return;
-		ParentCelestial = parentCelestial;
+		if (primary == null) return;
+		Primary = primary;
+		
+		epoch ??= GlobalValues.Time;
 		
 		var angularMomentumVector = position.Cross(velocity);
-		var standardGravity = GlobalValues.G * ParentCelestial.Mass;
+		var mu = Primary.Mu;
 
 		var eccentricityVector =
-			(position * (velocity.MagnitudeSquared() - standardGravity / position.Magnitude()) -
-			 position.Dot(velocity) * velocity) / standardGravity;
+			(position * (velocity.MagnitudeSquared() - mu / position.Magnitude) -
+			 position.Dot(velocity) * velocity) / mu;
 		
-		e = eccentricityVector.Magnitude();
+		e = eccentricityVector.Magnitude;
 		
-		p = angularMomentumVector.MagnitudeSquared() / standardGravity;
-
-		var k = new Vector3d(0, 1, 0);
-		var nodeVector = k.Cross(angularMomentumVector);
+		p = angularMomentumVector.MagnitudeSquared() / mu;
 		
-		i = Math.Acos(-angularMomentumVector.Y / angularMomentumVector.Magnitude());
+		var nodeVector = Vector3d.K.Cross(angularMomentumVector);
 		
-		l = Math.Acos(nodeVector.X / nodeVector.Magnitude());
+		i = Math.Acos(-angularMomentumVector.Y / angularMomentumVector.Magnitude);
+		if (double.IsNaN(i)) i = 0;
+		
+		l = Math.Acos(nodeVector.X / nodeVector.Magnitude);
 		l = nodeVector.Z < 0 ? Math.Tau - l : l;
+		if (double.IsNaN(l)) l = 0;
 
-		w = Math.Acos(nodeVector.Dot(eccentricityVector) / (nodeVector.Magnitude() * e));
+		w = Math.Acos(nodeVector.Dot(eccentricityVector) / (nodeVector.Magnitude * e));
 		w = eccentricityVector.Y < 0 ? Math.Tau - w: w;
+		if (double.IsNaN(w)) w = 0;
 
-		var v = Math.Acos(eccentricityVector.Dot(position) / (e * position.Magnitude()));
+		var v = Math.Acos(eccentricityVector.Dot(position) / (e * position.Magnitude));
 		v = position.Dot(velocity) < 0 ? Math.Tau - v: v;
-
-		MAtEpoch = MeanAnomalyFromTrueAnomaly(v);
-		Epoch = GlobalValues.Time;
 		
 		OrbitType = GetConicType();
-		n = OrbitType != ConicType.Parabolic? Math.Sqrt(standardGravity / Math.Pow(p / (1 - e * e) ,3)) : 2 * Math.Sqrt(standardGravity / Math.Pow(p,3));
 		
-		Apoapsis = GetApoapsis();
-		Periapsis = GetPeriapsis();
+		n = OrbitType is not ConicType.Parabolic? Math.Sqrt(mu / Math.Pow(p / Math.Abs(1 - e * e) ,3)) : (2 * Math.Sqrt(mu / Math.Pow(p,3)));
+		T = epoch.Value - MeanAnomalyFromTrueAnomaly(v) / n;
 		
 		UpdateOrbitLine();
 	}
 
-	public void CreateOrbitLine()
+	private bool FindIfIsEscapeTrajectory() => Apoapsis > Primary?.SOIRadius;
+	
+	private Range GetTrueAnomalyRange()
 	{
-		OrbitLineNode = OrbitMesh.CreateOrbitLine(this);
-	}
-
-	public void DeleteOrbitLine()
-	{
-		OrbitLineNode.DeleteOrbitLine();
-	}
-
-	public void UpdateOrbitLine()
-	{
-		OrbitLineNode?.UpdateOrbitLine(this);
-	}
-
-	public Vector3d GetCurrentPosition()
-	{
-		return GetPositionAtTime(GlobalValues.Time);
+		var maxV = IsEscapeTrajectory ? TrueAnomalyFromDistance(Primary.SOIRadius) : Math.PI;
+		
+		return new Range(-maxV, maxV);
 	}
 	
-	public Vector3d GetPositionAtTime(double time, bool setAnomaly = true)
+	
+	public void CreateOrbitLine(Range? trueAnomalyRange = null)
 	{
-		var anomaly = AnomalyFromTime(time);
-		if (setAnomaly) Anomaly = anomaly;
-
-		return PositionFromTrueAnomaly(TrueAnomalyFromMeanAnomaly(anomaly));
+		if (_orbitLineNode != null) return;
+		_orbitLineNode = OrbitMesh.CreateOrbitLine(this, trueAnomalyRange);
 	}
+	public void DeleteOrbitLine()
+	{
+		_orbitLineNode?.DeleteOrbitLine();
+	}
+	public void UpdateOrbitLine(Range? trueAnomalyRange = null)
+	{
+		_orbitLineNode?.UpdateOrbitLine(this, trueAnomalyRange);	
+	}
+
+	public void CreateApoapsisMarker()
+	{
+		if (IsEscapeTrajectory) return;
+		_orbitLineNode?.CreateMarker("Apoapsis", Math.PI, "Ap");
+	}
+	public void CreatePeriapsisMarker()
+	{
+		_orbitLineNode?.CreateMarker("Periapsis", 0, "Pe");
+	}
+	
+	public void UpdateApoapsisMarker()
+	{
+		if (IsEscapeTrajectory) _orbitLineNode?.DeleteMarker("Apoapsis");
+		else _orbitLineNode?.CreateMarker("Apoapsis", Math.PI, "Ap");
+	}
+	public void UpdatePeriapsisMarker()
+	{
+		if (IsEscapeTrajectory && GlobalValues.Time > T) _orbitLineNode.DeleteMarker("Periapsis");
+		_orbitLineNode?.CreateMarker("Periapsis", 0, "Pe");
+	}
+	
+
+	public void CreateMarkerAtTrueAnomaly(string labelName, double trueAnomaly, string labelText)
+	{
+		_orbitLineNode?.CreateMarker(labelName, trueAnomaly, labelText);
+	}
+	public void CreateMarkerAtTime(string labelName, double time, string labelText)
+	{
+		var trueAnomaly = TrueAnomalyFromTime(time);
+		CreateMarkerAtTrueAnomaly(labelName, trueAnomaly, labelText);
+	}
+
+	public void UpdateMarkerFromTrueAnomaly(string labelName, double trueAnomaly, string labelText)
+	{
+		_orbitLineNode.UpdateMarker(labelName, trueAnomaly, labelText);
+	}
+	public void UpdateMarkerFromTime(string labelName, double time, string labelText)
+	{
+		var trueAnomaly = TrueAnomalyFromTime(time);
+		UpdateMarkerFromTrueAnomaly(labelName, trueAnomaly, labelText);
+	}
+
+	public Vector3d PositionCurrent() => PositionFromTime(GlobalValues.Time, true);
+	public Vector3d VelocityCurrent() => VelocityFromTime(GlobalValues.Time, true);
+
+	public Vector3d PositionFromTime(double time, bool useAnomalyPrev = false) => PositionFromTrueAnomaly(TrueAnomalyFromTime(time, useAnomalyPrev));
+	public Vector3d VelocityFromTime(double time, bool useAnomalyPrev = false) => VelocityFromTrueAnomaly(TrueAnomalyFromTime(time, useAnomalyPrev));
 	
 	public Vector3d PositionFromTrueAnomaly(double v)
 	{
 		var x = p * Math.Cos(v) / (1 + e * Math.Cos(v));
 		var z = p * Math.Sin(v) / (1 + e * Math.Cos(v));
 
+		return RotateToOrbitalPlane(x, z);
+	}
+	public Vector3d VelocityFromTrueAnomaly(double v)
+	{
+		var temp = Math.Sqrt(Primary.Mu / p);
+			
+		var x = -temp * Math.Sin(v);
+		var z = temp * (e + Math.Cos(v));
+
+		return RotateToOrbitalPlane(x, z);
+	}
+
+	private Vector3d RotateToOrbitalPlane(double x, double z)
+	{
 		var sinW = Math.Sin(w);
 		var cosW = Math.Cos(w);
 		var sinL = Math.Sin(l);
@@ -179,151 +207,8 @@ public class Orbit
 		return new Vector3d(xRot, yRot, zRot);
 	}
 	
-	public double TrueAnomalyFromMeanAnomaly(double m)
-	{
-		return TrueAnomalyFromAnomaly(AnomalyFromMeanAnomaly(m));
-	}
-	
-	public double MeanAnomalyFromTrueAnomaly(double v)
-	{
-		return MeanAnomalyFromAnomaly(AnomalyFromTrueAnomaly(v));
-	}
-
-	public double TrueAnomalyFromTime(double time)
-	{
-		return AnomalyFromMeanAnomaly(MeanAnomalyFromTime(time));
-	}
-
-	public double MeanAnomalyFromTime(double time)
-	{
-		return n * (time - Epoch) + MAtEpoch - l - w;
-	}
-
-	public double AnomalyFromTime(double time)
-	{
-		return AnomalyFromMeanAnomaly(MeanAnomalyFromTime(time));
-	}
-	
-	public double TrueAnomalyFromAnomaly(double anomaly)
-	{
-		switch (OrbitType)
-		{
-			case ConicType.Circular:
-				return anomaly % Math.Tau;
-			case ConicType.Elliptical:
-			{
-				var sinv = Math.Sqrt(1 - e * e) * Math.Sin(anomaly) / (1 - e * Math.Cos(anomaly));
-				var cosv = (Math.Cos(anomaly) - e) / (1 - e * Math.Cos(anomaly));
-				return Math.Atan2(sinv, cosv);
-			}
-			case ConicType.Hyperbolic:
-			{
-				var sinv = -(Math.Sqrt(e * e - 1) * Math.Sinh(anomaly)) / (1 - e * Math.Cosh(anomaly));
-				var cosv = (Math.Cosh(anomaly) - e) / (1 - e * Math.Cosh(anomaly));
-				return Math.Atan2(sinv, cosv);
-			} 
-			case ConicType.Parabolic:
-				return 2 * Math.Atan(2 * anomaly);
-			default:
-				throw new ArgumentOutOfRangeException();
-		}
-	}
-
-	public double AnomalyFromMeanAnomaly(double M)
-	{
-		var anomaly = Anomaly;
-		switch (OrbitType)
-		{
-			case ConicType.Circular:
-				return M % Math.Tau;
-			case ConicType.Elliptical:
-			{
-				for (int i = 0; i < 10; i++)
-				{
-					var dE = (M - anomaly + e * Math.Sin(anomaly)) / (1 - e * Math.Cos(anomaly));
-					anomaly += dE;
-					
-					if (Mathf.Abs(dE) < Tolerance) break;
-				}
-				
-				return anomaly;
-			}
-			case ConicType.Hyperbolic:
-			{
-				for (int i = 0; i < 10; i++)
-				{
-					var dH = (M - e * Mathf.Sinh(anomaly) + anomaly) / (e * Mathf.Cosh(anomaly) - 1);
-					anomaly += dH;
-					
-					if (Mathf.Abs(dH) < Tolerance) break;
-				}
-
-				return anomaly;
-			}
-			case ConicType.Parabolic:
-				return Math.Tan(Math.PI / 2 - 2 * Math.Atan(Math.Pow(Math.Tan((Math.PI / 2 - Math.Atan(1.5 * M)) / 2), 1d / 3d)));
-			
-			default:
-				throw new ArgumentOutOfRangeException();
-		}
-	}
-	
-	public double AnomalyFromTrueAnomaly(double v)
-	{
-		switch (OrbitType)
-		{
-			case ConicType.Circular:
-				return v % Math.Tau;
-			case ConicType.Elliptical:
-			{
-				var sinE = Math.Sin(v) * Math.Sqrt(1 - e * e) / (1 + e * Math.Cos(v));
-				var cosE = (e + Math.Cos(v)) / (1 + e * Math.Cos(v));
-				return Math.Atan2(sinE, cosE);
-			}
-			case ConicType.Hyperbolic:
-			{
-				var sinhH = Math.Sin(v) * Math.Sqrt(e * e - 1) / (1 + e * Math.Cos(v));
-				return Math.Asinh(sinhH);
-			}
-			case ConicType.Parabolic:
-				return Math.Tan(v / 2);
-			
-			default:
-				throw new ArgumentOutOfRangeException();
-		}
-	}
-	
-	public double MeanAnomalyFromAnomaly(double anomaly)
-	{
-		return OrbitType switch
-		{
-			ConicType.Circular => anomaly % Math.Tau,
-			ConicType.Elliptical => anomaly - e * Math.Sin(anomaly),
-			ConicType.Hyperbolic => e * Math.Sinh(anomaly) - anomaly,
-			ConicType.Parabolic => anomaly + anomaly * anomaly * anomaly / 3,
-			_ => throw new ArgumentOutOfRangeException()
-		};
-	}
-	
-	public ConicType GetConicType()
-	{
-		if (e < Tolerance)
-		{
-			return ConicType.Circular;
-		}
-		if (Mathf.Abs(e - 1) < Tolerance)
-		{
-			return ConicType.Parabolic;
-		}
-		if (e < 1)
-		{
-			return ConicType.Elliptical;
-		}
-		return ConicType.Hyperbolic;
-	}
-
 	public static implicit operator string(Orbit orbit)
 	{
-		return $"p:{orbit.p:F0}, e:{orbit.e:F3}, w:{orbit.w:F3}, i:{orbit.i:F3}, l:{orbit.l:F3}, n:{orbit.n:F20}, Parent:{orbit.ParentCelestial.Name}";
+		return $"p:{orbit.p:F0}, e:{orbit.e:F3}, w:{orbit.w:F3}, i:{orbit.i:F3}, l:{orbit.l:F3}, n:{orbit.n:F10}, T:{orbit.T}, Parent:{orbit.Primary.Name}, ConicType: {orbit.OrbitType}";
 	}
 }

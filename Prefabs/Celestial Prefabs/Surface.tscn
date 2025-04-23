@@ -1,17 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://djknjwgwmfp2x"]
+[gd_scene load_steps=2 format=3 uid="uid://djknjwgwmfp2x"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_3xagl"]
+[sub_resource type="SphereMesh" id="SphereMesh_01hvt"]
 lightmap_size_hint = Vector2i(17, 9)
-radial_segments = 128
-rings = 64
+radial_segments = 256
+rings = 128
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_cs2r3"]
-
-[node name="Surface" type="AnimatableBody3D"]
-
-[node name="Mesh" type="MeshInstance3D" parent="."]
+[node name="Surface" type="MeshInstance3D"]
 cast_shadow = 0
-mesh = SubResource("SphereMesh_3xagl")
-
-[node name="Collider" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_cs2r3")
+mesh = SubResource("SphereMesh_01hvt")

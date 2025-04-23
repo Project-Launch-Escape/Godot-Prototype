@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://bkrfit3g50xg7"]
+
+[node name="DebugUISection" type="Label"]
+text = "Default Text"

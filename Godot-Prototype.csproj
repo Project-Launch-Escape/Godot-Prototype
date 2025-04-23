@@ -1,12 +1,15 @@
-<Project Sdk="Godot.NET.Sdk/4.3.0">
+<Project Sdk="Godot.NET.Sdk/4.4.0">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net7.0</TargetFramework>
-    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>GodotPrototype</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Scripts\Math\" />
+    <Compile Remove="Scripts\Simulation\Kepler\**" />
+    <Compile Remove="Scripts\Simulation\Physics\KeplerianElements\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Scripts\Simulation\Kepler\**" />
+    <EmbeddedResource Remove="Scripts\Simulation\Physics\KeplerianElements\**" />
   </ItemGroup>
 </Project>

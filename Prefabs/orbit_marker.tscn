@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://k4ax0iqe0gxp"]
+
+[ext_resource type="Script" uid="uid://c0d8qdwmtok86" path="res://Scripts/UserInterface/OrbitMarker.cs" id="1_88rv0"]
+[ext_resource type="Texture2D" uid="uid://b1ds14d83xaq6" path="res://images/Enby_Marker.png" id="2_j2818"]
+
+[node name="Orbit Marker" type="Control" node_paths=PackedStringArray("TextBox")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1142.0
+offset_bottom = -638.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_88rv0")
+TextBox = NodePath("Label")
+
+[node name="Marker" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 504.0
+offset_bottom = 504.0
+scale = Vector2(0.031, 0.031)
+texture = ExtResource("2_j2818")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+offset_left = -150.0
+offset_top = -30.0
+offset_right = 150.0
+offset_bottom = -5.0
+text = "Label Text"
+horizontal_alignment = 1
