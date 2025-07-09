@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://bp0y71wbm8kj"]
+
+[ext_resource type="PackedScene" uid="uid://0hctrn76drmj" path="res://Parts/SnapPoint.tscn" id="1_dbx60"]
+[ext_resource type="Script" uid="uid://k3500mi8rulg" path="res://Scripts/VesselEditor/Parts/VesselPart.cs" id="1_ekgpr"]
+[ext_resource type="PackedScene" uid="uid://c847xtl83rjci" path="res://Parts/Models/tank1.fbx" id="2_ekgpr"]
+[ext_resource type="PackedScene" uid="uid://cmmjhdnfxqbqr" path="res://Parts/SurfaceAttatchPoint.tscn" id="3_4gng2"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bjsqp"]
+
+[node name="Tank" type="StaticBody3D" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint")]
+script = ExtResource("1_ekgpr")
+SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
+SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
+
+[node name="SnapPoint" parent="." instance=ExtResource("1_dbx60")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="SnapPoint2" parent="." instance=ExtResource("1_dbx60")]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="SurfaceAttatchPoint" parent="." instance=ExtResource("3_4gng2")]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0.5, 0, 0)
+
+[node name="tank1" parent="." instance=ExtResource("2_ekgpr")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_bjsqp")

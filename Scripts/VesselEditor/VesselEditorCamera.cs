@@ -4,21 +4,14 @@ namespace GodotPrototype.Scripts.VesselEditor;
 
 public partial class VesselEditorCamera : Camera3D
 {
-	[Export]
-	public Vector3 Origin;
+	public readonly Vector3 Origin = Vector3.Zero;
 
 	[ExportGroup("Camera Settings")]
 	[Export]
-	public float MinCameraDistance = 5f;
+	public float MinCameraZoom = 5f;
 	
 	[Export]
-	public float MaxCameraDistance = 50f;
-
-	[Export]
-	public float MinCameraPitch = -80f;
-	
-	[Export]
-	public float MaxCameraPitch = 80f;
+	public float MaxCameraZoom = 50f;
 
 	[Export]
 	public float CameraSensitivity = 0.1f;
@@ -26,10 +19,11 @@ public partial class VesselEditorCamera : Camera3D
 	private float _cameraYaw;
 	private float _cameraPitch;
 	private float _cameraZoom;
+	private static bool Shift => VesselEditor.Shift;
 
 	public override void _Ready()
 	{
-		_cameraZoom = MinCameraDistance;
+		_cameraZoom = MinCameraZoom;
 		_cameraPitch = Mathf.DegToRad(30f);
 	}
 
@@ -42,10 +36,10 @@ public partial class VesselEditorCamera : Camera3D
 	{
 		switch (inputEvent)
 		{
-			case InputEventMouseMotion { ButtonMask: MouseButtonMask.Middle } inputEventMouseMotion:
+			case InputEventMouseMotion { ButtonMask: MouseButtonMask.Middle } inputEventMouseMotion when !Shift:
 				UpdateInputPan(inputEventMouseMotion);
 				break;
-			case InputEventMouseButton { ButtonIndex: MouseButton.WheelUp or MouseButton.WheelDown } inputEventMouseButton:
+			case InputEventMouseButton { ButtonIndex: MouseButton.WheelUp or MouseButton.WheelDown } inputEventMouseButton when !Shift:
 				UpdateInputScroll(inputEventMouseButton);
 				break;
 		}
@@ -55,18 +49,17 @@ public partial class VesselEditorCamera : Camera3D
 	{
 		_cameraYaw += Mathf.DegToRad(-inputEventMouseMotion.Relative.X * CameraSensitivity) % Mathf.Pi;
 		_cameraPitch += Mathf.DegToRad(inputEventMouseMotion.Relative.Y * CameraSensitivity);
-		_cameraPitch = Mathf.Clamp(_cameraPitch, Mathf.DegToRad(MinCameraPitch), Mathf.DegToRad(MaxCameraPitch));
 	}
 
 	private void UpdateInputScroll(InputEventMouseButton inputEventMouseButton)
 	{
 		_cameraZoom += inputEventMouseButton.ButtonIndex == MouseButton.WheelUp ? -1 : 1;
-		_cameraZoom = Mathf.Clamp(_cameraZoom, MinCameraDistance, MaxCameraDistance);
+		_cameraZoom = Mathf.Clamp(_cameraZoom, MinCameraZoom, MaxCameraZoom);
 	}
 
 	private void SetCameraTransform(float yaw, float pitch)
 	{
-		var rotation = new Quaternion(new Vector3(0, 1, 0), yaw) * new Quaternion(new Vector3(1, 0, 0), -pitch);
+		var rotation = new Quaternion(Vector3.Up, yaw) * new Quaternion(Vector3.Right, -pitch);
 		var position = Origin + rotation * new Vector3(0, 0, _cameraZoom);
 		
 		SetPosition(position);
