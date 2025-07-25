@@ -2,9 +2,8 @@ using Godot;
 using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
-using GodotPrototype.Scripts.Vessels;
 
-namespace GodotPrototype.Scripts.Debug;
+namespace GodotPrototype.Scripts.PLEDebug;
 
 public partial class DebugUIController : Control
 {

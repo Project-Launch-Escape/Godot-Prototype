@@ -1,7 +1,7 @@
 using Godot;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
 
-namespace GodotPrototype.Scripts.Debug;
+namespace GodotPrototype.Scripts.PLEDebug;
 
 public partial class DebugVector : MeshInstance3D
 {
