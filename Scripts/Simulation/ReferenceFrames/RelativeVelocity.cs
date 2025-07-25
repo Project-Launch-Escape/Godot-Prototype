@@ -1,5 +1,6 @@
 using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
+using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.Simulation.ReferenceFrames;
 
@@ -71,7 +72,7 @@ public class RelativeVelocity
 		{
 			CoordinateSpace.RenderSpace => throw new NotSupportedException(),
 			CoordinateSpace.AbsoluteSpace => GetAbsoluteVelocity(),
-			CoordinateSpace.VesselSpace => VelocityRefConverted(GlobalValues.ActiveVessel.VelocityRel),
+			CoordinateSpace.VesselSpace => VelocityRefConverted(Vessel.ActiveVessel.VelocityRel),
 			_ => new Vector3d()
 		};
 	}

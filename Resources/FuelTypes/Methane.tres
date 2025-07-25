@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="FuelType" load_steps=2 format=3 uid="uid://nvg5a2xy2o0i"]
+
+[ext_resource type="Script" uid="uid://bxfpnmmlr83qu" path="res://Scripts/Vessels/FuelType.cs" id="1_hffww"]
+
+[resource]
+script = ExtResource("1_hffww")
+Name = "Methane"
+Mass = 1.0
+Volume = 1.0
+Color = Color(0.835294, 0.760784, 0.105882, 1)
+metadata/_custom_type_script = "uid://bxfpnmmlr83qu"

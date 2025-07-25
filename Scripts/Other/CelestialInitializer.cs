@@ -2,6 +2,7 @@ using Godot;
 using GodotPrototype.Scripts.Simulation;
 using GodotPrototype.Scripts.Simulation.Physics;
 using GodotPrototype.Scripts.UserInterface;
+using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.Other;
 
@@ -11,6 +12,8 @@ public partial class CelestialInitializer : Node
 	private bool[] _createdCelestial;
 	private string[] _celestialNames;
 	private List<Celestial> _celestialNodes = [];
+
+	private const string CfgFolderFilePath = "res://Resources/CelestialConfigs/";
 	
 	[Export] private PackedScene _celestialPrefab;
 	[Export] private PackedScene _surfacePrefab;
@@ -22,6 +25,7 @@ public partial class CelestialInitializer : Node
 	public override void _EnterTree()
 	{
 		OrbitMesh.DefaultMeshParent = this;
+		FuelType.InitializeFuelTypes();
 	}
 
 	public override void _Ready()
@@ -45,11 +49,12 @@ public partial class CelestialInitializer : Node
 	private static List<ConfigFile> GetConfigs()
 	{
 		var cfgs = new List<ConfigFile>();
-		var fileNames = DirAccess.GetFilesAt("res://CelestialConfigs");
+		var fileNames = DirAccess.GetFilesAt(CfgFolderFilePath);
+
 		foreach (var fileName in fileNames)
 		{
 			var cfg = new ConfigFile();
-			var filePath = "res://CelestialConfigs/" + fileName;
+			var filePath = CfgFolderFilePath + fileName;
 			cfg.Load(filePath);
 			cfgs.Add(cfg);
 		}
@@ -140,10 +145,11 @@ public partial class CelestialInitializer : Node
 		celestial.Radius = radius;
 		celestial.SurfaceNode = surface;
 		
+		if (cfg.HasSection("SurfaceGlow")) material = AddSurfaceGlow(cfg, material);
+		
 		surface.Scale = Vector3.One * (float)radius * 2;
 		surface.SetMaterialOverride(material);
 		celestial.AddChild(surface);
-		if (cfg.HasSection("SurfaceGlow")) AddSurfaceGlow(cfg, surface);
 	}
 	
 	private void AddRings(ConfigFile cfg, Celestial celestial)
@@ -175,13 +181,16 @@ public partial class CelestialInitializer : Node
 		celestial.Luminosity = (double)cfg.GetValue("LightEmission", "Luminosity");
 	}
 	
-	private void AddSurfaceGlow(ConfigFile cfg, Node surface)
+	private StandardMaterial3D AddSurfaceGlow(ConfigFile cfg, StandardMaterial3D material)
 	{
-		if ((bool)cfg.GetValue("SurfaceGlow", "Enabled"))
-		{
-			var surfaceGlow = _surfaceGlowPrefab.Instantiate();
-			surface.AddChild(surfaceGlow);
-		}
+		material.EmissionEnabled = true;
+		material.EmissionIntensity = (float)cfg.GetValue("SurfaceGlow", "Intensity");
+		material.Emission =  (Color)cfg.GetValue("SurfaceGlow", "Color");
+		
+		material.EmissionOperator = BaseMaterial3D.EmissionOperatorEnum.Multiply;
+		material.EmissionTexture = material.AlbedoTexture;
+		
+		return material;
 	}
 	
 	private void AddNodeTracker(Celestial celestial)

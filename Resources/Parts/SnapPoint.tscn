@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://0hctrn76drmj"]
+
+[ext_resource type="Script" uid="uid://0t5ba2mlr1oi" path="res://Scripts/Vessels/SnapPoint.cs" id="1_efywd"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_d22qe"]
+
+[node name="SnapPoint" type="Node3D" node_paths=PackedStringArray("Collider")]
+script = ExtResource("1_efywd")
+Collider = NodePath("SnapRange")
+
+[node name="Marker3D" type="Marker3D" parent="."]
+gizmo_extents = 0.15
+
+[node name="Marker3D2" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+gizmo_extents = 0.15
+
+[node name="SnapRange" type="Area3D" parent="."]
+collision_layer = 4
+monitoring = false
+
+[node name="SnapRangeCollider" type="CollisionShape3D" parent="SnapRange"]
+shape = SubResource("SphereShape3D_d22qe")
+debug_color = Color(0, 0.595, 0.7, 1)

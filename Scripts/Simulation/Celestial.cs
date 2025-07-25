@@ -6,6 +6,7 @@ using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 
 namespace GodotPrototype.Scripts.Simulation;
 
+[GlobalClass, Icon("res://Resources/Icons/CelestialIcon.png")]
 public partial class Celestial : Node3D, IRenderable
 {
 	public double Mass;
@@ -27,6 +28,11 @@ public partial class Celestial : Node3D, IRenderable
 	public double Luminosity;
 	
 	
+	public static readonly List<Celestial> AllCelestials = [];
+	public static readonly Dictionary<string, Celestial> CelestialDict = [];
+	
+	
+	
 	public override void _Ready()
 	{
 		if (CelestialOrbit != null)
@@ -40,10 +46,9 @@ public partial class Celestial : Node3D, IRenderable
 			RelPosition = new RelativePosition(Transform.Origin);
 			RelVelocity = new RelativeVelocity();
 		}
-
-		GlobalValues.ReceiveCelestials(this);
+		AllCelestials.Add(this);
+		CelestialDict.Add(Name, this);
 		FlightCamera.AddToRenderSpaceUpdate(this);
-		
 	}
 	
 	public override void _Process(double dt)

@@ -3,6 +3,8 @@ using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
 using GodotPrototype.Scripts.Simulation.Physics;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
+using GodotPrototype.Scripts.UserInterface;
+using GodotPrototype.Scripts.Vessels;
 using DebugUIController = GodotPrototype.Scripts.Debug.DebugUIController;
 
 namespace GodotPrototype.Scripts.Simulation;
@@ -26,16 +28,6 @@ public partial class FlightCamera : Camera3D
 
 	[Export(PropertyHint.Range, "0.0,1.0")] private float _mouseSensitivity = 0.25f;
 	private Vector2 _deltaMousePos;
-
-	private bool _d;
-	private bool _a;
-	private bool _w;
-	private bool _s;
-	private bool _e;
-	private bool _q;
-
-	private bool _shift;
-	private bool _alt;
 
 	public static float Pitch;
 	public static float Yaw;
@@ -65,7 +57,7 @@ public partial class FlightCamera : Camera3D
 	private static List<double> GetCelestialDistances()
 	{
 		var distances = new List<double>();
-		foreach (var celestial in GlobalValues.AllCelestials)
+		foreach (var celestial in Celestial.AllCelestials)
 		{
 			distances.Add(celestial.RelPosition[CoordinateSpace.RenderSpace].Magnitude);
 		}
@@ -76,12 +68,12 @@ public partial class FlightCamera : Camera3D
 	private static SortedList<double, Celestial> GetSortedCelestialDistances()
 	{
 		var sortedDists = new SortedList<double, Celestial>();
-		var celestials = GlobalValues.AllCelestials;
+		var celestials = Celestial.AllCelestials;
 		
 		for (int i = 0; i < celestials.Count; i++)
 		{
 			if (!celestials[i].Visible) continue;
-			sortedDists.Add(_celestialDists[i], GlobalValues.AllCelestials[i]);
+			sortedDists.Add(_celestialDists[i], Celestial.AllCelestials[i]);
 		}
 		return sortedDists;
 	}
@@ -137,19 +129,19 @@ public partial class FlightCamera : Camera3D
 	private void FreecamUpdate(double delta)
 	{
 		_orbitCamCenter = PositionRel.ParentPosition;
+
+		var velocity = Vector3d.Zero;
+		if (Input.IsActionPressed(PLEInput.Right)) velocity += Basis.X;
+		if (Input.IsActionPressed(PLEInput.Left)) velocity -= Basis.X;
+		if (Input.IsActionPressed(PLEInput.Up)) velocity += Basis.Y;
+		if (Input.IsActionPressed(PLEInput.Down)) velocity -= Basis.Y;
+		if (Input.IsActionPressed(PLEInput.Forward)) velocity -= Basis.Z;
+		if (Input.IsActionPressed(PLEInput.Backward)) velocity += Basis.Z;
+		if (velocity == Vector3d.Zero) return;
 		
-		var direction = new Vector3d((_d ? 1f : 0f) - (_a ? 1f : 0f), (_e ? 1f : 0f) - (_q ? 1f : 0f), (_s ? 1f : 0f) - (_w ? 1f : 0f));
-		if (direction == Vector3d.Zero) return;
-		
-		var speedMulti = 1f;
-		if (_shift) speedMulti *= _modifierSpeedMultiplier;
-		if (_alt) speedMulti /= _modifierSpeedMultiplier;
-		
-		_velocity = direction * Speed;
-		var velocityRotated = ((Vector3)_velocity).Rotated(Vector3.Up, Yaw);
-		velocityRotated = velocityRotated.Rotated(Vector3.Right.Rotated(Vector3.Up, Yaw).Normalized(), Pitch);
+		velocity *= Speed * PLEInput.GetActiveModifier(_modifierSpeedMultiplier);
 			
-		PositionRel.LocalPosition += (Vector3d)velocityRotated * delta * speedMulti;
+		PositionRel.LocalPosition += velocity * delta;
 	}
 	
 	private void UpdateMouseLook()
@@ -168,78 +160,39 @@ public partial class FlightCamera : Camera3D
 		GlobalValues.LocalSpaceCamera.Rotation = Rotation;
 	}
 
-	public override void _Input(InputEvent @event)
+	public override void _Input(InputEvent inputEvent)
 	{
-		if (@event is InputEventMouseMotion inputEventMouseMotion)
+		switch (inputEvent)
 		{
-			_deltaMousePos = inputEventMouseMotion.ScreenRelative;
-		}
-		else if (@event is InputEventMouseButton inputEventMouseButton)
-		{
-			switch (inputEventMouseButton.ButtonIndex) 
-			{
-				case MouseButton.WheelUp:
-					if (CameraMode is CameraModeType.Freecam) Speed *= 0.1 * (_shift? 5 : 1) / (_alt? 5 : 1) + 1;
-					else _orbitCamRadius /= 0.1 * (_shift? 5 : 1) * (_alt? 0.1 : 1) + 1;
+			case InputEventMouseMotion inputEventMouseMotion:
+				_deltaMousePos = inputEventMouseMotion.ScreenRelative;
+				break;
+			case InputEventMouseButton {ButtonIndex: MouseButton.WheelUp}:
+				if (CameraMode is CameraModeType.Freecam) Speed *= 0.1 * PLEInput.GetActiveModifier(5d) + 1;
+				else _orbitCamRadius /= 0.1 * PLEInput.GetActiveModifier(5d) + 1;
+				break;
+			case InputEventMouseButton {ButtonIndex: MouseButton.WheelDown}:
+				if (CameraMode is CameraModeType.Freecam) Speed /= 0.1 * PLEInput.GetActiveModifier(5d) + 1;
+				else _orbitCamRadius *= 0.1 * PLEInput.GetActiveModifier(5d) + 1;
+				break;
+			case InputEventMouseButton {ButtonIndex: MouseButton.Right} inputEventMouseButton:
+				Input.SetMouseMode(inputEventMouseButton.Pressed ? Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible);
+				break;
+			case InputEventKey {Keycode: Key.F} inputEventKey:
+				if (inputEventKey.Pressed) break;
+				if (CameraMode is CameraModeType.Freecam)
+				{
+					CameraMode = CameraModeType.Orbitcam;
+					_orbitCamRadius = PositionRel.LocalPosition.Magnitude;
 					break;
-				
-				case MouseButton.WheelDown:
-					if (CameraMode is CameraModeType.Freecam) Speed /= 0.1 * (_shift? 5 : 1) / (_alt? 5 : 1) + 1;
-					else _orbitCamRadius *= 0.1 * (_shift? 5 : 1) / (_alt? 5 : 1) + 1;
-					break;
-				
-				case MouseButton.Right:
-					Input.SetMouseMode(inputEventMouseButton.Pressed ? Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible);
-					break;
-			}
-		}
-		else if (@event is InputEventKey inputEventKey)
-		{
-			switch (inputEventKey.Keycode)
-			{
-				case Key.W:
-					_w = inputEventKey.Pressed;
-					break;
-				case Key.A:
-					_a = inputEventKey.Pressed;
-					break;
-				case Key.S:
-					_s = inputEventKey.Pressed;
-					break;
-				case Key.D:
-					_d = inputEventKey.Pressed;
-					break;
-				case Key.Q:
-					_e = inputEventKey.Pressed;
-					break;
-				case Key.E:
-					_q = inputEventKey.Pressed;
-					break;
-				case Key.Shift:
-					_shift = inputEventKey.Pressed;
-					break;
-				case Key.Alt:
-					_alt = inputEventKey.Pressed;
-					break;
-				case Key.F:
-					if (inputEventKey.Pressed) break;
-					if (CameraMode is CameraModeType.Freecam)
-					{
-						CameraMode = CameraModeType.Orbitcam;
-						_orbitCamRadius = PositionRel.LocalPosition.Magnitude;
-					}
-					else
-					{
-						CameraMode = CameraModeType.Freecam;
-					}
-					break;
-				case Key.V:
-					if (inputEventKey.Pressed) break;
-					_orbitCamCenter = GlobalValues.ActiveVessel.PositionRel;
-					PositionRel.ConvertRef(_orbitCamCenter);
-					break;
-
-			}
+				}
+				CameraMode = CameraModeType.Freecam;
+				break;
+			case InputEventKey {Keycode: Key.V} inputEventKey:
+				if (inputEventKey.Pressed) break;
+				_orbitCamCenter = Vessel.ActiveVessel.PositionRel;
+				PositionRel.ConvertRef(_orbitCamCenter);
+				break;
 		}
 	}
 }

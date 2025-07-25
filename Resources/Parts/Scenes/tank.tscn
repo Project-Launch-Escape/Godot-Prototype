@@ -1,0 +1,45 @@
+[gd_scene load_steps=10 format=3 uid="uid://bp0y71wbm8kj"]
+
+[ext_resource type="PackedScene" uid="uid://0hctrn76drmj" path="res://Resources/Parts/SnapPoint.tscn" id="1_dbx60"]
+[ext_resource type="Script" uid="uid://k3500mi8rulg" path="res://Scripts/Vessels/VesselPart.cs" id="1_ekgpr"]
+[ext_resource type="PackedScene" uid="uid://c847xtl83rjci" path="res://Resources/Parts/Models/tank1.fbx" id="2_ekgpr"]
+[ext_resource type="PackedScene" uid="uid://cmmjhdnfxqbqr" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="3_4gng2"]
+[ext_resource type="Script" uid="uid://bskdkle22wkc2" path="res://Scripts/Vessels/FuelTank.cs" id="5_ieqmh"]
+[ext_resource type="Resource" uid="uid://nvg5a2xy2o0i" path="res://Resources/FuelTypes/Methane.tres" id="6_scbmc"]
+[ext_resource type="Script" uid="uid://bxfpnmmlr83qu" path="res://Scripts/Vessels/FuelType.cs" id="6_yiwjg"]
+[ext_resource type="Resource" uid="uid://bsechgrsa5844" path="res://Resources/FuelTypes/Oxidizer.tres" id="7_yiwjg"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bjsqp"]
+
+[node name="Tank" type="StaticBody3D" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components")]
+script = ExtResource("1_ekgpr")
+SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
+SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
+Components = [NodePath("FuelTankComponent")]
+_baseMass = 5.0
+
+[node name="SnapPoint" parent="." instance=ExtResource("1_dbx60")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="SnapPoint2" parent="." instance=ExtResource("1_dbx60")]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="SurfaceAttatchPoint" parent="." instance=ExtResource("3_4gng2")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.5, 0, 0)
+
+[node name="tank1" parent="." instance=ExtResource("2_ekgpr")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_bjsqp")
+
+[node name="FuelTankComponent" type="Node3D" parent="."]
+script = ExtResource("5_ieqmh")
+FuelLevels = Dictionary[ExtResource("6_yiwjg"), float]({
+ExtResource("6_scbmc"): 300.0,
+ExtResource("7_yiwjg"): 100.0
+})
+MaxFuelLevels = Dictionary[ExtResource("6_yiwjg"), float]({
+ExtResource("6_scbmc"): 300.0,
+ExtResource("7_yiwjg"): 100.0
+})

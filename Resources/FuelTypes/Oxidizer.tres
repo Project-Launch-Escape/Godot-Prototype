@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="FuelType" load_steps=2 format=3 uid="uid://bsechgrsa5844"]
+
+[ext_resource type="Script" uid="uid://bxfpnmmlr83qu" path="res://Scripts/Vessels/FuelType.cs" id="1_0yruy"]
+
+[resource]
+script = ExtResource("1_0yruy")
+Name = "Oxidizer"
+Mass = 1.0
+Volume = 2.0
+Color = Color(0.607843, 0.768627, 1, 1)
+metadata/_custom_type_script = "uid://bxfpnmmlr83qu"

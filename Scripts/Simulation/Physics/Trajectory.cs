@@ -173,6 +173,7 @@ public class Trajectory
 		return true;
 	}
 	
+	//TODO: Add encounter detection
 	/*
 	
 	private void CheckForEncounter(Celestial celestials)

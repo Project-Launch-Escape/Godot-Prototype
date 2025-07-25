@@ -2,8 +2,8 @@
 
 [sub_resource type="SphereMesh" id="SphereMesh_01hvt"]
 lightmap_size_hint = Vector2i(17, 9)
-radial_segments = 256
-rings = 128
+radial_segments = 1024
+rings = 512
 
 [node name="Surface" type="MeshInstance3D"]
 cast_shadow = 0

@@ -1,12 +1,13 @@
 using Godot;
 using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
+using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.Simulation;
 
 public partial class LocalSurface : MeshInstance3D, IRenderable
 {
-	private static Celestial CurrentSOI => GlobalValues.ActiveVessel.ParentBody;
+	private static Celestial CurrentSOI => Vessel.ActiveVessel.ParentBody;
 	private static MeshInstance3D _meshObject;
 
 	public override void _Ready()
@@ -32,6 +33,6 @@ public partial class LocalSurface : MeshInstance3D, IRenderable
 
 	public void RenderUpdate()
 	{
-		Position = (Vector3)CurrentSOI.RelPosition[CoordinateSpace.RenderSpace];
+		Position = (Vector3)CurrentSOI.RelPosition[CoordinateSpace.VesselSpace];
 	}
 }

@@ -1,5 +1,6 @@
 using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
+using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.Simulation.ReferenceFrames;
 
@@ -71,30 +72,30 @@ public class RelativePosition
 		{
 			CoordinateSpace.RenderSpace => PositionRefConverted(FlightCamera.PositionRel),
 			CoordinateSpace.AbsoluteSpace => GetAbsolutePosition(),
-			CoordinateSpace.VesselSpace => PositionRefConverted(GlobalValues.ActiveVessel.PositionRel),
+			CoordinateSpace.VesselSpace => PositionRefConverted(Vessel.ActiveVessel.PositionRel),
 			_ => new Vector3d()
 		};
 	}
 
 	private Vector3d GetAbsolutePosition()
 	{
-		var absolutepos = new Vector3d();
+		var absolutePos = new Vector3d();
 		for (CoordinateSpace layer = 0; layer < CoordLayer; layer++)
 		{
-			absolutepos += GetPositionAtLayer(layer);
+			absolutePos += GetPositionAtLayer(layer);
 		}
 
-		return absolutepos;
+		return absolutePos;
 	}
 	
 	public Celestial FindHighestSOI()
 	{
-		var celestials = GlobalValues.AllCelestials;
+		var celestials = Celestial.AllCelestials;
 		var currentSOIs = new List<Celestial>();
 		
 		var celestialDists = new List<double>();
 		
-		foreach (var celestial in GlobalValues.AllCelestials)
+		foreach (var celestial in Celestial.AllCelestials)
 		{
 			celestialDists.Add(celestial.RelPosition.PositionRefConverted(this).Magnitude);
 		}

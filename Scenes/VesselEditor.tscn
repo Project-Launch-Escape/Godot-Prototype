@@ -1,0 +1,60 @@
+[gd_scene load_steps=11 format=3 uid="uid://b4ajfh7q5214k"]
+
+[ext_resource type="Script" uid="uid://ba3yuukuk7yel" path="res://Scripts/VesselEditor/VesselEditor.cs" id="1_a5mxq"]
+[ext_resource type="Script" uid="uid://b2ucfws7t3bhu" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
+[ext_resource type="PackedScene" uid="uid://0genpyip5sjc" path="res://Scenes/sphere.tscn" id="4_tshso"]
+[ext_resource type="PackedScene" uid="uid://d3t3v4jewjjhr" path="res://Scenes/cube.tscn" id="5_60qqo"]
+[ext_resource type="PackedScene" uid="uid://wdmru320mfw3" path="res://Scenes/gizmo_translate.tscn" id="8_txf6a"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vqfw5"]
+sky_top_color = Color(0.177378, 0.470621, 0.689949, 1)
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_bottom_color = Color(0.13471, 0.220951, 0.325942, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_6kmqj"]
+sky_material = SubResource("ProceduralSkyMaterial_vqfw5")
+
+[sub_resource type="Environment" id="Environment_175yu"]
+background_mode = 2
+background_color = Color(0.0931457, 0.471752, 0.711669, 1)
+background_intensity = 20000.0
+sky = SubResource("Sky_6kmqj")
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.2
+tonemap_mode = 3
+glow_enabled = true
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_y6rsm"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_vqfw5"]
+
+[node name="VesselEditor" type="Node3D" node_paths=PackedStringArray("Camera")]
+script = ExtResource("1_a5mxq")
+Camera = NodePath("Camera")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_175yu")
+camera_attributes = SubResource("CameraAttributesPractical_y6rsm")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00630343, 0.679551, 2.27911)
+attributes = SubResource("CameraAttributesPractical_vqfw5")
+fov = 70.0
+script = ExtResource("2_npby0")
+CameraSensitivity = 0.2
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.629456, 0.777036, 0, -0.777036, 0.629456, 0, 0, 0)
+light_intensity_lux = 50000.0
+light_temperature = 8000.0
+
+[node name="Sphere" parent="." instance=ExtResource("4_tshso")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.74222, 0, 0)
+
+[node name="Cube" parent="." instance=ExtResource("5_60qqo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.32511, 0, 0)
+
+[node name="GizmoTranslate" parent="." instance=ExtResource("8_txf6a")]
+visible = false

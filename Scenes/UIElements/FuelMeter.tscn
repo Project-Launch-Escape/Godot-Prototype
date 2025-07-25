@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://cubad3nr3nssl"]
+
+[ext_resource type="Texture2D" uid="uid://wwl1jfkjjwu0" path="res://Resources/UITextures/FuelMeter.png" id="1_6fvdw"]
+[ext_resource type="Texture2D" uid="uid://oo7u1hgkho6m" path="res://Resources/UITextures/FuelMeterFill.png" id="2_fxrn6"]
+[ext_resource type="Script" uid="uid://7fw2tf021mow" path="res://Scripts/UserInterface/FuelMeter.cs" id="3_fxrn6"]
+
+[node name="FuelMeter" type="TextureProgressBar" node_paths=PackedStringArray("meterLabel")]
+offset_right = 128.0
+offset_bottom = 16.0
+texture_over = ExtResource("1_6fvdw")
+texture_progress = ExtResource("2_fxrn6")
+script = ExtResource("3_fxrn6")
+meterLabel = NodePath("MeterLabel")
+
+[node name="MeterLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_top = -15.0
+offset_right = 175.0
+offset_bottom = 9.0
+scale = Vector2(0.75, 0.75)
+bbcode_enabled = true
+text = "Fuel"
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="Separator" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 18.0
+offset_right = 132.0
+offset_bottom = 20.0
+color = Color(0.179285, 0.158445, 0.41942, 1)

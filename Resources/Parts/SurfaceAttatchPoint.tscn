@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmmjhdnfxqbqr"]
+
+[ext_resource type="Script" uid="uid://0t5ba2mlr1oi" path="res://Scripts/Vessels/SnapPoint.cs" id="1_va8mj"]
+
+[node name="SurfaceAttatchPoint" type="Node3D"]
+script = ExtResource("1_va8mj")
+
+[node name="Marker3D" type="Marker3D" parent="."]
+gizmo_extents = 0.15
+
+[node name="Marker3D2" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+gizmo_extents = 0.15
