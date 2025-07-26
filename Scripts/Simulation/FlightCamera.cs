@@ -5,7 +5,7 @@ using GodotPrototype.Scripts.Simulation.Physics;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 using GodotPrototype.Scripts.UserInterface;
 using GodotPrototype.Scripts.Vessels;
-using DebugUIController = GodotPrototype.Scripts.Debug.DebugUIController;
+using GodotPrototype.Scripts.PLEDebug;
 
 namespace GodotPrototype.Scripts.Simulation;
 

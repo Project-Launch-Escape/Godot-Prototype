@@ -1,5 +1,5 @@
 using Godot;
-using GodotPrototype.Scripts.Debug;
+using GodotPrototype.Scripts.PLEDebug;
 using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
