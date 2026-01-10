@@ -1,8 +1,8 @@
 using Godot;
 using GodotPrototype.Scripts.Simulation;
 using GodotPrototype.Scripts.Simulation.Physics;
-using GodotPrototype.Scripts.UserInterface;
 using GodotPrototype.Scripts.Vessels;
+using OrbitMesh = GodotPrototype.Scripts.UserInterface.UIElements.OrbitMesh;
 
 namespace GodotPrototype.Scripts.Other;
 
@@ -20,7 +20,9 @@ public partial class CelestialInitializer : Node
 	[Export] private PackedScene _ringsPrefab;
 	[Export] private PackedScene _lightEmitterPrefab;
 	[Export] private PackedScene _surfaceGlowPrefab;
-	[Export] private PackedScene _nodeTrackerPrefab;
+	[Export] private PackedScene _markerPrefab;
+
+	[Export] private Texture2D _celestialIcon;
 
 	public override void _EnterTree()
 	{
@@ -82,16 +84,16 @@ public partial class CelestialInitializer : Node
 		celestial.Name = (string)cfg.GetValue("Properties", "Name");
 		
 		if (cfg.HasSection("Orbit")) AddOrbit(cfg,celestial);
-		else celestial.Position = (Vector3)cfg.GetValue("Properties", "GalaxyPosition");
+		else AddOrbitStatic(cfg, celestial);
 		if (cfg.HasSectionKey("Properties", "SOIRadius"))
 			celestial.SOIRadius = (double)cfg.GetValue("Properties", "SOIRadius");
 		if (cfg.HasSection("Surface")) AddSurface(cfg, celestial);
 		if (cfg.HasSection("Rings")) AddRings(cfg, celestial);
 		if (cfg.HasSection("LightEmission")) AddLightEmitter(cfg, celestial);
+		if (cfg.HasSection("Properties")) AddIcon(celestial);
 		
 		_celestialNodes.Add(celestial);
 		AddChild(celestial);
-		if (cfg.HasSection("Properties")) AddNodeTracker(celestial);
 		
 		for (int i = 0; i < _configs.Count; i++)
 		{
@@ -129,10 +131,31 @@ public partial class CelestialInitializer : Node
 			: (double)cfg.GetValue("Orbit", "Epoch") - (double)cfg.GetValue("Orbit", "MeanAnomalyAtEpoch") / n;
 		
 		var color = (Color)cfg.GetValue("Orbit", "Color");
-		celestial.CelestialOrbit = new Orbit(p, e, w, i, l, n, tpp, parentCelestial, color);
+		celestial.CelestialOrbit = new Orbit
+		{
+			p = p,
+			e = e,
+			w = w,
+			i = i,
+			l = l,
+			T = tpp,
+			n = n,
+			Color = color,
+			Primary = parentCelestial,
+			OrbitingObject = celestial
+		};
 		
-		if (!cfg.HasSectionKey("Properties", "SOIRadius"))
-			celestial.SOIRadius = p * Math.Pow(celestial.Mass / parentCelestial.Mass, 0.4f);
+		if (!cfg.HasSectionKey("Properties", "SOIRadius")) celestial.SOIRadius = p * Math.Pow(celestial.Mass / parentCelestial!.Mass, 0.4f);
+		
+	}
+
+	private void AddOrbitStatic(ConfigFile cfg, Celestial celestial)
+	{
+		celestial.Position = (Vector3)cfg.GetValue("Properties", "GalaxyPosition");
+		celestial.CelestialOrbit = new Orbit();
+		celestial.CelestialOrbit.SetToStatic();
+		celestial.CelestialOrbit.CreateOrbitLine();
+		celestial.CelestialOrbit.OrbitingObject = celestial;
 	}
 	
 	private void AddSurface(ConfigFile cfg, Celestial celestial)
@@ -193,9 +216,11 @@ public partial class CelestialInitializer : Node
 		return material;
 	}
 	
-	private void AddNodeTracker(Celestial celestial)
+	private void AddIcon(Celestial celestial)
 	{
-		var nodeTracker = _nodeTrackerPrefab.Instantiate();
-		celestial.AddChild(nodeTracker);
+		var color = !celestial.CelestialOrbit.IsStatic? celestial.CelestialOrbit.Color : new Color(1, 1, 1);
+		var image = _celestialIcon;
+		celestial.Icon = image;
+		celestial.IconColor = color;
 	}
 }

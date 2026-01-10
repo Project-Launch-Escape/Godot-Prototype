@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://wdmru320mfw3"]
 
-[ext_resource type="Script" uid="uid://chall127tuyhe" path="res://Scripts/VesselEditor/GizmoTranslate.cs" id="1_vmmqn"]
+[ext_resource type="Script" uid="uid://chall127tuyhe" path="res://Scripts/VesselEditor/TranslateTool.cs" id="1_vmmqn"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_k6x33"]
 height = 0.5

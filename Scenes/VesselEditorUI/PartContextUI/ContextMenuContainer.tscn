@@ -1,0 +1,92 @@
+[gd_scene load_steps=6 format=3 uid="uid://crnsjo4ueukmv"]
+
+[ext_resource type="Script" uid="uid://bpyf0s7lfq8oc" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/ContextMenu.cs" id="1_i2txm"]
+[ext_resource type="Texture2D" uid="uid://bsjietnkjvvrp" path="res://Resources/UITextures/XIcon.png" id="2_ay3f2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ssbxe"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.025363794, 0.025363805, 0.025363766, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i2txm"]
+bg_color = Color(0.63240004, 0.6546134, 0.68, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.023529412, 0.023529412, 0.023529412, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i2txm"]
+size = Vector2(350, 48)
+
+[node name="ContextMenuContainer" type="Panel" node_paths=PackedStringArray("_componentMenuContainer", "_xButton", "_partNameLabel", "_dragCollider")]
+offset_right = 350.0
+offset_bottom = 300.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_ssbxe")
+script = ExtResource("1_i2txm")
+_componentMenuContainer = NodePath("ComponentMenuContainer")
+_xButton = NodePath("Header/X Button")
+_partNameLabel = NodePath("Header/PartName")
+_dragCollider = NodePath("Header/Drag Collider")
+
+[node name="Header" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 50.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i2txm")
+
+[node name="X Button" type="Button" parent="Header"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -46.0
+offset_top = 10.0
+offset_right = -16.0
+offset_bottom = 40.0
+grow_horizontal = 0
+icon = ExtResource("2_ay3f2")
+
+[node name="PartName" type="Label" parent="Header"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 12.0
+offset_right = 296.0
+offset_bottom = 35.0
+text = "Part Name"
+
+[node name="Drag Collider" type="Area2D" parent="Header"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Header/Drag Collider"]
+position = Vector2(175, 24)
+shape = SubResource("RectangleShape2D_i2txm")
+debug_color = Color(0, 0.5950001, 0.7, 0)
+
+[node name="ComponentMenuContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 49.0
+offset_right = -13.0
+grow_horizontal = 2
+grow_vertical = 2

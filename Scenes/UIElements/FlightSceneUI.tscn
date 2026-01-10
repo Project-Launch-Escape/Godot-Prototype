@@ -1,8 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://km1h4vn3ffl7"]
+[gd_scene load_steps=49 format=3 uid="uid://km1h4vn3ffl7"]
 
 [ext_resource type="Script" uid="uid://crhs8keftn727" path="res://Scripts/UserInterface/FlightUIController.cs" id="1_mrerc"]
-[ext_resource type="Script" uid="uid://cvok1dj0ebw4u" path="res://Scripts/Debug/DebugUIController.cs" id="1_wae5i"]
+[ext_resource type="Script" uid="uid://cvok1dj0ebw4u" path="res://Scripts/PLEDebug/DebugUIController.cs" id="1_wae5i"]
 [ext_resource type="PackedScene" uid="uid://bkrfit3g50xg7" path="res://Prefabs/DebugUISection.tscn" id="2_v065c"]
+[ext_resource type="Script" uid="uid://btphvogvrngh" path="res://Scripts/UserInterface/UIElements/TimewarpSlider.cs" id="4_8pcu1"]
+[ext_resource type="Texture2D" uid="uid://b58dlsam66qx2" path="res://Resources/UITextures/PlayIcon.png" id="5_nm0om"]
+[ext_resource type="Texture2D" uid="uid://dcyy5x6krabtt" path="res://Resources/UITextures/PauseIcon.png" id="6_mhhnu"]
+[ext_resource type="Script" uid="uid://c2kjjjaaag1p8" path="res://Scripts/UserInterface/UIElements/PauseButton.cs" id="7_mhhnu"]
+[ext_resource type="Script" uid="uid://d3u667s66u083" path="res://Scripts/UserInterface/UIElements/NavRectangle.cs" id="8_mbdiu"]
+[ext_resource type="Texture2D" uid="uid://clnr21py3bpk7" path="res://Resources/UITextures/NavRectangle.png" id="9_22ulr"]
+[ext_resource type="Texture2D" uid="uid://c1ckh70pdlwl8" path="res://Resources/UITextures/NavRectangleCurrent.png" id="9_mbdiu"]
+[ext_resource type="Texture2D" uid="uid://brunu8ex73nng" path="res://Resources/UITextures/NavRectangleCameraPoint.png" id="10_5vu0m"]
+[ext_resource type="Texture2D" uid="uid://ttowc5ll1v7k" path="res://Resources/UITextures/NavRectanglePrograde.png" id="10_l8jfw"]
+[ext_resource type="Texture2D" uid="uid://b1kpjs8qamllw" path="res://Resources/UITextures/NavRectangleRetrograde.png" id="11_pr41h"]
+[ext_resource type="Texture2D" uid="uid://cqwaskny7ti2j" path="res://Resources/UITextures/NavRectangleNormal.png" id="12_pr41h"]
+[ext_resource type="Texture2D" uid="uid://c0ihvhaibr3s1" path="res://Resources/UITextures/NavRectangleAntiNormal.png" id="13_527sr"]
+[ext_resource type="Script" uid="uid://bbd257du148l2" path="res://Scripts/UserInterface/UIElements/AltimeterSpeedometer.cs" id="16_6jclk"]
+[ext_resource type="Texture2D" uid="uid://d3gl0uel3anu2" path="res://Resources/Icons/VesselIcon.png" id="17_xe4cc"]
+[ext_resource type="Texture2D" uid="uid://bjgche0rohxb2" path="res://Resources/UITextures/CameraIcon.png" id="18_6jclk"]
+[ext_resource type="Script" uid="uid://los5tych8jaw" path="res://Scripts/UserInterface/UIElements/ThrottleGauge.cs" id="18_15p0u"]
+[ext_resource type="Texture2D" uid="uid://3ttgmnnurah1" path="res://Resources/UITextures/CelestialIcon.png" id="19_xe4cc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mrerc"]
 bg_color = Color(0.803922, 0.835294, 0.964706, 0.705882)
@@ -17,17 +34,192 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 anti_aliasing = false
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8pcu1"]
+bg_color = Color(0.4977, 0.50652, 0.63, 1)
+border_width_left = 5
+border_width_right = 5
+border_width_bottom = 5
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 1
+expand_margin_left = 10.0
+expand_margin_right = 10.0
+
+[sub_resource type="DPITexture" id="DPITexture_ma3c1"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><circle cx=\"8\" cy=\"8\" r=\"7\" fill=\"#fefefe\"/></svg>
+"
+
+[sub_resource type="Gradient" id="Gradient_8pcu1"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wkok0"]
+gradient = SubResource("Gradient_8pcu1")
+width = 2
+height = 10
+fill_from = Vector2(0.491453, 0.017094)
+fill_to = Vector2(0.448718, 0.166667)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_8pcu1"]
+color = Color(0.294118, 0.352941, 0.654902, 1)
+thickness = 10
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_wkok0"]
+color = Color(0.407617, 0.74, 0.3774, 1)
+thickness = 10
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_nm0om"]
+color = Color(0.407617, 0.74, 0.3774, 1)
+thickness = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_8pcu1"]
+outline_size = 8
+outline_color = Color(0.274853, 0.198385, 0.47245, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wkok0"]
+paragraph_spacing = -5.0
+outline_size = 8
+outline_color = Color(0.274853, 0.198385, 0.47245, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_megd2"]
+bg_color = Color(0.2968, 0.339553, 0.53, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_detail = 1
+anti_aliasing = false
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t4of4"]
+texture = ExtResource("9_22ulr")
+
+[sub_resource type="LabelSettings" id="LabelSettings_22ulr"]
+font_size = 12
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_22ulr"]
+bg_color = Color(0.509804, 0.529412, 0.8, 1)
+border_width_left = 3
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 40
+corner_detail = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_t4of4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4of4"]
+bg_color = Color(0.306358, 0.503574, 0.414063, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 3
+border_width_bottom = 2
+corner_radius_top_right = 40
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wv5l7"]
+bg_color = Color(0.33062804, 0.14373323, 0.13635269, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_foo4s"]
+bg_color = Color(0.04055991, 0.1485638, 0.17673266, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_15p0u"]
+bg_color = Color(0.46028668, 0.3243, 0.47, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_bottom = 2
+corner_detail = 10
+anti_aliasing = false
+
+[sub_resource type="Gradient" id="Gradient_15p0u"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 0.46666667, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6jclk"]
+gradient = SubResource("Gradient_15p0u")
+width = 20
+height = 5
+fill_from = Vector2(0.48708487, 0.35424355)
+fill_to = Vector2(0.448718, 0.166667)
+
+[sub_resource type="Gradient" id="Gradient_ma3c1"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_15p0u"]
+gradient = SubResource("Gradient_ma3c1")
+width = 14
+height = 2
+fill_from = Vector2(0.491453, 0.017094)
+fill_to = Vector2(0.448718, 0.166667)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6jclk"]
+content_margin_left = 9.0
+content_margin_right = 9.0
+bg_color = Color(0.34079993, 0.276, 0.6, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_color = Color(0.27159992, 0.1974, 0.42, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xe4cc"]
+bg_color = Color(0.7, 0.59091663, 0.10499998, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.7865, 0.39, 1)
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_15p0u"]
+font_size = 12
+font_color = Color(0.65199995, 1, 0.42000002, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_6jclk"]
+font_size = 10
+font_color = Color(0.65199995, 1, 0.42000002, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0lvd3"]
+bg_color = Color(0.46028668, 0.3243, 0.47, 1)
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_detail = 10
+anti_aliasing = false
+
 [node name="UI" type="Node" node_paths=PackedStringArray("_fuelMeterContainer")]
 process_priority = 100
 script = ExtResource("1_mrerc")
 _fuelMeterContainer = NodePath("FuelMeters/VBoxContainer")
 
 [node name="Debug Interface" type="Panel" parent="." node_paths=PackedStringArray("_sectionContainerSetter")]
-anchors_preset = -1
-anchor_bottom = 0.0268519
-offset_left = 5.0
-offset_right = 305.0
-offset_bottom = 243.0
+offset_left = 15.0
+offset_top = 11.0
+offset_right = 315.0
+offset_bottom = 128.0
 size_flags_vertical = 3
 script = ExtResource("1_wae5i")
 _sectionContainerSetter = NodePath("VBoxContainer")
@@ -36,8 +228,10 @@ metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Debug Interface"]
 layout_mode = 0
-offset_right = 300.0
-offset_bottom = 128.0
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 299.0
+offset_bottom = 169.0
 
 [node name="Title" type="Label" parent="Debug Interface/VBoxContainer"]
 layout_mode = 2
@@ -116,9 +310,442 @@ metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FuelMeters"]
 layout_mode = 0
-offset_left = 25.0
-offset_top = 34.0
-offset_right = 170.0
-offset_bottom = 156.0
+offset_left = 5.0
+offset_top = 22.0
+offset_right = 160.33337
+offset_bottom = 133.33334
 scale = Vector2(1.5, 1.5)
-theme_override_constants/separation = 18
+theme_override_constants/separation = 45
+
+[node name="TimewarpPanel" type="Panel" parent="."]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = -0.001
+anchor_right = 0.5
+anchor_bottom = -0.001
+offset_left = -290.0
+offset_top = 0.08
+offset_right = 282.0
+offset_bottom = 71.08
+theme_override_styles/panel = SubResource("StyleBoxFlat_8pcu1")
+
+[node name="TimewarpSlider" type="HSlider" parent="TimewarpPanel" node_paths=PackedStringArray("_timeWarpLabelString", "_timeWarpLabelInteger", "_currentTimeLabel")]
+layout_mode = 1
+offset_left = 12.0
+offset_top = 5.0
+offset_right = 562.0
+offset_bottom = 21.0
+theme_override_constants/center_grabber = 1
+theme_override_constants/grabber_offset = 0
+theme_override_icons/grabber = SubResource("DPITexture_ma3c1")
+theme_override_icons/grabber_disabled = SubResource("DPITexture_ma3c1")
+theme_override_icons/tick = SubResource("GradientTexture2D_wkok0")
+theme_override_styles/slider = SubResource("StyleBoxLine_8pcu1")
+theme_override_styles/grabber_area = SubResource("StyleBoxLine_wkok0")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxLine_nm0om")
+max_value = 64.0
+rounded = true
+scrollable = false
+tick_count = 17
+ticks_position = 3
+script = ExtResource("4_8pcu1")
+_timeWarpLabelString = NodePath("../TimewarpLabelString")
+_timeWarpLabelInteger = NodePath("../TimewarpLabelInt")
+_currentTimeLabel = NodePath("../CurrentTimeLabel")
+
+[node name="TimewarpLabelString" type="Label" parent="TimewarpPanel"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 43.0
+offset_right = 222.0
+offset_bottom = 66.0
+text = "1s/s"
+label_settings = SubResource("LabelSettings_8pcu1")
+
+[node name="TimewarpLabelInt" type="Label" parent="TimewarpPanel"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 20.0
+offset_right = 177.0
+offset_bottom = 43.0
+text = "1x"
+label_settings = SubResource("LabelSettings_wkok0")
+
+[node name="CurrentTimeLabel" type="Label" parent="TimewarpPanel"]
+layout_mode = 0
+offset_left = 394.0
+offset_top = 21.0
+offset_right = 535.0
+offset_bottom = 70.0
+text = "Year 0, Day 000
+ Hour 00:00:00"
+label_settings = SubResource("LabelSettings_wkok0")
+horizontal_alignment = 1
+
+[node name="PauseButton" type="Panel" parent="TimewarpPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 27.0
+offset_right = 20.0
+offset_bottom = 67.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_megd2")
+
+[node name="TextureButton" type="TextureButton" parent="TimewarpPanel/PauseButton"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 18.0
+offset_bottom = 18.0
+scale = Vector2(2.3, 2.3)
+texture_normal = ExtResource("6_mhhnu")
+script = ExtResource("7_mhhnu")
+_playIcon = ExtResource("5_nm0om")
+_pauseIcon = ExtResource("6_mhhnu")
+
+[node name="NavRectangle" type="Control" parent="." node_paths=PackedStringArray("_cameraAngleIcon", "_vesselAngleIcon", "_progradeAngleIcon", "_retrogradeAngleIcon", "_normalAngleIcon", "_antinormalAngleIcon")]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -187.0
+offset_top = -187.0
+offset_right = 188.0
+offset_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("8_mbdiu")
+_cameraAngleIcon = NodePath("CameraAngleMarker")
+_vesselAngleIcon = NodePath("VesselAngleMarker")
+_progradeAngleIcon = NodePath("ProgradeAngleMarker")
+_retrogradeAngleIcon = NodePath("RetrogradeAngleMarker")
+_normalAngleIcon = NodePath("NormalAngleMarker")
+_antinormalAngleIcon = NodePath("AntiNormalAngleMarker")
+
+[node name="Panel" type="Panel" parent="NavRectangle"]
+layout_mode = 0
+offset_right = 375.0
+offset_bottom = 187.5
+theme_override_styles/panel = SubResource("StyleBoxTexture_t4of4")
+
+[node name="Label" type="Label" parent="NavRectangle/Panel"]
+layout_mode = 0
+offset_left = 3.99998
+offset_top = 132.0
+offset_right = 22.0
+offset_bottom = 149.0
+text = "-45"
+label_settings = SubResource("LabelSettings_22ulr")
+horizontal_alignment = 2
+
+[node name="Label2" type="Label" parent="NavRectangle/Panel"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 39.0
+offset_right = 18.0
+offset_bottom = 56.0
+text = "45"
+label_settings = SubResource("LabelSettings_22ulr")
+horizontal_alignment = 2
+
+[node name="Label3" type="Label" parent="NavRectangle/Panel"]
+layout_mode = 0
+offset_left = 4.40002
+offset_top = -0.399963
+offset_right = 16.4
+offset_bottom = 13.6
+text = "90"
+label_settings = SubResource("LabelSettings_22ulr")
+
+[node name="Label4" type="Label" parent="NavRectangle/Panel"]
+layout_mode = 0
+offset_left = 5.8
+offset_top = 169.8
+offset_right = 19.8
+offset_bottom = 186.8
+text = "90"
+label_settings = SubResource("LabelSettings_22ulr")
+
+[node name="Label5" type="Label" parent="NavRectangle/Panel"]
+layout_mode = 0
+offset_left = 87.2
+offset_top = 77.0
+offset_right = 101.2
+offset_bottom = 94.0
+text = "90"
+label_settings = SubResource("LabelSettings_22ulr")
+
+[node name="Label6" type="Label" parent="NavRectangle/Panel"]
+layout_mode = 0
+offset_left = 177.0
+offset_top = 77.0
+offset_right = 198.0
+offset_bottom = 94.0
+text = "180"
+label_settings = SubResource("LabelSettings_22ulr")
+
+[node name="Label7" type="Label" parent="NavRectangle/Panel"]
+layout_mode = 0
+offset_left = 271.4
+offset_top = 76.2
+offset_right = 292.4
+offset_bottom = 93.2
+text = "270"
+label_settings = SubResource("LabelSettings_22ulr")
+
+[node name="Label8" type="Label" parent="NavRectangle/Panel"]
+layout_mode = 0
+offset_left = 5.19997
+offset_top = 77.9999
+offset_right = 23.2
+offset_bottom = 94.9999
+text = "0"
+label_settings = SubResource("LabelSettings_22ulr")
+
+[node name="Label9" type="Label" parent="NavRectangle/Panel"]
+layout_mode = 0
+offset_left = 350.0
+offset_top = 76.0
+offset_right = 371.0
+offset_bottom = 93.0
+text = "360"
+label_settings = SubResource("LabelSettings_22ulr")
+
+[node name="CameraAngleMarker" type="TextureRect" parent="NavRectangle"]
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 24.0
+texture = ExtResource("10_5vu0m")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VesselAngleMarker" type="TextureRect" parent="NavRectangle"]
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 24.0
+texture = ExtResource("9_mbdiu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProgradeAngleMarker" type="TextureRect" parent="NavRectangle"]
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 24.0
+texture = ExtResource("10_l8jfw")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RetrogradeAngleMarker" type="TextureRect" parent="NavRectangle"]
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 24.0
+texture = ExtResource("11_pr41h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NormalAngleMarker" type="TextureRect" parent="NavRectangle"]
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 24.0
+texture = ExtResource("12_pr41h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AntiNormalAngleMarker" type="TextureRect" parent="NavRectangle"]
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 24.0
+texture = ExtResource("13_527sr")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Altimeter_Spedometer" type="Control" parent="." node_paths=PackedStringArray("_altitudeText", "_velocityText", "_verticalSpeedText", "_trackingSwitchButton", "_referenceIcon")]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -188.0
+offset_top = -227.0
+offset_right = 187.0
+offset_bottom = -187.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("16_6jclk")
+_altitudeText = NodePath("Altimeter/Label")
+_velocityText = NodePath("Spedometer/Label2")
+_verticalSpeedText = NodePath("Spedometer/Label3")
+_trackingSwitchButton = NodePath("TrackingObject/TextureButton")
+_referenceIcon = NodePath("ReferenceObject/TextureButton")
+
+[node name="Altimeter" type="Panel" parent="Altimeter_Spedometer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -223.5
+offset_top = -40.0
+offset_right = 1.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_22ulr")
+
+[node name="Label" type="Label" parent="Altimeter_Spedometer/Altimeter"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = -1.0
+offset_right = 160.0
+offset_bottom = 22.0
+text = "Alt: 100km"
+label_settings = SubResource("LabelSettings_t4of4")
+
+[node name="Spedometer" type="Panel" parent="Altimeter_Spedometer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -0.5
+offset_top = -40.0
+offset_right = 224.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_t4of4")
+
+[node name="Label2" type="Label" parent="Altimeter_Spedometer/Spedometer"]
+layout_mode = 0
+offset_left = 44.0
+offset_top = -1.0
+offset_right = 190.0
+offset_bottom = 22.0
+text = "Vel: 3000m/s"
+label_settings = SubResource("LabelSettings_t4of4")
+
+[node name="Label3" type="Label" parent="Altimeter_Spedometer/Spedometer"]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 16.0
+offset_right = 190.0
+offset_bottom = 39.0
+text = "VSpeed: 10m/s"
+label_settings = SubResource("LabelSettings_t4of4")
+
+[node name="TrackingObject" type="Panel" parent="Altimeter_Spedometer"]
+layout_mode = 0
+offset_left = 149.0
+offset_right = 189.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wv5l7")
+
+[node name="TextureButton" type="TextureButton" parent="Altimeter_Spedometer/TrackingObject"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 36.0
+offset_bottom = 36.0
+toggle_mode = true
+texture_normal = ExtResource("17_xe4cc")
+texture_pressed = ExtResource("18_6jclk")
+stretch_mode = 5
+
+[node name="ReferenceObject" type="Panel" parent="Altimeter_Spedometer"]
+layout_mode = 0
+offset_left = 188.0
+offset_right = 228.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_foo4s")
+
+[node name="TextureButton" type="TextureRect" parent="Altimeter_Spedometer/ReferenceObject"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 36.0
+offset_bottom = 36.0
+texture = ExtResource("19_xe4cc")
+stretch_mode = 5
+
+[node name="Throttle Gauge" type="Panel" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -224.0
+offset_top = -189.0
+offset_right = -187.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_15p0u")
+
+[node name="TimewarpSlider" type="VSlider" parent="Throttle Gauge" node_paths=PackedStringArray("_throttleLevelText")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -27.0
+offset_top = 24.0
+offset_right = -7.0
+offset_bottom = 172.0
+grow_horizontal = 0
+theme_override_constants/center_grabber = 1
+theme_override_constants/grabber_offset = 0
+theme_override_icons/grabber = SubResource("GradientTexture2D_6jclk")
+theme_override_icons/grabber_highlight = SubResource("GradientTexture2D_6jclk")
+theme_override_icons/grabber_disabled = SubResource("GradientTexture2D_6jclk")
+theme_override_icons/tick = SubResource("GradientTexture2D_15p0u")
+theme_override_styles/slider = SubResource("StyleBoxFlat_6jclk")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_xe4cc")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_xe4cc")
+max_value = 1.0
+step = 0.0
+value = 0.5
+scrollable = false
+tick_count = 11
+ticks_position = 3
+script = ExtResource("18_15p0u")
+_throttleLevelText = NodePath("Label9")
+
+[node name="Label9" type="Label" parent="Throttle Gauge/TimewarpSlider"]
+layout_mode = 0
+offset_left = -8.0
+offset_top = 73.0
+offset_right = 27.0
+offset_bottom = 90.0
+text = "50%"
+label_settings = SubResource("LabelSettings_15p0u")
+horizontal_alignment = 1
+
+[node name="Label10" type="Label" parent="Throttle Gauge"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = 37.0
+offset_bottom = 21.0
+text = "THRTL"
+label_settings = SubResource("LabelSettings_6jclk")
+horizontal_alignment = 1
+
+[node name="Placeholder Slot" type="Panel" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 187.0
+offset_top = -189.0
+offset_right = 224.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_0lvd3")

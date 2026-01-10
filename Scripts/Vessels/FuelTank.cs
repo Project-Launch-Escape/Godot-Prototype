@@ -7,6 +7,8 @@ public partial class FuelTank : PartComponent
 {
     [Export] public Godot.Collections.Dictionary<FuelType, double> FuelLevels = [];
     [Export] public Godot.Collections.Dictionary<FuelType, double> MaxFuelLevels = [];
+
+    public List<FuelType> FuelTypes => FuelLevels.Keys.ToList();
     
     /// <summary>Changes the amount of a specific fuel type in the tank by a specified amount (in units)</summary>
     /// <param name="deltaFuel">Change in fuel requested, negative for drain, positive for fill</param>
@@ -35,6 +37,11 @@ public partial class FuelTank : PartComponent
 
         FuelLevels[fuelType] += deltaFuel;
         return 0;
+    }
+
+    public void SetFuelAmount(double newFuel, FuelType fuelType)
+    {
+        FuelLevels[fuelType] = newFuel;
     }
 
     protected override double GetMass() => BaseMass + FuelLevels.Sum(fuelLevel => fuelLevel.Value * fuelLevel.Key.Mass);

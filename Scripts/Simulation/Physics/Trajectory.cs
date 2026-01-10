@@ -2,6 +2,8 @@ using Godot;
 using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
+using GodotPrototype.Scripts.UserInterface.UIElements;
+using GodotPrototype.Scripts.UserInterface.UIElements.OrbitMarkers;
 
 namespace GodotPrototype.Scripts.Simulation.Physics;
 
@@ -53,8 +55,6 @@ public class Trajectory
 				? Range.Intersect(new Range(orbit.TrueAnomalyFromTime(GlobalValues.Time)), orbit.TrueAnomalyRange) : null;
 			
 			orbit.UpdateOrbitLine(trueAnomalyRange);
-			orbit.UpdateApoapsisMarker();
-			orbit.UpdatePeriapsisMarker();
 		}
 		else
 		{
@@ -64,8 +64,8 @@ public class Trajectory
 				? Range.Intersect(new Range(newOrbit.TrueAnomalyFromTime(GlobalValues.Time)), newOrbit.TrueAnomalyRange) : null;
 			
 			newOrbit.CreateOrbitLine(trueAnomalyRange);
-			newOrbit.CreateApoapsisMarker();
-			newOrbit.CreatePeriapsisMarker();
+			newOrbit.CreateMarkerOfType(OrbitMarkerType.Apoapsis);
+			newOrbit.CreateMarkerOfType(OrbitMarkerType.Periapsis);
 		}
 
 	}
@@ -104,7 +104,6 @@ public class Trajectory
 		Range? trueAnomalyRange = CurrentOrbit.IsEscapeTrajectory
 			? Range.Intersect(new Range(CurrentOrbit.TrueAnomalyFromTime(GlobalValues.Time)), CurrentOrbit.TrueAnomalyRange) : null;
 		CurrentOrbit.UpdateOrbitLine(trueAnomalyRange);
-		CurrentOrbit.UpdatePeriapsisMarker();
 	}
 
 	public Orbit GetOrbitAtTime(double time)

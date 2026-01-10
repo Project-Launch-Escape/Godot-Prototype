@@ -46,7 +46,10 @@ public partial class DebugVector : MeshInstance3D
 		{ 
 			Reparent(parentObject, false);
 		}
+	}
 
+	public override void _Process(double delta)
+	{
 		GlobalRotation = new Vector3();
 	}
 }

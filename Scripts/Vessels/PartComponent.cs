@@ -13,4 +13,22 @@ public abstract partial class PartComponent : Node3D
 	public double Mass => GetMass();
 
 	protected virtual double GetMass() => BaseMass;
+	public ComponentType ComponentType => GetComponentType();
+
+	private ComponentType GetComponentType()
+	{
+		return this switch
+		{
+			FuelTank => ComponentType.FuelTank,
+			RocketEngine => ComponentType.Engine,
+			_ => throw new IndexOutOfRangeException()
+		};
+	}
+}
+
+public enum ComponentType
+{
+	FuelTank,
+	Engine,
+	Default
 }

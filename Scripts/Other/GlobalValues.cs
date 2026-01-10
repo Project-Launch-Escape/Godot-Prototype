@@ -1,4 +1,5 @@
 using Godot;
+using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 
 namespace GodotPrototype.Scripts.Other;
 
@@ -10,17 +11,24 @@ public partial class GlobalValues : Node
     public static bool Paused = true;
     public static bool UIVisible = true;
     
-    public const double G = 0.00000000006674315f;
+    public const double G = 0.00000000006674315;
     public const double Minute = 60;
     public const double Hour = Minute * 60; 
     public const double Day = Hour * 24;
-    public const double Year = Day * 365.2422;
+    public const double Year = Day * 365; // Leap years are the bane of any programmer's existance
+
+    public static readonly List<(string name, double multiplier)> SIPrefixes =
+    [
+        ("m",0.001), ("c",0.01), ("",1), ("k",1000), ("M",1000000), ("G",1000000000), ("T",1000000000000)
+    ];
 
     public static Camera3D RenderSpaceCamera;
     public static Camera3D LocalSpaceCamera;
     
     [Export] private Camera3D _renderSpaceCamera;
     [Export] private Camera3D _localSpaceCamera;
+
+    public static RelativePosition FOPosition = new();
 
     public override void _Ready()
     {
@@ -31,14 +39,50 @@ public partial class GlobalValues : Node
     public override void _Process(double delta)
     {
         if (Paused) return;
-        Time += delta * TimeScale;
+        Time += delta;
+        Engine.TimeScale = TimeScale;
     }
 
     public static string TimeToYearDayString(double time)
     {
         var days = time % Year / Day;
         var years = (long)((time - Day * days) / Year);
-        return $"{years} yr, {days:F1} d";
+        return $"year {years}, {days:F1} d";
+    }
+    public static string TimeToVerboseString(double time)
+    {
+        var years = (long)(time / Year);
+        time -= years * Year;
+        var days = (long)(time / Day);
+        time -= days * Day;
+        var hours = (long)(time / Hour);
+        time -= hours * Hour;
+        var minutes = (long)(time / Minute);
+        time -= minutes * Minute;
+        var seconds = (long)time;
+
+        return $"Year {years}  Day {MinumumLength(days, 3)}\n Hour {MinumumLength(hours, 2)}:{MinumumLength(minutes, 2)}:{MinumumLength(seconds, 2)}";
+        
+        string MinumumLength(long number, long length)
+        {
+            var originalString = $"{number}";
+            string leadingZeroes = "";
+            for (int i = 0; i < length - originalString.Length; i++)
+            {
+                leadingZeroes += "0";
+            }
+            return leadingZeroes + originalString;
+        }
+    }
+    public static (string prefixName, double prefixMultiplier) ScalarToHighestSIPrefix(double value)
+    {
+        value = Math.Abs(value);
+        var highestPrefix = SIPrefixes[0];
+        foreach (var prefix in SIPrefixes)
+        {
+            if (value > prefix.multiplier && prefix.multiplier > highestPrefix.multiplier) highestPrefix = prefix;
+        }
+        return highestPrefix;
     }
     
     public override void _Input(InputEvent @event)
@@ -49,15 +93,6 @@ public partial class GlobalValues : Node
             {
                 case Key.Space:
                     Paused = !Paused;
-                    break;
-                case Key.Comma:
-                    TimeScale /= 1.5;
-                    break;
-                case Key.Period:
-                    TimeScale *= 1.5;
-                    break;
-                case Key.Slash:
-                    TimeScale = 1;
                     break;
                 case Key.M:
                     UIVisible = !UIVisible;

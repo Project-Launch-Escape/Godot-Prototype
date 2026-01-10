@@ -1,7 +1,10 @@
 using Godot;
 using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
-using GodotPrototype.Scripts.UserInterface;
+using GodotPrototype.Scripts.UserInterface.UIElements;
+using GodotPrototype.Scripts.UserInterface.UIElements.OrbitMarkers;
+using GodotPrototype.Scripts.Vessels;
+using OrbitMesh = GodotPrototype.Scripts.UserInterface.UIElements.OrbitMesh;
 
 namespace GodotPrototype.Scripts.Simulation.Physics;
 
@@ -10,29 +13,17 @@ public class Orbit : OrbitalElements
 	public Celestial Primary;
 	public Color Color;
 
-	private OrbitMesh _orbitLineNode;
+	public OrbitMesh OrbitLineNode;
+	public IOrbitable OrbitingObject;
 
 	public bool IsEscapeTrajectory => FindIfIsEscapeTrajectory();
-	public Range TrueAnomalyRange => GetTrueAnomalyRange();
+	public Range TrueAnomalyRange => GetTrueAnomalyRange(); // True Anomaly range assuming infinite SOI
+	public Range ConstrainedTrueAnomalyRange => GetTrueAnomalyRange(); // True Anomaly range assuming constrained SOI
 
 
 	public Orbit()
 	{
 		
-	}
-	
-	public Orbit(double p, double e, double w, double i, double l, double n, double t, Celestial primary, Color color)
-	{
-		this.p = p;
-		this.e = e;
-		this.w = w;
-		this.i = i;
-		this.l = l;
-		this.n = n;
-		T = t;
-		Primary = primary;
-		Color = color;
-		OrbitType = GetConicType();
 	}
 
 	public Orbit(Orbit orbit)
@@ -56,8 +47,8 @@ public class Orbit : OrbitalElements
 		n = orbit.n;
 		T = orbit.T;
 		Primary = orbit.Primary;
+		OrbitingObject = orbit.OrbitingObject;
 		Color = orbit.Color;
-		OrbitType = orbit.OrbitType;
 	}
 	
 	public void SetFromStateVectors(Vector3d position, Vector3d velocity, Celestial primary, double? epoch = null)
@@ -94,8 +85,6 @@ public class Orbit : OrbitalElements
 		var v = Math.Acos(eccentricityVector.Dot(position) / (e * position.Magnitude));
 		v = position.Dot(velocity) < 0 ? Math.Tau - v: v;
 		
-		OrbitType = GetConicType();
-		
 		n = OrbitType is not ConicType.Parabolic? Math.Sqrt(mu / Math.Pow(p / Math.Abs(1 - e * e) ,3)) : (2 * Math.Sqrt(mu / Math.Pow(p,3)));
 		T = epoch.Value - MeanAnomalyFromTrueAnomaly(v) / n;
 		
@@ -114,68 +103,41 @@ public class Orbit : OrbitalElements
 	
 	public void CreateOrbitLine(Range? trueAnomalyRange = null)
 	{
-		if (_orbitLineNode != null) return;
-		_orbitLineNode = OrbitMesh.CreateOrbitLine(this, trueAnomalyRange);
+		if (OrbitLineNode != null) return;
+		OrbitLineNode = OrbitMesh.CreateOrbitLine(this, trueAnomalyRange);
 	}
 	public void DeleteOrbitLine()
 	{
-		_orbitLineNode?.DeleteOrbitLine();
+		OrbitLineNode?.DeleteOrbitLine();
 	}
 	public void UpdateOrbitLine(Range? trueAnomalyRange = null)
 	{
-		_orbitLineNode?.UpdateOrbitLine(this, trueAnomalyRange);	
+		OrbitLineNode?.UpdateOrbitLine(this, trueAnomalyRange);	
 	}
 
-	public void CreateApoapsisMarker()
+	public void CreateMarkerOfType(OrbitMarkerType markerType)
 	{
-		if (IsEscapeTrajectory) return;
-		_orbitLineNode?.CreateMarker("Apoapsis", Math.PI, "Ap");
-	}
-	public void CreatePeriapsisMarker()
-	{
-		_orbitLineNode?.CreateMarker("Periapsis", 0, "Pe");
-	}
-	
-	public void UpdateApoapsisMarker()
-	{
-		if (IsEscapeTrajectory) _orbitLineNode?.DeleteMarker("Apoapsis");
-		else _orbitLineNode?.CreateMarker("Apoapsis", Math.PI, "Ap");
-	}
-	public void UpdatePeriapsisMarker()
-	{
-		if (IsEscapeTrajectory && GlobalValues.Time > T) _orbitLineNode.DeleteMarker("Periapsis");
-		_orbitLineNode?.CreateMarker("Periapsis", 0, "Pe");
-	}
-	
-
-	public void CreateMarkerAtTrueAnomaly(string labelName, double trueAnomaly, string labelText)
-	{
-		_orbitLineNode?.CreateMarker(labelName, trueAnomaly, labelText);
-	}
-	public void CreateMarkerAtTime(string labelName, double time, string labelText)
-	{
-		var trueAnomaly = TrueAnomalyFromTime(time);
-		CreateMarkerAtTrueAnomaly(labelName, trueAnomaly, labelText);
+		OrbitLineNode?.CreateMarkerOfType(markerType);
 	}
 
-	public void UpdateMarkerFromTrueAnomaly(string labelName, double trueAnomaly, string labelText)
-	{
-		_orbitLineNode.UpdateMarker(labelName, trueAnomaly, labelText);
-	}
-	public void UpdateMarkerFromTime(string labelName, double time, string labelText)
-	{
-		var trueAnomaly = TrueAnomalyFromTime(time);
-		UpdateMarkerFromTrueAnomaly(labelName, trueAnomaly, labelText);
-	}
+	public Vector3d PositionCurrent() => PositionFromTime(GlobalValues.Time);
+	public Vector3d VelocityCurrent() => VelocityFromTime(GlobalValues.Time);
 
-	public Vector3d PositionCurrent() => PositionFromTime(GlobalValues.Time, true);
-	public Vector3d VelocityCurrent() => VelocityFromTime(GlobalValues.Time, true);
-
-	public Vector3d PositionFromTime(double time, bool useAnomalyPrev = false) => PositionFromTrueAnomaly(TrueAnomalyFromTime(time, useAnomalyPrev));
-	public Vector3d VelocityFromTime(double time, bool useAnomalyPrev = false) => VelocityFromTrueAnomaly(TrueAnomalyFromTime(time, useAnomalyPrev));
+	public Vector3d PositionFromTime(double time) => PositionFromTrueAnomaly(TrueAnomalyFromTime(time));
+	public Vector3d VelocityFromTime(double time) => VelocityFromTrueAnomaly(TrueAnomalyFromTime(time));
 	
 	public Vector3d PositionFromTrueAnomaly(double v)
 	{
+		if (OrbitType is ConicType.Static)
+		{
+			return OrbitingObject switch
+			{
+				Celestial celestial => celestial.PositionRel.LocalPosition,
+				Vessel vessel => vessel.PositionRel.LocalPosition,
+				_ => Vector3d.Zero
+			};
+		}
+		
 		var x = p * Math.Cos(v) / (1 + e * Math.Cos(v));
 		var z = p * Math.Sin(v) / (1 + e * Math.Cos(v));
 
@@ -183,6 +145,8 @@ public class Orbit : OrbitalElements
 	}
 	public Vector3d VelocityFromTrueAnomaly(double v)
 	{
+		if (OrbitType is ConicType.Static) return Vector3d.Zero;
+		
 		var temp = Math.Sqrt(Primary.Mu / p);
 			
 		var x = -temp * Math.Sin(v);

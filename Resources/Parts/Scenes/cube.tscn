@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://d3t3v4jewjjhr"]
+
+[ext_resource type="Script" uid="uid://k3500mi8rulg" path="res://Scripts/Vessels/VesselPart.cs" id="1_m6c8s"]
+[ext_resource type="Texture2D" uid="uid://baoorl76v6ipw" path="res://Resources/Icons/VesselPartIcon.png" id="2_cb2we"]
+[ext_resource type="PackedScene" uid="uid://0hctrn76drmj" path="res://Resources/Parts/SnapPoint.tscn" id="2_g8u7g"]
+[ext_resource type="PackedScene" uid="uid://cmmjhdnfxqbqr" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="3_6t0yj"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_28r6v"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pw2ib"]
+
+[node name="Cube" type="StaticBody3D" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components")]
+script = ExtResource("1_m6c8s")
+SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
+SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
+Components = []
+Icon = ExtResource("2_cb2we")
+PartName = "The Cube"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_28r6v")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_pw2ib")
+
+[node name="SnapPoint" parent="." instance=ExtResource("2_g8u7g")]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0.5, 0, 0)
+
+[node name="SnapPoint2" parent="." instance=ExtResource("2_g8u7g")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.5, 0, 0)
+
+[node name="SnapPoint3" parent="." instance=ExtResource("2_g8u7g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="SnapPoint4" parent="." instance=ExtResource("2_g8u7g")]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="SnapPoint5" parent="." instance=ExtResource("2_g8u7g")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.5)
+
+[node name="SnapPoint6" parent="." instance=ExtResource("2_g8u7g")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.5)
+
+[node name="SurfaceAttatchPoint" parent="." instance=ExtResource("3_6t0yj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)

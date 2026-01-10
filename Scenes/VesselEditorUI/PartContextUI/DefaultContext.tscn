@@ -1,0 +1,58 @@
+[gd_scene load_steps=4 format=3 uid="uid://cumveuqyrmds2"]
+
+[ext_resource type="Script" uid="uid://bly4fv1xfascj" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/MenuDefault.cs" id="1_jf8o2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o20pn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77y6v"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.08873706, 0.10533955, 0.1264208, 0.7764706)
+border_width_left = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.14767182, 0.14767182, 0.1476717, 1)
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="DefaultContext" type="FoldableContainer" node_paths=PackedStringArray("_mass", "_snapPoints", "_children", "_rootPart")]
+clip_contents = true
+offset_right = 325.0
+offset_bottom = 31.0
+mouse_filter = 1
+theme_override_styles/focus = SubResource("StyleBoxEmpty_o20pn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_77y6v")
+folded = true
+title = "Default"
+script = ExtResource("1_jf8o2")
+_mass = NodePath("VBoxContainer/Mass")
+_snapPoints = NodePath("VBoxContainer/SnapPoints")
+_children = NodePath("VBoxContainer/Children")
+_rootPart = NodePath("VBoxContainer/RootPart")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="Mass" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Mass: "
+
+[node name="SnapPoints" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Snap Points Occupied: "
+
+[node name="Children" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Child Parts: "
+
+[node name="RootPart" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Is Root Part: "

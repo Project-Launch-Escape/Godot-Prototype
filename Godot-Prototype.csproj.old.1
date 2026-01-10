@@ -1,0 +1,15 @@
+<Project Sdk="Godot.NET.Sdk/4.4.0">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>GodotPrototype</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Scripts\Simulation\Kepler\**" />
+    <Compile Remove="Scripts\Simulation\Physics\KeplerianElements\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Scripts\Simulation\Kepler\**" />
+    <EmbeddedResource Remove="Scripts\Simulation\Physics\KeplerianElements\**" />
+  </ItemGroup>
+</Project>

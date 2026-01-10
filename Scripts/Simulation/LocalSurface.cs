@@ -29,10 +29,14 @@ public partial class LocalSurface : MeshInstance3D, IRenderable
 		_meshObject.Mesh = newCelestial.SurfaceNode.Mesh;
 		_meshObject.MaterialOverride = newCelestial.SurfaceNode.MaterialOverride;
 		_meshObject.Scale = Vector3.One * 2 * (float)newCelestial.Radius;
+		foreach (var child in _meshObject.GetChildren())
+		{
+			((Node3D)child).Transform = Transform3D.Identity;
+		}
 	}
 
 	public void RenderUpdate()
 	{
-		Position = (Vector3)CurrentSOI.RelPosition[CoordinateSpace.VesselSpace];
+		Position = (Vector3)CurrentSOI.PositionRel[CoordinateSpace.VesselSpace];
 	}
 }

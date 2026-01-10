@@ -1,9 +1,10 @@
 using Godot;
+using GodotPrototype.Scripts.UserInterface;
 
 namespace GodotPrototype.Scripts.Vessels;
 
 [GlobalClass, Icon("res://Resources/Icons/VesselPartIcon.png")]
-public partial class VesselPart : StaticBody3D
+public partial class VesselPart : StaticBody3D, IDepictable
 {
 	[Export] public SnapPoint[] SnapPoints;
 	[Export] public SnapPoint SurfaceAttatchPoint;
@@ -13,27 +14,26 @@ public partial class VesselPart : StaticBody3D
 	public Vessel ParentVessel;
 	public VesselPart VesselRootPart => ParentVessel.RootPart;
 	public VesselPart ParentPart => GetParent() as VesselPart;
-	public List<VesselPart> ChildParts = [];
+	public List<VesselPart> ChildParts => GetChildParts();
 
-	public bool IsRootPart;
+	public bool IsRootPart => ParentPart == null;
 	
 	[Export] public PartComponent[] Components;
 	public FuelSystem ConnectedFuelSystem;
 	public double Mass => _baseMass + Components.Sum(component => component.Mass);
 	[Export] private double _baseMass;
 
+	[Export] public Texture2D Icon { get; set; }
+	public Color IconColor { get; set; }
+	[Export] public string PartName;
+
+	public Basis UnsnappedBasis = Basis.Identity;
 	
 	public override void _Ready()
 	{
 		foreach (var component in Components)
 		{
 			component.ParentPart = this;
-		}
-
-		var nodeChildren = GetChildren();
-		foreach (var child in nodeChildren)
-		{
-			if (child is VesselPart childPart) ChildParts.Add(childPart);
 		}
 	}
 
@@ -44,7 +44,7 @@ public partial class VesselPart : StaticBody3D
 			switch (component)
 			{
 				case FuelTank tank:
-					ConnectedFuelSystem.ConnectedTanks.Add(tank);
+					ConnectedFuelSystem.AddTank(tank);
 					break;
 				case RocketEngine engine:
 					ParentVessel.Engines.Add(engine);
@@ -64,5 +64,28 @@ public partial class VesselPart : StaticBody3D
 		}
 
 		return descendantParts;
+	}
+
+	public List<VesselPart> GetChildParts()
+	{
+		var childParts = new List<VesselPart>();
+		
+		foreach (var child in GetChildren())
+		{
+			if (child is VesselPart childPart) childParts.Add(childPart);
+		}
+		return childParts;
+	}
+
+	public void SetDescendantOwner(bool set)
+	{
+		foreach (var descendant in GetAllDescendantParts())
+		{
+			descendant.Owner = set ? this : null;
+			foreach (var component in Components)
+			{
+				component.Owner = set ? this : null;
+			}
+		}
 	}
 }

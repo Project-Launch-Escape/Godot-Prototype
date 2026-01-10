@@ -5,5 +5,6 @@ public enum ConicType
 	Circular,
 	Elliptical,
 	Parabolic,
-	Hyperbolic
+	Hyperbolic,
+	Static
 }

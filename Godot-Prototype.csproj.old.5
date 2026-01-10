@@ -1,0 +1,23 @@
+<Project Sdk="Godot.NET.Sdk/4.5.0">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>GodotPrototype</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Scripts\Simulation\Kepler\**" />
+    <Compile Remove="Scripts\Simulation\Physics\KeplerianElements\**" />
+    <Compile Remove="Scripts\Debug\**" />
+    <Compile Remove="Scripts\UserInterface\UserInterface\**" />
+    <Compile Remove="Scripts\UserInterface\VesselEditor\EditorUI\**" />
+    <Compile Remove="Scripts\UserInterface\VesselEditor\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Scripts\Simulation\Kepler\**" />
+    <EmbeddedResource Remove="Scripts\Simulation\Physics\KeplerianElements\**" />
+    <EmbeddedResource Remove="Scripts\Debug\**" />
+    <EmbeddedResource Remove="Scripts\UserInterface\UserInterface\**" />
+    <EmbeddedResource Remove="Scripts\UserInterface\VesselEditor\EditorUI\**" />
+    <EmbeddedResource Remove="Scripts\UserInterface\VesselEditor\**" />
+  </ItemGroup>
+</Project>

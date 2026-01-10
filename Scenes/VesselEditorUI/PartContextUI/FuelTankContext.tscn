@@ -1,0 +1,51 @@
+[gd_scene load_steps=4 format=3 uid="uid://b4el8s1os3ibp"]
+
+[ext_resource type="Script" uid="uid://cusc5la1iuijj" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/MenuFuelTank.cs" id="1_o20pn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o20pn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j3pw2"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.05851675, 0.112889074, 0.137721, 0.7764706)
+border_width_left = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.14767182, 0.14767182, 0.1476717, 1)
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="FuelTankContext" type="FoldableContainer" node_paths=PackedStringArray("_fuelLevels", "_fuelMax", "_fuelMass", "ComponentMenuContainer")]
+clip_contents = true
+offset_right = 325.0
+offset_bottom = 117.0
+mouse_filter = 1
+theme_override_styles/focus = SubResource("StyleBoxEmpty_o20pn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_j3pw2")
+title = "Fuel Tank"
+script = ExtResource("1_o20pn")
+_fuelLevels = NodePath("VBoxContainer/FuelLevels")
+_fuelMax = NodePath("VBoxContainer/FuelMax")
+_fuelMass = NodePath("VBoxContainer/FuelMass")
+ComponentMenuContainer = NodePath("VBoxContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="FuelLevels" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Total Fuel:"
+
+[node name="FuelMax" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Total Fuel Max: "
+
+[node name="FuelMass" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Fuel Mass:"

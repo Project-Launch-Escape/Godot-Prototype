@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://c0c02n4buej3s"]
+
+[ext_resource type="Script" uid="uid://d1ervwp1yaxsn" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/MenuEngine.cs" id="1_hg2d6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o20pn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77y6v"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1347225, 0.09503981, 0.07114721, 0.7764706)
+border_width_left = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.14767182, 0.14767182, 0.1476717, 1)
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="EngineContext" type="FoldableContainer" node_paths=PackedStringArray("_thrust", "_twr", "_isp", "_fuelTypes")]
+clip_contents = true
+offset_right = 325.0
+offset_bottom = 31.0
+mouse_filter = 1
+theme_override_styles/focus = SubResource("StyleBoxEmpty_o20pn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_77y6v")
+title = "Engine"
+script = ExtResource("1_hg2d6")
+_thrust = NodePath("VBoxContainer/Thrust")
+_twr = NodePath("VBoxContainer/TWR")
+_isp = NodePath("VBoxContainer/ISP")
+_fuelTypes = NodePath("VBoxContainer/FuelTypes")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Thrust" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Thrust: "
+
+[node name="TWR" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  TWR: "
+
+[node name="ISP" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  ISP: "
+
+[node name="FuelTypes" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Fuel Types: "

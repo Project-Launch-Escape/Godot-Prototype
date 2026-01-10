@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://sy4kdr7r0khc"]
+[gd_scene load_steps=7 format=3 uid="uid://sy4kdr7r0khc"]
 
 [ext_resource type="Script" uid="uid://k3500mi8rulg" path="res://Scripts/Vessels/VesselPart.cs" id="1_54i6f"]
 [ext_resource type="PackedScene" uid="uid://0hctrn76drmj" path="res://Resources/Parts/SnapPoint.tscn" id="2_2eoh6"]
+[ext_resource type="Texture2D" uid="uid://d3gl0uel3anu2" path="res://Resources/Icons/VesselIcon.png" id="2_a4o5o"]
 [ext_resource type="PackedScene" uid="uid://cmwdrrkfp7ef8" path="res://Resources/Parts/Models/capsule1.fbx" id="3_0eqms"]
 [ext_resource type="PackedScene" uid="uid://cmmjhdnfxqbqr" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="3_2eoh6"]
 
@@ -15,6 +16,8 @@ SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
 SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
 Components = []
 _baseMass = 10.0
+Icon = ExtResource("2_a4o5o")
+PartName = "Capsule"
 
 [node name="SnapPoint" parent="." instance=ExtResource("2_2eoh6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cruuwvlyim2ft"]
 
-[ext_resource type="Script" uid="uid://bcajlv1cq5lmg" path="res://Scripts/Debug/DebugVector.cs" id="1_nvaa0"]
+[ext_resource type="Script" uid="uid://bcajlv1cq5lmg" path="res://Scripts/PLEDebug/DebugVector.cs" id="1_nvaa0"]
 
 [node name="OrbitLine" type="MeshInstance3D"]
 script = ExtResource("1_nvaa0")

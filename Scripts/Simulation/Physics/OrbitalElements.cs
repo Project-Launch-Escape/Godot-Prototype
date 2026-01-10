@@ -5,60 +5,61 @@ namespace GodotPrototype.Scripts.Simulation.Physics;
 
 public abstract class OrbitalElements
 {
-    public ConicType OrbitType;
+	public ConicType OrbitType => GetConicType();
 
-    public double p; //semi-parameter (semi-latus rectum)
-    public double e; //eccentricity
+	public double p; //semi-parameter (semi-latus rectum)
+	public double e; //eccentricity
 
-    public double w; // argument of periapsis
-    public double i; // inlination
-    public double l; // longitude of ascending node
+	public double w; // argument of periapsis
+	public double i; // inlination
+	public double l; // longitude of ascending node
 
-    public double n; // mean motion (rad/s)
-    
-    public double T; // Time of periapsis passage
-    
-    private double _anomalyPrev; // Eccentric, parabolic, or hyperbolic anomaly (depending on OrbitType)
-    
-    
-    public double Apoapsis => GetApoapsis();
-    public double Periapsis => GetPeriapsis();
+	public double n; // mean motion (rad/s)
+	
+	public double T; // Time of periapsis passage
+	
+	public double Apoapsis => GetApoapsis();
+	public double Periapsis => GetPeriapsis();
 
-    public double a => GetSemiMajorAxis();
-    public double b => GetSemiMinorAxis();
+	public double a => GetSemiMajorAxis();
+	public double b => GetSemiMinorAxis();
 
-    public Range DistanceRange => GetDistanceRange();
+	public double Period => Math.Tau / n;
 
-    public Vector3d NormalVector => GetNormalVector();
-    
-    
-    private double GetApoapsis()
-    {
-        if (OrbitType is ConicType.Parabolic or ConicType.Hyperbolic)
-        {
-            return double.PositiveInfinity;
-        }
-        return p / (1 - e);
-    }
-    private double GetPeriapsis() => p / (1 + e);
+	public Range DistanceRange => GetDistanceRange();
 
-    private double GetSemiMajorAxis() => p / (1 - e * e);
-    private double GetSemiMinorAxis() => p / Math.Sqrt(1 - e * e);
+	public Vector3d NormalVector => GetNormalVector();
 
-    private Range GetDistanceRange() => new (Periapsis, Apoapsis);
+	public bool IsStatic => OrbitType is ConicType.Static;
+	
+	
+	private double GetApoapsis()
+	{
+		if (OrbitType is ConicType.Parabolic or ConicType.Hyperbolic)
+		{
+			return double.PositiveInfinity;
+		}
+		return p / (1 - e);
+	}
+	private double GetPeriapsis() => p / (1 + e);
 
-    private Vector3d GetNormalVector() => new (Math.Cos(w) * Math.Sin(i), Math.Cos(i), Math.Sin(w) * Math.Sin(i));
+	private double GetSemiMajorAxis() => p / (1 - e * e);
+	private double GetSemiMinorAxis() => p / Math.Sqrt(1 - e * e);
 
-    
-    public double TrueAnomalyFromMeanAnomaly(double m, bool useAnomalyPrev = false) => TrueAnomalyFromAnomaly(AnomalyFromMeanAnomaly(m, useAnomalyPrev));
+	private Range GetDistanceRange() => new (Periapsis, Apoapsis);
+
+	private Vector3d GetNormalVector() => new (Math.Cos(w) * Math.Sin(i), Math.Cos(i), Math.Sin(w) * Math.Sin(i));
+
+	
+	public double TrueAnomalyFromMeanAnomaly(double m) => TrueAnomalyFromAnomaly(AnomalyFromMeanAnomaly(m));
 
 	public double MeanAnomalyFromTrueAnomaly(double v) => MeanAnomalyFromAnomaly(AnomalyFromTrueAnomaly(v));
 
-	public double TrueAnomalyFromTime(double time, bool useAnomalyPrev = false) => TrueAnomalyFromMeanAnomaly(MeanAnomalyFromTime(time), useAnomalyPrev);
+	public double TrueAnomalyFromTime(double time) => TrueAnomalyFromMeanAnomaly(MeanAnomalyFromTime(time));
 
 	public double MeanAnomalyFromTime(double time) => n * (time - T);
 
-	public double AnomalyFromTime(double time, bool useAnomalyPrev = false) => AnomalyFromMeanAnomaly(MeanAnomalyFromTime(time), useAnomalyPrev);
+	public double AnomalyFromTime(double time) => AnomalyFromMeanAnomaly(MeanAnomalyFromTime(time));
 
 	public double TimeFromMeanAnomaly(double m) => m / n + T;
 
@@ -94,27 +95,25 @@ public abstract class OrbitalElements
 		}
 	}
 
-	public double AnomalyFromMeanAnomaly(double m, bool useAnomalyPrev = false)
+	public double AnomalyFromMeanAnomaly(double m)
 	{
-		var anomaly = useAnomalyPrev? _anomalyPrev : m;
+		var anomaly = m;
 
 		const float tolerance = 0.00001f;
 		
 		switch (OrbitType)
 		{
 			case ConicType.Circular:
-				if (useAnomalyPrev) _anomalyPrev = m;
 				return m;
 			case ConicType.Elliptical:
 			{
-				for (int j = 0; j < 10; j++)
+				for (int j = 0; j < 100; j++)
 				{
 					var dE = (m - anomaly + e * Math.Sin(anomaly)) / (1 - e * Math.Cos(anomaly));
 					anomaly += dE;
 					
 					if (Math.Abs(dE) < tolerance) break;
 				}
-				if (useAnomalyPrev) _anomalyPrev = anomaly;
 				return anomaly;
 			}
 			case ConicType.Hyperbolic:
@@ -126,7 +125,6 @@ public abstract class OrbitalElements
 					
 					if (Math.Abs(dH) < tolerance) break;
 				}
-				if (useAnomalyPrev) _anomalyPrev = anomaly;
 				return anomaly;
 			}
 			case ConicType.Parabolic:
@@ -173,22 +171,19 @@ public abstract class OrbitalElements
 		};
 	}
 
-	protected ConicType GetConicType()
+	public void SetToStatic() => e = double.MinValue;
+
+	private ConicType GetConicType()
 	{
-		const double tolerance = 0.00001;
-		if (e < tolerance)
+		const double tolerance = 0.0000001;
+		return e switch
 		{
-			return ConicType.Circular;
-		}
-		if (Math.Abs(e - 1) < tolerance)
-		{
-			return ConicType.Parabolic;
-		}
-		if (e < 1)
-		{
-			return ConicType.Elliptical;
-		}
-		return ConicType.Hyperbolic;
+			double.MinValue => ConicType.Static,
+			< tolerance => ConicType.Circular,
+			1 => ConicType.Parabolic,
+			< 1 => ConicType.Elliptical,
+			_ => ConicType.Hyperbolic
+		};
 	}
-    
+	
 }

@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://bekwkkpfweibu"]
+
+[ext_resource type="Texture2D" uid="uid://3ttgmnnurah1" path="res://Resources/UITextures/CelestialIcon.png" id="1_oixwc"]
+[ext_resource type="Script" uid="uid://bptw7vdxk5nm3" path="res://Scripts/UserInterface/UIElements/OrbitMarkers/CelestialMarker.cs" id="2_s34ty"]
+
+[node name="CelestialMarker" type="Control" node_paths=PackedStringArray("_nameText", "_hoverDisplay")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("2_s34ty")
+_nameText = NodePath("HoverDisplay/NameText")
+_hoverDisplay = NodePath("HoverDisplay")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -12.0
+offset_top = -13.0
+offset_right = 12.0
+offset_bottom = 11.0
+texture = ExtResource("1_oixwc")
+
+[node name="HoverDisplay" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+
+[node name="NameText" type="Label" parent="HoverDisplay"]
+layout_mode = 0
+offset_left = -128.0
+offset_top = -36.0
+offset_right = 128.0
+offset_bottom = -13.0
+text = "CelestialName"
+horizontal_alignment = 1

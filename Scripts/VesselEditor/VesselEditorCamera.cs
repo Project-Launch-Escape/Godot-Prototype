@@ -22,7 +22,7 @@ public partial class VesselEditorCamera : Camera3D
 	private float _cameraYaw;
 	private float _cameraPitch;
 	private float _cameraZoom;
-	private static bool Shift => VesselEditor.Shift;
+	private static bool Shift => Input.IsKeyPressed(Key.Shift);
 
 	public override void _Ready()
 	{

@@ -3,12 +3,18 @@ using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
 using GodotPrototype.Scripts.Simulation.Physics;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
+using GodotPrototype.Scripts.UserInterface;
+using GodotPrototype.Scripts.UserInterface.UIElements;
+using GodotPrototype.Scripts.UserInterface.UIElements.OrbitMarkers;
 
 namespace GodotPrototype.Scripts.Simulation;
 
 [GlobalClass, Icon("res://Resources/Icons/CelestialIcon.png")]
-public partial class Celestial : Node3D, IRenderable
+public partial class Celestial : Node3D, IRenderable, IOrbitable, IDepictable
 {
+	public static readonly List<Celestial> AllCelestials = [];
+	public static readonly Dictionary<string, Celestial> CelestialDict = [];
+	
 	public double Mass;
 	public double Radius;
 	public double SOIRadius;
@@ -16,8 +22,8 @@ public partial class Celestial : Node3D, IRenderable
 	public double Mu => Mass * GlobalValues.G;
 	
 	public Orbit CelestialOrbit;
-	public RelativePosition RelPosition = new ();
-	public RelativeVelocity RelVelocity = new ();
+	public RelativePosition PositionRel = new ();
+	public RelativeVelocity VelocityRel = new ();
 	public Celestial ParentCelestial => CelestialOrbit?.Primary;
 	
 	public readonly List<Celestial> ChildCelestials = [];
@@ -26,26 +32,31 @@ public partial class Celestial : Node3D, IRenderable
 	public DirectionalLight3D LightEmissionNode;
 	public DirectionalLight3D LightEmissionNodeMirror; //Same as above but in LocalSpace scene
 	public double Luminosity;
-	
-	
-	public static readonly List<Celestial> AllCelestials = [];
-	public static readonly Dictionary<string, Celestial> CelestialDict = [];
-	
-	
-	
+
+	public Texture2D Icon { get; set; }
+	public Color IconColor { get; set; }
+
+
 	public override void _Ready()
 	{
-		if (CelestialOrbit != null)
+		CelestialOrbit.CreateOrbitLine();
+		if (!CelestialOrbit.IsStatic)
 		{
-			RelPosition = new RelativePosition(CelestialOrbit.PositionCurrent(), ParentCelestial);
-			RelVelocity = new RelativeVelocity(CelestialOrbit.VelocityCurrent(), ParentCelestial);
-			CelestialOrbit.CreateOrbitLine();
+			PositionRel = new RelativePosition(CelestialOrbit.PositionCurrent(), ParentCelestial);
+			VelocityRel = new RelativeVelocity(CelestialOrbit.VelocityCurrent(), ParentCelestial);
+			
+
+			CelestialOrbit.CreateMarkerOfType(OrbitMarkerType.Apoapsis);
+			CelestialOrbit.CreateMarkerOfType(OrbitMarkerType.Periapsis);
 		}
 		else
 		{
-			RelPosition = new RelativePosition(Transform.Origin);
-			RelVelocity = new RelativeVelocity();
+			PositionRel = new RelativePosition(Transform.Origin);
+			VelocityRel = new RelativeVelocity();
 		}
+		
+		CelestialOrbit.CreateMarkerOfType(OrbitMarkerType.Position);
+		
 		AllCelestials.Add(this);
 		CelestialDict.Add(Name, this);
 		FlightCamera.AddToRenderSpaceUpdate(this);
@@ -54,10 +65,10 @@ public partial class Celestial : Node3D, IRenderable
 	public override void _Process(double dt)
 	{
 		if (GlobalValues.Paused) return;
-		if (CelestialOrbit != null)
+		if (!CelestialOrbit.IsStatic)
 		{
-			RelPosition.LocalPosition = CelestialOrbit.PositionCurrent();
-			RelVelocity.LocalVelocity = CelestialOrbit.VelocityCurrent();
+			PositionRel.LocalPosition = CelestialOrbit.PositionCurrent();
+			VelocityRel.LocalVelocity = CelestialOrbit.VelocityCurrent();
 		}
 	}
 
@@ -65,7 +76,7 @@ public partial class Celestial : Node3D, IRenderable
 
 	public void RenderUpdate()
 	{
-		var renderSpacePos = RelPosition[CoordinateSpace.RenderSpace];
+		var renderSpacePos = PositionRel[CoordinateSpace.RenderSpace];
 		var newScale = 1 / renderSpacePos.Magnitude;
 
 		var extraScale = 1;

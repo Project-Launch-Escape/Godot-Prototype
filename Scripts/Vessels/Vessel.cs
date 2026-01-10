@@ -1,6 +1,6 @@
 using Godot;
-using GodotPrototype.Scripts.PLEDebug;
 using GodotPrototype.Scripts.Other;
+using GodotPrototype.Scripts.PLEDebug;
 using GodotPrototype.Scripts.Simulation;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
 using GodotPrototype.Scripts.Simulation.Physics;
@@ -10,10 +10,10 @@ using GodotPrototype.Scripts.UserInterface;
 namespace GodotPrototype.Scripts.Vessels;
 
 [GlobalClass, Icon("res://Resources/Icons/VesselIcon.png")]
-public partial class Vessel : Node3D, IRenderable
+public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
 {
-	public RelativePosition PositionRel = new (new Vector3d(-15147490.0,-2714.0,0));
-	public RelativeVelocity VelocityRel = new (new Vector3d(50, 150, 450));
+	public RelativePosition PositionRel = new (new Vector3d(-2514749.0,-2714.0,0));
+	public RelativeVelocity VelocityRel = new (new Vector3d(50, 150, -1350));
 	private Vector3d _acceleration = new();
 
 	public Celestial ParentBody;
@@ -29,8 +29,7 @@ public partial class Vessel : Node3D, IRenderable
 		get => VelocityRel.LocalVelocity;
 		set => VelocityRel.LocalVelocity = value;
 	}
-
-	public double Mass => GetVesselMass();
+	
 	public double Elasticity = 0.5;
 	
 	public PhysicsType PhysicsMode = PhysicsType.Kepler;
@@ -46,8 +45,8 @@ public partial class Vessel : Node3D, IRenderable
 
 	public static readonly List<Vessel> AllVessels = [];
 	public static Vessel ActiveVessel;
-		
-	
+
+	public double Throttle;
 	
 	public override void _Ready()
 	{
@@ -56,8 +55,32 @@ public partial class Vessel : Node3D, IRenderable
 		FlightCamera.AddToRenderSpaceUpdate(this);
 		
 		FuelSystems.Add(new FuelSystem());
+		InitializePartsFromFile("res://Vessels/save.tscn");
 		
-		RootPart = ResourceLoader.Load<PackedScene>("res://Vessels/save.tscn").Instantiate<VesselPart>();
+		var parentBody = Celestial.CelestialDict["Luna"];
+		//PositionLocal = parentBody.GetSurfacePosition(0, Math.PI / 2);
+		//VelocityLocal = Vector3d.One;
+		
+		Trajectory = new Trajectory(PositionLocal, VelocityLocal, parentBody, new Color(0.9f, 0.4f, 0.8f));
+		PositionRel.ParentPosition = parentBody.PositionRel;
+		VelocityRel.ReferenceVelocity = parentBody.VelocityRel;
+		ParentBody = parentBody;
+
+		_gravityVector = DebugVector.CreateVector(Vector3d.Zero, Vector3d.Zero, new Color(0, 1, 0), this);
+		_thrustVector = DebugVector.CreateVector(Vector3d.Zero, Vector3d.Zero, new Color(1f, 0.85f, 0.1f), this);
+		
+		LocalSurface.OnSOIChange(parentBody);
+		GlobalValues.FOPosition = new RelativePosition(PositionRel);
+		
+		Position = Vector3.Zero;
+		LinearVelocity = (Vector3)VelocityLocal;
+		ContactMonitor = true;
+		MaxContactsReported = 10;
+	}
+
+	private void InitializePartsFromFile(string filePath)
+	{
+		RootPart = ResourceLoader.Load<PackedScene>(filePath).Instantiate<VesselPart>();
 		RootPart.Position = Vector3.Zero;
 		AddChild(RootPart);
 		
@@ -68,88 +91,78 @@ public partial class Vessel : Node3D, IRenderable
 			part.ParentVessel = this;
 			part.ConnectedFuelSystem = FuelSystems[0];
 			part.InitializePart();
+			foreach (var partChild in part.GetChildren())
+			{
+				if (partChild is CollisionShape3D) partChild.Reparent(this);
+			}
 		}
-
-		
-		var parentBody = Celestial.CelestialDict["Luna"];
-		//PositionLocal = parentBody.GetSurfacePosition(Math.PI / 2, Math.PI / 2);
-		
-		Trajectory = new Trajectory(PositionLocal, VelocityLocal, parentBody, new Color(0.9f, 0.4f, 0.8f));
-		PositionRel.ParentPosition = parentBody.RelPosition;
-		VelocityRel.ReferenceVelocity = parentBody.RelVelocity;
-		ParentBody = parentBody;
-
-		_gravityVector = DebugVector.CreateVector(Vector3d.Zero, Vector3d.Zero, new Color(0, 1, 0), this);
-		_thrustVector = DebugVector.CreateVector(Vector3d.Zero, Vector3d.Zero, new Color(1f, 0.85f, 0.1f), this);
-		
-		LocalSurface.OnSOIChange(parentBody);
 	}
-	
+
+	public override void _IntegrateForces(PhysicsDirectBodyState3D state)
+	{
+		//if (state.GetContactCount() != 0) GD.Print($"V: {state.LinearVelocity.Length()}, ω: {state.AngularVelocity.Length()}, Col: {((Node)state.GetContactColliderObject(0)).Name}");
+	}
+
 	public override void _Process(double delta)
 	{
+		var dtPhys = delta;
+		delta /= Engine.TimeScale;
+		
 		if (Input.IsActionJustReleased(PLEInput.PhysicsMode))
 		{
 			PhysicsMode = PhysicsMode is PhysicsType.Kepler ? PhysicsType.Newton : PhysicsType.Kepler;
 			DebugUIController.UpdatePhysicsMode(PhysicsMode);
 		}
-		if (GlobalValues.Paused) return;
 		
-		var dtPhys = delta * GlobalValues.TimeScale;
+		Throttle += delta * ((Input.IsActionPressed(PLEInput.ThrottleUp) ? 1 : 0) - (Input.IsActionPressed(PLEInput.ThrottleDown) ? 1 : 0)) * PLEInput.GetActiveModifier(5d);
+		Throttle = Math.Clamp(Throttle, 0d, 1d);
 		
 		UpdateRotation();
 		
-		if (PhysicsMode is PhysicsType.Newton)
+		if (PhysicsMode is PhysicsType.Newton && !GlobalValues.Paused) PhysicsUpdateNewton(dtPhys);
+		else PhysicsUpdateKepler();
+
+		if (Position.Length() > 1000)
 		{
-			PhysicsUpdateNewton(dtPhys);
+			GlobalValues.FOPosition.LocalPosition += Position;
+			Position = Vector3.Zero;
 		}
-		else
-		{
-			PhysicsUpdateKepler();
-		}
-		
+		VelocityLocal = LinearVelocity;
+		if (PositionRel.ParentPosition != GlobalValues.FOPosition.ParentPosition) GlobalValues.FOPosition.ConvertRef(PositionRel.ParentPosition);
+
 		Trajectory.Update();
 	}
 
 	private void PhysicsUpdateNewton(double dtPhys)
 	{
+		Mass = (float)GetVesselMass();
+		
 		var currentSOI = PositionRel.FindHighestSOI();
 		if (ParentBody != currentSOI)
 		{
-			PositionRel.ConvertRef(currentSOI?.RelPosition);
-			VelocityRel.ConvertRef(currentSOI?.RelVelocity);
+			PositionRel.ConvertRef(currentSOI?.PositionRel);
+			VelocityRel.ConvertRef(currentSOI?.VelocityRel);
 			ParentBody = currentSOI;
 		}
+		PositionLocal = GlobalValues.FOPosition.LocalPosition + Position;
 
 		if (currentSOI != null)
 		{
 			var gravity = -PositionLocal.Normalized() * ParentBody.Mu / PositionLocal.MagnitudeSquared();
-			_acceleration += gravity;
+			AddForce(Mass * gravity);
 			_gravityVector.UpdateVector(Vector3d.Zero, 100 * gravity, _gravityVector.Color, this);
 		}
-		
-		var throttle = ((Input.IsActionPressed(PLEInput.ThrottleUp) ? 1 : 0) - (Input.IsActionPressed(PLEInput.ThrottleDown) ? 1 : 0)) * PLEInput.GetActiveModifier(5d);
 
-		var velprev = new Vector3d(VelocityLocal);
+		var velprev = new Vector3d(LinearVelocity);
 		foreach (var engine in Engines)
 		{
-			engine.FireEngine(throttle, dtPhys);
+			engine.FireEngine(Throttle, dtPhys);
 		}
-		var engineAccel = (VelocityLocal - velprev) / dtPhys;
+		
+		var engineAccel = (LinearVelocity - velprev) / dtPhys;
 
 		_thrustVector.UpdateVector(Vector3d.Zero, engineAccel, _thrustVector.Color, this);
-		
-		VelocityLocal += dtPhys * _acceleration;
-		PositionRel.LocalPosition += VelocityLocal * dtPhys;
-
-		_acceleration = Vector3d.Zero;
-		
 		Trajectory.SetFromStateVectors(PositionLocal, VelocityLocal, ParentBody);
-		if (ParentBody != null && PositionLocal.Magnitude < ParentBody.Radius)
-		{
-			PositionLocal.Magnitude = ParentBody.Radius;
-			var normalVector = PositionLocal.Normalized();
-			VelocityLocal -= normalVector * VelocityLocal.Dot(normalVector) * (Elasticity + 1);
-		}
 	}
 	
 
@@ -157,33 +170,36 @@ public partial class Vessel : Node3D, IRenderable
 	{
 		var newPosRel = Trajectory.PositionCurrent();
 		PositionRel.ParentPosition = newPosRel.ParentPosition;
-		PositionRel.LocalPosition = newPosRel.LocalPosition;
+		PositionLocal = newPosRel.LocalPosition;
 		ParentBody = Trajectory.GetOrbitAtTime(GlobalValues.Time).Primary;
 
 		var newVelRel = Trajectory.VelocityCurrent();
 		VelocityRel.ReferenceVelocity = newVelRel.ReferenceVelocity;
-		VelocityRel.LocalVelocity = newVelRel.LocalVelocity;
+		LinearVelocity = (Vector3)newVelRel.LocalVelocity;
+
+		Position = (Vector3)(PositionLocal - GlobalValues.FOPosition.LocalPosition);
 	}
 
 	private void UpdateRotation()
 	{
-		if (Input.IsActionPressed(PLEInput.Forward)) Rotation = new Vector3(FlightCamera.Pitch - MathF.PI / 2, FlightCamera.Yaw, 0);
-		if (Input.IsActionPressed(PLEInput.Backward)) Rotation = new Vector3(FlightCamera.Pitch + MathF.PI / 2, FlightCamera.Yaw, 0);
+		AngularVelocity = Vector3.Zero;
+		if (Input.IsActionPressed(PLEInput.Forward)) Basis = GlobalValues.RenderSpaceCamera.GlobalBasis.Rotated(GlobalValues.RenderSpaceCamera.GlobalBasis.X, -Mathf.Pi/2);
+		if (Input.IsActionPressed(PLEInput.Backward)) Basis = GlobalValues.RenderSpaceCamera.GlobalBasis.Rotated(GlobalValues.RenderSpaceCamera.GlobalBasis.X, Mathf.Pi/2);
 	}
 
 	public void AddForce(Vector3d force)
 	{
-		_acceleration += force / Mass;
+		ApplyCentralForce((Vector3)force);
 	}
 	public void AddImpulse(Vector3d impulse)
 	{
-		VelocityLocal += impulse / Mass;
+		ApplyCentralImpulse((Vector3)impulse);
 	}
 
 	private double GetVesselMass() => Parts.Sum(part => part.Mass);
 
 	public void RenderUpdate()
 	{
-		Position = (Vector3)PositionRel[CoordinateSpace.VesselSpace];
+		//Position = (Vector3)PositionRel[CoordinateSpace.VesselSpace];
 	}
 }

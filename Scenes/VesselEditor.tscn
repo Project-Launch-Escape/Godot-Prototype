@@ -1,10 +1,26 @@
-[gd_scene load_steps=11 format=3 uid="uid://b4ajfh7q5214k"]
+[gd_scene load_steps=31 format=3 uid="uid://b4ajfh7q5214k"]
 
-[ext_resource type="Script" uid="uid://ba3yuukuk7yel" path="res://Scripts/VesselEditor/VesselEditor.cs" id="1_a5mxq"]
+[ext_resource type="Script" uid="uid://ba3yuukuk7yel" path="res://Scripts/VesselEditor/Editor.cs" id="1_a5mxq"]
 [ext_resource type="Script" uid="uid://b2ucfws7t3bhu" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
 [ext_resource type="PackedScene" uid="uid://0genpyip5sjc" path="res://Scenes/sphere.tscn" id="4_tshso"]
-[ext_resource type="PackedScene" uid="uid://d3t3v4jewjjhr" path="res://Scenes/cube.tscn" id="5_60qqo"]
+[ext_resource type="PackedScene" uid="uid://d3t3v4jewjjhr" path="res://Resources/Parts/Scenes/cube.tscn" id="5_60qqo"]
+[ext_resource type="Script" uid="uid://mvrdcf02w5px" path="res://Scripts/VesselEditor/PlaceTool.cs" id="6_2h56u"]
+[ext_resource type="Texture2D" uid="uid://ucmrdfypttq0" path="res://Resources/UITextures/SelectionIcon.png" id="7_bgqvo"]
+[ext_resource type="Script" uid="uid://ctm5cnctg8ixr" path="res://Scripts/VesselEditor/AttachTool.cs" id="7_r60lh"]
+[ext_resource type="Script" uid="uid://cf5feccw1v1gv" path="res://Scripts/VesselEditor/EditorUI/PartSelector.cs" id="7_y6rsm"]
+[ext_resource type="Texture2D" uid="uid://b7oqx0id03mtt" path="res://Resources/UITextures/TransformIcon.png" id="8_5ps10"]
 [ext_resource type="PackedScene" uid="uid://wdmru320mfw3" path="res://Scenes/gizmo_translate.tscn" id="8_txf6a"]
+[ext_resource type="Script" uid="uid://cgylab4b4dsrr" path="res://Scripts/VesselEditor/EditorUI/ToolSelector.cs" id="9_bgqvo"]
+[ext_resource type="Texture2D" uid="uid://d1jm80ty1h10" path="res://Resources/UITextures/ModifyIcon.png" id="9_h32pl"]
+[ext_resource type="Script" uid="uid://c8oshc1a3mc63" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/ContextMenuController.cs" id="10_5ps10"]
+[ext_resource type="PackedScene" uid="uid://b4el8s1os3ibp" path="res://Scenes/VesselEditorUI/PartContextUI/FuelTankContext.tscn" id="11_du1xg"]
+[ext_resource type="PackedScene" uid="uid://c0c02n4buej3s" path="res://Scenes/VesselEditorUI/PartContextUI/EngineContext.tscn" id="12_6e330"]
+[ext_resource type="PackedScene" uid="uid://crnsjo4ueukmv" path="res://Scenes/VesselEditorUI/PartContextUI/ContextMenuContainer.tscn" id="12_giy6m"]
+[ext_resource type="Texture2D" uid="uid://p3tdndsckdy5" path="res://Resources/UITextures/AttachIcon.png" id="12_r60lh"]
+[ext_resource type="PackedScene" uid="uid://cumveuqyrmds2" path="res://Scenes/VesselEditorUI/PartContextUI/DefaultContext.tscn" id="13_6e330"]
+[ext_resource type="Texture2D" uid="uid://bt31em58k1gc3" path="res://Resources/UITextures/InputIcons/LeftClick.png" id="14_jts1t"]
+[ext_resource type="PackedScene" uid="uid://ba0yb6a4ei3ua" path="res://Scenes/VesselEditorUI/PartContextUI/MenuComponents/ValueInput.tscn" id="15_s2kt1"]
+[ext_resource type="Texture2D" uid="uid://b1ov6e8mhffhi" path="res://Resources/UITextures/InputIcons/RightClick.png" id="15_sprtt"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vqfw5"]
 sky_top_color = Color(0.177378, 0.470621, 0.689949, 1)
@@ -30,9 +46,47 @@ glow_enabled = true
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_vqfw5"]
 
-[node name="VesselEditor" type="Node3D" node_paths=PackedStringArray("Camera")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bgqvo"]
+bg_color = Color(0.2754, 0.31200668, 0.34, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y6rsm"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.26400003, 0.2904, 0.33, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h32pl"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.31364167, 0.61, 0.2867, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frkoo"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.59, 0.29814667, 0.2773, 1)
+
+[node name="VesselEditor" type="Node3D"]
 script = ExtResource("1_a5mxq")
-Camera = NodePath("Camera")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_175yu")
@@ -58,3 +112,99 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.32511, 0, 0)
 
 [node name="GizmoTranslate" parent="." instance=ExtResource("8_txf6a")]
 visible = false
+
+[node name="PlaceTool" type="Node3D" parent="."]
+script = ExtResource("6_2h56u")
+
+[node name="AttachTool" type="Node3D" parent="."]
+script = ExtResource("7_r60lh")
+
+[node name="UI" type="Node" parent="."]
+
+[node name="PartSelector" type="ItemList" parent="UI"]
+texture_filter = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 300.0
+offset_bottom = -237.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bgqvo")
+allow_rmb_select = true
+max_text_lines = 3
+max_columns = 3
+same_column_width = true
+fixed_column_width = 90
+icon_mode = 0
+fixed_icon_size = Vector2i(75, 75)
+script = ExtResource("7_y6rsm")
+
+[node name="ToolSelector" type="ItemList" parent="UI" node_paths=PackedStringArray("_leftOutline", "_rightOutline")]
+texture_filter = 1
+offset_left = 400.0
+offset_top = 10.0
+offset_right = 787.0
+offset_bottom = 110.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/v_separation = 12
+theme_override_font_sizes/font_size = 16
+theme_override_styles/panel = SubResource("StyleBoxFlat_y6rsm")
+wraparound_items = false
+item_count = 4
+max_columns = 10
+same_column_width = true
+fixed_column_width = 90
+icon_mode = 0
+fixed_icon_size = Vector2i(48, 48)
+item_0/text = "Place"
+item_0/icon = ExtResource("7_bgqvo")
+item_1/text = "Transform"
+item_1/icon = ExtResource("8_5ps10")
+item_2/text = "Modify"
+item_2/icon = ExtResource("9_h32pl")
+item_3/text = "Attach"
+item_3/icon = ExtResource("12_r60lh")
+script = ExtResource("9_bgqvo")
+_leftOutline = NodePath("LeftClickOutline")
+_rightOutline = NodePath("RightClickOutline")
+
+[node name="LeftClickOutline" type="Panel" parent="UI/ToolSelector"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 100.0
+offset_bottom = 94.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_h32pl")
+
+[node name="RightClickOutline" type="Panel" parent="UI/ToolSelector"]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 5.0
+offset_right = 192.0
+offset_bottom = 94.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_frkoo")
+
+[node name="LeftClickHint" type="TextureRect" parent="UI"]
+offset_left = 356.0
+offset_top = 12.0
+offset_right = 396.0
+offset_bottom = 52.0
+texture = ExtResource("14_jts1t")
+
+[node name="RightClickHint" type="TextureRect" parent="UI"]
+offset_left = 356.0
+offset_top = 59.0
+offset_right = 396.0
+offset_bottom = 99.0
+texture = ExtResource("15_sprtt")
+
+[node name="ContextMenuController" type="Node" parent="UI"]
+script = ExtResource("10_5ps10")
+ComponentMenus = Dictionary[int, PackedScene]({
+0: ExtResource("11_du1xg"),
+1: ExtResource("12_6e330"),
+2: ExtResource("13_6e330")
+})
+ContextMenuScene = ExtResource("12_giy6m")
+ValueInputScene = ExtResource("15_s2kt1")

@@ -24,7 +24,7 @@ public class RelativePosition
 		LocalPosition = localPosition;
 		if (parentCelestial != null)
 		{
-			ParentPosition = parentCelestial.RelPosition;
+			ParentPosition = parentCelestial.PositionRel;
 			return;
 		}
 
@@ -72,7 +72,7 @@ public class RelativePosition
 		{
 			CoordinateSpace.RenderSpace => PositionRefConverted(FlightCamera.PositionRel),
 			CoordinateSpace.AbsoluteSpace => GetAbsolutePosition(),
-			CoordinateSpace.VesselSpace => PositionRefConverted(Vessel.ActiveVessel.PositionRel),
+			CoordinateSpace.VesselSpace => PositionRefConverted(GlobalValues.FOPosition),
 			_ => new Vector3d()
 		};
 	}
@@ -97,7 +97,7 @@ public class RelativePosition
 		
 		foreach (var celestial in Celestial.AllCelestials)
 		{
-			celestialDists.Add(celestial.RelPosition.PositionRefConverted(this).Magnitude);
+			celestialDists.Add(celestial.PositionRel.PositionRefConverted(this).Magnitude);
 		}
 
 		for (int i = 0; i < celestialDists.Count; i++)
@@ -112,9 +112,9 @@ public class RelativePosition
 		
 		for (var i = 0; i < currentSOIs.Count; i++)
 		{
-			if (currentSOIs[i].RelPosition.CoordLayer <= highestSOILayer) continue;
+			if (currentSOIs[i].PositionRel.CoordLayer <= highestSOILayer) continue;
 			
-			highestSOILayer = currentSOIs[i].RelPosition.CoordLayer;
+			highestSOILayer = currentSOIs[i].PositionRel.CoordLayer;
 			highestSOIIndex = i;
 		}
 		

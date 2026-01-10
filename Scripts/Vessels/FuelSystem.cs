@@ -1,5 +1,3 @@
-using Godot;
-
 namespace GodotPrototype.Scripts.Vessels;
 
 public class FuelSystem
@@ -57,6 +55,8 @@ public class FuelSystem
         }
         return tanks;
     }
+
+    public void AddTank(FuelTank tank) => ConnectedTanks.Add(tank);
 
     public double GetMaxOfFuelType(FuelType fuelType)
     {

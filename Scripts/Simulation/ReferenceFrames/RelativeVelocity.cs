@@ -1,4 +1,3 @@
-using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation.DoublePrecision;
 using GodotPrototype.Scripts.Vessels;
 
@@ -24,7 +23,7 @@ public class RelativeVelocity
 		LocalVelocity = localVelocity ?? new Vector3d();
 		if (parentCelestial != null)
 		{
-			ReferenceVelocity = parentCelestial.RelVelocity;
+			ReferenceVelocity = parentCelestial.VelocityRel;
 			return;
 		}
 
