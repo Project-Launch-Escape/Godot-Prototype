@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PartDefinition" load_steps=4 format=3 uid="uid://cuxlcvhgb0kdv"]
+
+[ext_resource type="Script" uid="uid://b6mm672vti7v5" path="res://Scripts/Vessels/PartDefinition.cs" id="1_3vr88"]
+[ext_resource type="Texture2D" uid="uid://0c7bov3nf6q7" path="res://Resources/Icons/EngineIcon.png" id="1_ubtoq"]
+[ext_resource type="PackedScene" uid="uid://b255lhj0e72l7" path="res://Resources/Parts/Scenes/engine.tscn" id="2_wyle5"]
+
+[resource]
+script = ExtResource("1_3vr88")
+PartScene = ExtResource("2_wyle5")
+PartName = "RocketEngine"
+PartID = 1
+Icon = ExtResource("1_ubtoq")
+IconColor = Color(0, 0.7083333, 0.85, 1)
+metadata/_custom_type_script = "uid://b6mm672vti7v5"

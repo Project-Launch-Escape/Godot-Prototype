@@ -1,341 +1,59 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=12 format=3]
 
-[ext_resource type="Script" path="res://Scripts/Vessels/VesselPart.cs" id="1_w3sd8"]
-[ext_resource type="Texture2D" path="res://Resources/Icons/VesselPartIcon.png" id="2_nuujk"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/SnapPoint.tscn" id="3_0efn6"]
-[ext_resource type="Script" path="res://Scripts/Vessels/SnapPoint.cs" id="4_4npfi"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="5_kuilv"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/Scenes/cube.tscn" id="6_5hehm"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/Scenes/engine.tscn" id="7_cxo6p"]
-[ext_resource type="Texture2D" path="res://Resources/Icons/EngineIcon.png" id="8_2qyno"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/Scenes/tank.tscn" id="9_67byv"]
-[ext_resource type="Texture2D" path="res://Resources/Icons/FuelTankIcon.png" id="10_26p7i"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/Scenes/capsule.tscn" id="11_edrec"]
-[ext_resource type="Texture2D" path="res://Resources/Icons/VesselIcon.png" id="12_6qwtt"]
+[ext_resource type="Script" path="res://Scripts/Vessels/VesselPart.cs" id="1_p4a7n"]
+[ext_resource type="Texture2D" path="res://Resources/Icons/FuelTankIcon.png" id="2_0rc7j"]
+[ext_resource type="PackedScene" path="res://Resources/Parts/SnapPoint.tscn" id="3_w3sd8"]
+[ext_resource type="Script" path="res://Scripts/Vessels/SnapPoint.cs" id="4_nuujk"]
+[ext_resource type="PackedScene" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="5_0efn6"]
+[ext_resource type="PackedScene" path="res://Resources/Parts/Models/tank1.fbx" id="6_4npfi"]
+[ext_resource type="Script" path="res://Scripts/Vessels/FuelTank.cs" id="7_kuilv"]
+[ext_resource type="Script" path="res://Scripts/Vessels/FuelType.cs" id="8_5hehm"]
+[ext_resource type="Resource" path="res://Resources/FuelTypes/Methane.tres" id="9_cxo6p"]
+[ext_resource type="Resource" path="res://Resources/FuelTypes/Oxidizer.tres" id="10_2qyno"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_28r6v"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bjsqp"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_pw2ib"]
-
-[node name="Cube" type="StaticBody3D" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92225003, 0.303765, 2.1984243)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
+[node name="Tank" type="StaticBody3D" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42573872, 1.0577985, -0.66987324)
+script = ExtResource("1_p4a7n")
+SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
 SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
+Components = [NodePath("FuelTankComponent")]
+_baseMass = 5.0
+Icon = ExtResource("2_0rc7j")
+PartName = "Fuel Tank"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_28r6v")
-skeleton = NodePath("")
+[node name="SnapPoint" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape", "_visual") instance=ExtResource("3_w3sd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("4_nuujk")
+Collider = NodePath("SnapRange")
+_collisionShape = NodePath("SnapRange/SnapRangeCollider")
+_visual = NodePath("VisualIndicator")
+
+[node name="SnapPoint2" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape", "_visual") instance=ExtResource("3_w3sd8")]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, -1, 0)
+script = ExtResource("4_nuujk")
+Collider = NodePath("SnapRange")
+_collisionShape = NodePath("SnapRange/SnapRangeCollider")
+_visual = NodePath("VisualIndicator")
+
+[node name="SurfaceAttatchPoint" type="Node3D" parent="." instance=ExtResource("5_0efn6")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.5, 0, 0)
+script = ExtResource("4_nuujk")
+
+[node name="tank1" type="Node3D" parent="." instance=ExtResource("6_4npfi")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape3D_pw2ib")
+shape = SubResource("CylinderShape3D_bjsqp")
 
-[node name="SnapPoint" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape") instance=ExtResource("3_0efn6")]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0.5, 0, 0)
-script = ExtResource("4_4npfi")
-Collider = NodePath("SnapRange")
-_collisionShape = NodePath("SnapRange/SnapRangeCollider")
-
-[node name="SnapPoint2" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape") instance=ExtResource("3_0efn6")]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.5, 0, 0)
-script = ExtResource("4_4npfi")
-Collider = NodePath("SnapRange")
-_collisionShape = NodePath("SnapRange/SnapRangeCollider")
-
-[node name="SnapPoint3" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape") instance=ExtResource("3_0efn6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-script = ExtResource("4_4npfi")
-Collider = NodePath("SnapRange")
-_collisionShape = NodePath("SnapRange/SnapRangeCollider")
-
-[node name="SnapPoint4" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape") instance=ExtResource("3_0efn6")]
-transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, -0.5, 0)
-script = ExtResource("4_4npfi")
-Collider = NodePath("SnapRange")
-_collisionShape = NodePath("SnapRange/SnapRangeCollider")
-
-[node name="SnapPoint5" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape") instance=ExtResource("3_0efn6")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.5)
-script = ExtResource("4_4npfi")
-Collider = NodePath("SnapRange")
-_collisionShape = NodePath("SnapRange/SnapRangeCollider")
-
-[node name="SnapPoint6" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape") instance=ExtResource("3_0efn6")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.5)
-script = ExtResource("4_4npfi")
-Collider = NodePath("SnapRange")
-_collisionShape = NodePath("SnapRange/SnapRangeCollider")
-
-[node name="SurfaceAttatchPoint" type="Node3D" parent="." instance=ExtResource("5_kuilv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
-script = ExtResource("4_4npfi")
-
-[node name="@StaticBody3D@9" type="StaticBody3D" parent="." node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 1, 0, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@12" type="StaticBody3D" parent="@StaticBody3D@9" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 0, 1)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@13" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(1, -1.7484555e-07, 0, 1.7484555e-07, 1, 0, 0, 0, 1, 0, 1, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@18" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 8.742279e-08, 0, -8.742279e-08, -1, 0, 0, 0, 1, 0, 0, 1)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@29" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1.1920929e-07, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@30" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18/@StaticBody3D@29" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 8.742279e-08, 0, -8.742279e-08, -1, 0, 0, 0, 1, 0, 1, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@34" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18/@StaticBody3D@29/@StaticBody3D@30" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 8.742279e-08, 0, -8.742279e-08, -1, 0, 0, 0, 1, 0, 0, 1)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@41" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18/@StaticBody3D@29/@StaticBody3D@30/@StaticBody3D@34" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 3.7252903e-08, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@42" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18/@StaticBody3D@29/@StaticBody3D@30/@StaticBody3D@34/@StaticBody3D@41" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 2.6226837e-07, 0, -2.6226837e-07, -1, 0, 0, 0, 1, 1.3411045e-07, -0.99999994, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="Engine" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18/@StaticBody3D@29/@StaticBody3D@30/@StaticBody3D@34" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("7_cxo6p")]
-transform = Transform3D(-1, 8.742278e-08, 0, 0, 4.3711402e-08, -1, -8.742278e-08, -1, -4.37114e-08, 0, -2.2351742e-08, 1)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = [NodePath("EngineComponent")]
-_baseMass = 10.0
-Icon = ExtResource("8_2qyno")
-PartName = "Engine"
-
-[node name="Tank" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18/@StaticBody3D@29/@StaticBody3D@30" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("9_67byv")]
-transform = Transform3D(0, 4.371139e-08, -1, 1, -4.37114e-08, 0, -4.37114e-08, -1, -4.371139e-08, -0.2037636, -0.99999964, -0.11008668)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = [NodePath("FuelTankComponent")]
-_baseMass = 5.0
-Icon = ExtResource("10_26p7i")
-PartName = "Fuel Tank"
-
-[node name="@StaticBody3D@43" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18/@StaticBody3D@29/@StaticBody3D@30" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(4.3711395e-08, -4.3711402e-08, -1, -1, 8.742277e-08, -4.3711395e-08, 8.742278e-08, 1, -4.37114e-08, -1, 0, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@44" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18/@StaticBody3D@29/@StaticBody3D@30/@StaticBody3D@43" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-2.1855698e-07, -1, -3.8213714e-15, 1, -2.1855699e-07, 0, 0, 1.33748036e-14, 1, -0.9999999, 0, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@45" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18/@StaticBody3D@29/@StaticBody3D@30/@StaticBody3D@43/@StaticBody3D@44" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(1, -1.7484558e-07, 0, 1.7484555e-07, 1, 1.3374803e-14, 0, -3.582587e-14, 1, -1, 1.1920929e-07, 2.2351742e-08)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@46" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@13/@StaticBody3D@18/@StaticBody3D@29/@StaticBody3D@30/@StaticBody3D@43/@StaticBody3D@44/@StaticBody3D@45" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(1, -1.7484558e-07, 0, 1.7484558e-07, 1, 2.1017545e-14, 0, 8.5503714e-14, 1, 5.9604645e-08, -1, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@28" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(1, -1.7484558e-07, 0, -1.4210855e-14, -4.37114e-08, -1, 1.7484558e-07, 1, -4.37114e-08, 0, -2.2351742e-08, 1)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@31" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@28" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 8.742278e-08, 0, 0, 4.37114e-08, 1, 8.742277e-08, 1, -4.37114e-08, 2.3841858e-07, 0.9999999, -2.2351742e-08)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@32" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@28/@StaticBody3D@31" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 2.6226837e-07, 0, -2.6226837e-07, -1, 3.3881318e-21, 0, 6.5764993e-16, 1, 2.3841858e-07, -0.9999999, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@33" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@28/@StaticBody3D@31/@StaticBody3D@32" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 8.742279e-08, 0, -8.742279e-08, -1, 0, 0, 6.576364e-16, 1, -0.9999999, 1.1920929e-07, 2.3841858e-07)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="Engine" type="StaticBody3D" parent="@StaticBody3D@9/@StaticBody3D@12/@StaticBody3D@28/@StaticBody3D@31/@StaticBody3D@32/@StaticBody3D@33" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("7_cxo6p")]
-transform = Transform3D(-1, 8.742278e-08, 7.642758e-15, 6.558807e-21, 4.3711402e-08, -1, -8.742278e-08, -1, -4.37114e-08, 0, 0, 1)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = [NodePath("EngineComponent")]
-_baseMass = 10.0
-Icon = ExtResource("8_2qyno")
-PartName = "Engine"
-
-[node name="@StaticBody3D@10" type="StaticBody3D" parent="." node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(1, -1.7484558e-07, 0, 1.7484558e-07, 1, 0, 0, 0, 1, -1.1920929e-07, 1, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@11" type="StaticBody3D" parent="@StaticBody3D@10" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 8.742279e-08, 0, -8.742279e-08, -1, 0, 0, 0, 1, 1.0000001, 0, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="@StaticBody3D@15" type="StaticBody3D" parent="@StaticBody3D@10" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 8.742279e-08, 0, -8.742279e-08, -1, 0, 0, 0, 1, 0, 0, 1)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="Tank" type="StaticBody3D" parent="@StaticBody3D@10/@StaticBody3D@15" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("9_67byv")]
-transform = Transform3D(-1.7484552e-07, 8.742279e-08, -1, 1, -5.164665e-15, -1.7484552e-07, -1.7763568e-14, -1, -8.74228e-08, 0.03399062, -1, 0.42386985)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = [NodePath("FuelTankComponent")]
-_baseMass = 5.0
-Icon = ExtResource("10_26p7i")
-PartName = "Fuel Tank"
-
-[node name="@StaticBody3D@14" type="StaticBody3D" parent="@StaticBody3D@10/@StaticBody3D@15" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(-1, 8.742279e-08, 0, -8.742279e-08, -1, 0, 0, 0, 1, 0, 0.99999994, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="Capsule" type="StaticBody3D" parent="@StaticBody3D@10" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("11_edrec")]
-transform = Transform3D(1, -1.7484558e-07, 0, -1.4210855e-14, -4.37114e-08, 1, -1.7484558e-07, -1, -4.37114e-08, -1.1920929e-07, 0, -1)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-_baseMass = 10.0
-Icon = ExtResource("12_6qwtt")
-PartName = "Capsule"
-
-[node name="@StaticBody3D@48" type="StaticBody3D" parent="@StaticBody3D@10" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(4.3711395e-08, -4.3711406e-08, 1, -1, 8.742277e-08, 4.3711395e-08, -8.742278e-08, -1, -4.37114e-08, -1, -1.1920929e-07, 0)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
-
-[node name="Capsule" type="StaticBody3D" parent="." node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("11_edrec")]
-transform = Transform3D(1, -1.7484558e-07, 0, -7.642744e-15, -4.37114e-08, 1, -1.7484558e-07, -1, -4.37114e-08, -1.1920929e-07, -2.2351742e-08, -1)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-_baseMass = 10.0
-Icon = ExtResource("12_6qwtt")
-PartName = "Capsule"
-
-[node name="@StaticBody3D@47" type="StaticBody3D" parent="." node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components") instance=ExtResource("6_5hehm")]
-transform = Transform3D(1, -1.7484558e-07, 0, 1.7484558e-07, 1, 0, 0, 0, 1, -1, 2.3841858e-07, 2.3841858e-07)
-script = ExtResource("1_w3sd8")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
-SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
-Icon = ExtResource("2_nuujk")
-PartName = "The Cube"
+[node name="FuelTankComponent" type="Node3D" parent="."]
+script = ExtResource("7_kuilv")
+FuelLevels = Dictionary[ExtResource("8_5hehm"), float]({
+ExtResource("9_cxo6p"): 300.0,
+ExtResource("10_2qyno"): 100.0
+})
+MaxFuelLevels = Dictionary[ExtResource("8_5hehm"), float]({
+ExtResource("9_cxo6p"): 300.0,
+ExtResource("10_2qyno"): 100.0
+})

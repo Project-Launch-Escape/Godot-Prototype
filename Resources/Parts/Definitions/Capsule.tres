@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="PartDefinition" load_steps=2 format=3 uid="uid://mbcd11lsktjf"]
+
+[ext_resource type="Script" uid="uid://b6mm672vti7v5" path="res://Scripts/Vessels/PartDefinition.cs" id="1_82h26"]
+
+[resource]
+script = ExtResource("1_82h26")
+metadata/_custom_type_script = "uid://b6mm672vti7v5"

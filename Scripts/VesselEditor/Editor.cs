@@ -14,8 +14,8 @@ public partial class Editor : Node3D
 	
 	public static List<PackedScene> PartsScenes = [];
 	
-	private const string PartSceneDirectory = "res://Resources/Parts/Scenes/";
-	private const string VesselFileDirectory = "res://Vessels/";
+	public const string PartSceneDirectory = "res://Resources/Parts/Scenes/";
+	public const string VesselFileDirectory = "res://Vessels/";
 	
 	public static EditorTool ToolLeft = EditorTool.Place;
 	public static EditorTool ToolRight = EditorTool.Modify;
@@ -146,6 +146,8 @@ public partial class Editor : Node3D
 		scene.Pack(vesselRootPart);
 		var error = ResourceSaver.Save(scene, VesselFileDirectory + "save.tscn");
 		if (error is not Error.Ok) GD.PrintErr(error);
+		
+		VesselFileTools.SavePartToFile(vesselRootPart);
 		
 		vesselRootPart.SetDescendantOwner(false);
 		//vesselRootPart.QueueFree();

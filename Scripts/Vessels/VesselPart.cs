@@ -23,6 +23,8 @@ public partial class VesselPart : StaticBody3D, IDepictable
 	public double Mass => _baseMass + Components.Sum(component => component.Mass);
 	[Export] private double _baseMass;
 
+	public PartDefinition PartDef;
+	
 	[Export] public Texture2D Icon { get; set; }
 	public Color IconColor { get; set; }
 	[Export] public string PartName;

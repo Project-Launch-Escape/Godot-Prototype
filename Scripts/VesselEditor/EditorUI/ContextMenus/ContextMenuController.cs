@@ -41,11 +41,11 @@ public partial class ContextMenuController : Node, IToolable
 
 	public void OnToolEnable()
 	{
-		GD.Print("Yay!");
+		
 	}
 
 	public void OnToolDisable()
 	{
-		GD.Print("Awww...");
+		
 	}
 }
