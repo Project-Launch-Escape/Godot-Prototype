@@ -4,8 +4,11 @@ using GodotPrototype.Scripts.UserInterface;
 namespace GodotPrototype.Scripts.Vessels;
 
 [GlobalClass, Icon("res://Resources/Icons/VesselPartIcon.png")]
-public partial class VesselPart : StaticBody3D, IDepictable
+public partial class VesselPart : StaticBody3D
 {
+	public PartDefinition PartDef => PartDefinition.PartDefByID[PartDefID];
+	public string PartDefID;
+	
 	[Export] public SnapPoint[] SnapPoints;
 	[Export] public SnapPoint SurfaceAttatchPoint;
 
@@ -23,11 +26,7 @@ public partial class VesselPart : StaticBody3D, IDepictable
 	public double Mass => _baseMass + Components.Sum(component => component.Mass);
 	[Export] private double _baseMass;
 
-	public PartDefinition PartDef;
-	
-	[Export] public Texture2D Icon { get; set; }
-	public Color IconColor { get; set; }
-	[Export] public string PartName;
+	public string PartName => PartDef.Name;
 
 	public Basis UnsnappedBasis = Basis.Identity;
 	

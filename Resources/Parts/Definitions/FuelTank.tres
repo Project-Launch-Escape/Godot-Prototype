@@ -6,10 +6,9 @@
 
 [resource]
 script = ExtResource("3_k8ste")
-PartScene = ExtResource("2_j004g")
-PartName = "FuelTank"
-PartID = 3
-PartType = 2
+Scene = ExtResource("2_j004g")
+Name = "Fuel Tank"
+ID = "TANK_12g3"
 Icon = ExtResource("1_bvlhp")
 IconColor = Color(0.6665981, 0.66426194, 0.15438941, 1)
 metadata/_custom_type_script = "uid://b6mm672vti7v5"

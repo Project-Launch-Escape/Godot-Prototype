@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Godot;
 using GodotPrototype.Scripts.VesselEditor.EditorUI;
 using GodotPrototype.Scripts.Vessels;
@@ -7,28 +9,34 @@ namespace GodotPrototype.Scripts.VesselEditor;
 
 public static class VesselFileTools
 {
-    public static void SavePartToFile(VesselPart part, bool includeDescendents = true)
-    {
-        var savePath = Editor.VesselFileDirectory + "vessel.json";
-        var save = FileAccess.Open(savePath, FileAccess.ModeFlags.Write);
-        
-        var jsonString = Json.Stringify(part, "\n", true, true);
-        
-        GD.Print(jsonString);
-        save.StoreLine(jsonString);
-        save.Close();
-    }
+	private static readonly JsonSerializerOptions DefaultOptions = new()
+	{
+		WriteIndented = true,
+		IncludeFields = true,
+	};
+	public static void SavePartToFile(VesselPart part, bool includeDescendents = true)
+	{
+		var savePath = Editor.VesselFileDirectory + "vessel.json";
+		var save = FileAccess.Open(savePath, FileAccess.ModeFlags.Write);
 
-    public static PackedScene GetPartSceneFromName(string partName)
-    {
-        var fileNames = DirAccess.GetFilesAt(Editor.PartSceneDirectory);
-        foreach (var fileName in fileNames)
-        {
-            var filePath = Editor.PartSceneDirectory + fileName;
-            var partDef = ResourceLoader.Load<PartDefinition>(filePath);
-            if (partDef.PartName == partName) return partDef.PartScene;
-        }
+		var jsonReady = new VesselPartJSON(part, 0, 0);
+		var jsonString = JsonSerializer.Serialize(jsonReady, DefaultOptions);
+		
+		GD.Print(jsonString);
+		save.StoreLine(jsonString);
+		save.Close();
+	}
 
-        return null;
-    }
+	public static PackedScene GetPartSceneFromName(string partName)
+	{
+		var fileNames = DirAccess.GetFilesAt(Editor.PartDefinitionDirectory);
+		foreach (var fileName in fileNames)
+		{
+			var filePath = Editor.PartDefinitionDirectory + fileName;
+			var partDef = ResourceLoader.Load<PartDefinition>(filePath);
+			if (partDef.Name == partName) return partDef.Scene;
+		}
+
+		return null;
+	}
 }

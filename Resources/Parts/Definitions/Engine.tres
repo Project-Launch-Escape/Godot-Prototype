@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("1_3vr88")
-PartScene = ExtResource("2_wyle5")
-PartName = "RocketEngine"
-PartID = 1
+Scene = ExtResource("2_wyle5")
+Name = "Engine"
+ID = "ENGINE_132h"
 Icon = ExtResource("1_ubtoq")
 IconColor = Color(0, 0.7083333, 0.85, 1)
 metadata/_custom_type_script = "uid://b6mm672vti7v5"

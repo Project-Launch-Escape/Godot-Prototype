@@ -1,7 +1,14 @@
-[gd_resource type="Resource" script_class="PartDefinition" load_steps=2 format=3 uid="uid://mbcd11lsktjf"]
+[gd_resource type="Resource" script_class="PartDefinition" load_steps=4 format=3 uid="uid://mbcd11lsktjf"]
 
 [ext_resource type="Script" uid="uid://b6mm672vti7v5" path="res://Scripts/Vessels/PartDefinition.cs" id="1_82h26"]
+[ext_resource type="Texture2D" uid="uid://d3gl0uel3anu2" path="res://Resources/Icons/VesselIcon.png" id="1_oqihq"]
+[ext_resource type="PackedScene" uid="uid://sy4kdr7r0khc" path="res://Resources/Parts/Scenes/capsule.tscn" id="2_mk05g"]
 
 [resource]
 script = ExtResource("1_82h26")
+Scene = ExtResource("2_mk05g")
+Name = "Capsule"
+ID = "CAPSULE_1a4b"
+Icon = ExtResource("1_oqihq")
+IconColor = Color(0.47285002, 0.30380002, 0.98, 1)
 metadata/_custom_type_script = "uid://b6mm672vti7v5"

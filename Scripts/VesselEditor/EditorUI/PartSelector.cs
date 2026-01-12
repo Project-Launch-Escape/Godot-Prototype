@@ -8,8 +8,6 @@ public partial class PartSelector : ItemList
 	public static PartSelector SelectorNode;
 	[Export] private Color _itemBackgroundColor = new (0.5f,0.5f,0.5f,0.2f);
 	
-	private List<VesselPart> _parts = [];
-	
 	public override void _Ready()
 	{
 		if (SelectorNode != null) GD.PrintErr("Multiple PartSelector Nodes!");
@@ -17,14 +15,11 @@ public partial class PartSelector : ItemList
 		ItemClicked += OnItemClicked;
 	}
 	
-	public void InitializeParts(List<PackedScene> partScenes)
+	public void InitializeParts(List<PartDefinition> partDefinitions)
 	{
-		foreach (var partScene in partScenes)
+		foreach (var partDef in partDefinitions)
 		{
-			var part = partScene.Instantiate<VesselPart>();
-			
-			_parts.Add(part);
-			AddPartToUI(part);
+			AddPartToUI(partDef);
 		}
 
 		for (int i = 0; i < ItemCount; i++)
@@ -33,9 +28,9 @@ public partial class PartSelector : ItemList
 		}
 	}
 
-	private void AddPartToUI(VesselPart part)
+	private void AddPartToUI(PartDefinition partDef)
 	{
-		AddItem(part.PartName, part.Icon);
+		AddItem(partDef.Name, partDef.Icon);
 	}
 
 	public void OnItemClicked(long index, Vector2 clickPos, long mouseButtonIndex)

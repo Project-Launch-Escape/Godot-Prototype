@@ -1,59 +1,44 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=7 format=3]
 
-[ext_resource type="Script" path="res://Scripts/Vessels/VesselPart.cs" id="1_p4a7n"]
-[ext_resource type="Texture2D" path="res://Resources/Icons/FuelTankIcon.png" id="2_0rc7j"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/SnapPoint.tscn" id="3_w3sd8"]
-[ext_resource type="Script" path="res://Scripts/Vessels/SnapPoint.cs" id="4_nuujk"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="5_0efn6"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/Models/tank1.fbx" id="6_4npfi"]
-[ext_resource type="Script" path="res://Scripts/Vessels/FuelTank.cs" id="7_kuilv"]
-[ext_resource type="Script" path="res://Scripts/Vessels/FuelType.cs" id="8_5hehm"]
-[ext_resource type="Resource" path="res://Resources/FuelTypes/Methane.tres" id="9_cxo6p"]
-[ext_resource type="Resource" path="res://Resources/FuelTypes/Oxidizer.tres" id="10_2qyno"]
+[ext_resource type="Script" path="res://Scripts/Vessels/VesselPart.cs" id="1_tkaqe"]
+[ext_resource type="PackedScene" path="res://Resources/Parts/SnapPoint.tscn" id="2_p4a7n"]
+[ext_resource type="Script" path="res://Scripts/Vessels/SnapPoint.cs" id="3_0rc7j"]
+[ext_resource type="PackedScene" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="4_w3sd8"]
+[ext_resource type="PackedScene" path="res://Resources/Parts/Models/capsule1.fbx" id="5_pbpt2"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_bjsqp"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_rycbp"]
+height = 1.8
+radius = 1.0
 
-[node name="Tank" type="StaticBody3D" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42573872, 1.0577985, -0.66987324)
-script = ExtResource("1_p4a7n")
+[node name="Capsule" type="StaticBody3D" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13564914, 1.4885648, -0.66029596)
+script = ExtResource("1_tkaqe")
 SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
 SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = [NodePath("FuelTankComponent")]
-_baseMass = 5.0
-Icon = ExtResource("2_0rc7j")
-PartName = "Fuel Tank"
+Components = []
+_baseMass = 10.0
 
-[node name="SnapPoint" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape", "_visual") instance=ExtResource("3_w3sd8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-script = ExtResource("4_nuujk")
+[node name="SnapPoint" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape", "_visual") instance=ExtResource("2_p4a7n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+script = ExtResource("3_0rc7j")
 Collider = NodePath("SnapRange")
 _collisionShape = NodePath("SnapRange/SnapRangeCollider")
 _visual = NodePath("VisualIndicator")
 
-[node name="SnapPoint2" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape", "_visual") instance=ExtResource("3_w3sd8")]
-transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, -1, 0)
-script = ExtResource("4_nuujk")
+[node name="SnapPoint2" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape", "_visual") instance=ExtResource("2_p4a7n")]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, -0.5, 0)
+script = ExtResource("3_0rc7j")
 Collider = NodePath("SnapRange")
 _collisionShape = NodePath("SnapRange/SnapRangeCollider")
 _visual = NodePath("VisualIndicator")
 
-[node name="SurfaceAttatchPoint" type="Node3D" parent="." instance=ExtResource("5_0efn6")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.5, 0, 0)
-script = ExtResource("4_nuujk")
+[node name="SurfaceAttatchPoint" type="Node3D" parent="." instance=ExtResource("4_w3sd8")]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, -0.5, 0)
+script = ExtResource("3_0rc7j")
 
-[node name="tank1" type="Node3D" parent="." instance=ExtResource("6_4npfi")]
+[node name="capsule1" type="Node3D" parent="." instance=ExtResource("5_pbpt2")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("CylinderShape3D_bjsqp")
-
-[node name="FuelTankComponent" type="Node3D" parent="."]
-script = ExtResource("7_kuilv")
-FuelLevels = Dictionary[ExtResource("8_5hehm"), float]({
-ExtResource("9_cxo6p"): 300.0,
-ExtResource("10_2qyno"): 100.0
-})
-MaxFuelLevels = Dictionary[ExtResource("8_5hehm"), float]({
-ExtResource("9_cxo6p"): 300.0,
-ExtResource("10_2qyno"): 100.0
-})
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.05, 0)
+shape = SubResource("CylinderShape3D_rycbp")

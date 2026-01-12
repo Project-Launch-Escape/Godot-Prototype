@@ -12,9 +12,8 @@ public partial class Editor : Node3D
 {
 	public static Camera3D Camera;
 	
-	public static List<PackedScene> PartsScenes = [];
-	
 	public const string PartSceneDirectory = "res://Resources/Parts/Scenes/";
+	public const string PartDefinitionDirectory = "res://Resources/Parts/Definitions/";
 	public const string VesselFileDirectory = "res://Vessels/";
 	
 	public static EditorTool ToolLeft = EditorTool.Place;
@@ -59,14 +58,14 @@ public partial class Editor : Node3D
 
 	private static void InitializeParts()
 	{
-		var fileNames = DirAccess.GetFilesAt(PartSceneDirectory);
+		var fileNames = DirAccess.GetFilesAt(PartDefinitionDirectory);
 		foreach (var fileName in fileNames)
 		{
-			var filePath = PartSceneDirectory + fileName;
-			var partFile = ResourceLoader.Load<PackedScene>(filePath);
-			PartsScenes.Add(partFile);
+			var filePath = PartDefinitionDirectory + fileName;
+			var partFile = ResourceLoader.Load<PartDefinition>(filePath);
+			PartDefinition.AddDefinition(partFile);
 		}
-		PartSelector.SelectorNode.InitializeParts(PartsScenes);
+		PartSelector.SelectorNode.InitializeParts(PartDefinition.PartDefinitions);
 	}
 
 	private static void HandleToolInput(InputEventMouseButton mouseInput)

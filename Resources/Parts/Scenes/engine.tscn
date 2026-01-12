@@ -1,9 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://b255lhj0e72l7"]
+[gd_scene load_steps=12 format=3 uid="uid://b255lhj0e72l7"]
 
 [ext_resource type="PackedScene" uid="uid://g6dapi7muo5g" path="res://Resources/Parts/Models/engine2.fbx" id="1_85g5s"]
 [ext_resource type="PackedScene" uid="uid://0hctrn76drmj" path="res://Resources/Parts/SnapPoint.tscn" id="1_oqaa7"]
 [ext_resource type="Script" uid="uid://k3500mi8rulg" path="res://Scripts/Vessels/VesselPart.cs" id="1_r1p40"]
-[ext_resource type="Texture2D" uid="uid://0c7bov3nf6q7" path="res://Resources/Icons/EngineIcon.png" id="2_sed01"]
 [ext_resource type="PackedScene" uid="uid://cmmjhdnfxqbqr" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="3_u37f4"]
 [ext_resource type="Script" uid="uid://dnjfp023n42dq" path="res://Scripts/Vessels/RocketEngine.cs" id="5_xjcb0"]
 [ext_resource type="Resource" uid="uid://nvg5a2xy2o0i" path="res://Resources/FuelTypes/Methane.tres" id="6_vsh2y"]
@@ -31,8 +30,6 @@ SnapPoints = [NodePath("SnapPoint")]
 SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
 Components = [NodePath("EngineComponent")]
 _baseMass = 10.0
-Icon = ExtResource("2_sed01")
-PartName = "Engine"
 
 [node name="SnapPoint" parent="." instance=ExtResource("1_oqaa7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

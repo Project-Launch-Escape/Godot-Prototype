@@ -201,12 +201,15 @@ public partial class PlaceTool : Node3D, IToolable
 	{
 		var distTemp = _placingDist;
 		DeselectPart();
-		if (n < 0 || n >= Editor.PartsScenes.Count) return;
+
+		var partDefs = PartDefinition.PartDefinitions;
+		if (n < 0 || n >= partDefs.Count) return;
 		_placingDist = distTemp; // So it doesn't reset
 
 		IsToolActive = true;
 		SnapPoint.SetVisualVisibility(true);
-		_currentPlacingPart = (VesselPart)Editor.PartsScenes[n].Instantiate();
+		_currentPlacingPart = (VesselPart)partDefs[n].Scene.Instantiate();
+		_currentPlacingPart.PartDefID = partDefs[n].ID;
 		
 		AddChild(_currentPlacingPart);
 	}

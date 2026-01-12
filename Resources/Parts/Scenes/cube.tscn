@@ -1,7 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://d3t3v4jewjjhr"]
 
 [ext_resource type="Script" uid="uid://k3500mi8rulg" path="res://Scripts/Vessels/VesselPart.cs" id="1_m6c8s"]
-[ext_resource type="Texture2D" uid="uid://baoorl76v6ipw" path="res://Resources/Icons/VesselPartIcon.png" id="2_cb2we"]
 [ext_resource type="PackedScene" uid="uid://0hctrn76drmj" path="res://Resources/Parts/SnapPoint.tscn" id="2_g8u7g"]
 [ext_resource type="PackedScene" uid="uid://cmmjhdnfxqbqr" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="3_6t0yj"]
 
@@ -14,7 +13,6 @@ script = ExtResource("1_m6c8s")
 SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
 SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
 Components = []
-Icon = ExtResource("2_cb2we")
 PartName = "The Cube"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

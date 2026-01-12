@@ -1,1 +1,23 @@
-"<StaticBody3D#180053084194>"
+{
+  "PartIndex": 0,
+  "PartDefID": "CAPSULE_1a4b",
+  "ParentIndex": 0,
+  "ParentSnapPointIndex": -2,
+  "SnapPointIndex": -2,
+  "Position": {
+    "X": -0.13564914,
+    "Y": 1.4885648,
+    "Z": -0.66029596
+  },
+  "Rotation": {
+    "X": -0,
+    "Y": 0,
+    "Z": 0
+  },
+  "UnsnappedRotation": {
+    "X": -0,
+    "Y": 0,
+    "Z": 0
+  },
+  "Components": []
+}

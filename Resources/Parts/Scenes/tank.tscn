@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://0hctrn76drmj" path="res://Resources/Parts/SnapPoint.tscn" id="1_dbx60"]
 [ext_resource type="Script" uid="uid://k3500mi8rulg" path="res://Scripts/Vessels/VesselPart.cs" id="1_ekgpr"]
 [ext_resource type="PackedScene" uid="uid://c847xtl83rjci" path="res://Resources/Parts/Models/tank1.fbx" id="2_ekgpr"]
-[ext_resource type="Texture2D" uid="uid://cnuwbhn51o7yg" path="res://Resources/Icons/FuelTankIcon.png" id="2_rouoy"]
 [ext_resource type="PackedScene" uid="uid://cmmjhdnfxqbqr" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="3_4gng2"]
 [ext_resource type="Script" uid="uid://bskdkle22wkc2" path="res://Scripts/Vessels/FuelTank.cs" id="5_ieqmh"]
 [ext_resource type="Resource" uid="uid://nvg5a2xy2o0i" path="res://Resources/FuelTypes/Methane.tres" id="6_scbmc"]
@@ -18,7 +17,6 @@ SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
 SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
 Components = [NodePath("FuelTankComponent")]
 _baseMass = 5.0
-Icon = ExtResource("2_rouoy")
 PartName = "Fuel Tank"
 
 [node name="SnapPoint" parent="." instance=ExtResource("1_dbx60")]
