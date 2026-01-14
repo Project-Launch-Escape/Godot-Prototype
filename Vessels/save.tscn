@@ -1,44 +1,59 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=13 format=3]
 
-[ext_resource type="Script" path="res://Scripts/Vessels/VesselPart.cs" id="1_tkaqe"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/SnapPoint.tscn" id="2_p4a7n"]
-[ext_resource type="Script" path="res://Scripts/Vessels/SnapPoint.cs" id="3_0rc7j"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="4_w3sd8"]
-[ext_resource type="PackedScene" path="res://Resources/Parts/Models/capsule1.fbx" id="5_pbpt2"]
+[ext_resource type="Script" path="res://Scripts/Vessels/VesselPart.cs" id="1_pbpt2"]
+[ext_resource type="PackedScene" path="res://Resources/Parts/SnapPoint.tscn" id="2_jimno"]
+[ext_resource type="Script" path="res://Scripts/Vessels/SnapPoint.cs" id="3_2qqie"]
+[ext_resource type="PackedScene" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="4_3aa8t"]
+[ext_resource type="PackedScene" path="res://Resources/Parts/Models/engine2.fbx" id="5_tkaqe"]
+[ext_resource type="Script" path="res://Scripts/Vessels/RocketEngine.cs" id="6_p4a7n"]
+[ext_resource type="Resource" path="res://Resources/FuelTypes/Methane.tres" id="7_0rc7j"]
+[ext_resource type="Script" path="res://Scripts/Vessels/EnginePropellant.cs" id="8_w3sd8"]
+[ext_resource type="Resource" path="res://Resources/FuelTypes/Oxidizer.tres" id="9_nuujk"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_rycbp"]
-height = 1.8
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_x4wjh"]
 radius = 1.0
 
-[node name="Capsule" type="StaticBody3D" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13564914, 1.4885648, -0.66029596)
-script = ExtResource("1_tkaqe")
-SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
+[sub_resource type="Resource" id="Resource_hcopj"]
+script = ExtResource("8_w3sd8")
+Fuel = ExtResource("7_0rc7j")
+Ratio = 0.75
+metadata/_custom_type_script = "uid://ct3l6ipt2jrnw"
+
+[sub_resource type="Resource" id="Resource_kbxpd"]
+script = ExtResource("8_w3sd8")
+Fuel = ExtResource("9_nuujk")
+Ratio = 0.25
+metadata/_custom_type_script = "uid://ct3l6ipt2jrnw"
+
+[node name="Engine" type="StaticBody3D" node_paths=PackedStringArray("SnapPoints", "SurfaceAttatchPoint", "Components")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9570999, 0.9033096, -2.6698732)
+script = ExtResource("1_pbpt2")
+SnapPoints = [NodePath("SnapPoint")]
 SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
+Components = [NodePath("EngineComponent")]
 _baseMass = 10.0
 
-[node name="SnapPoint" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape", "_visual") instance=ExtResource("2_p4a7n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
-script = ExtResource("3_0rc7j")
+[node name="SnapPoint" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape", "_visual") instance=ExtResource("2_jimno")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("3_2qqie")
 Collider = NodePath("SnapRange")
 _collisionShape = NodePath("SnapRange/SnapRangeCollider")
 _visual = NodePath("VisualIndicator")
 
-[node name="SnapPoint2" type="Node3D" parent="." node_paths=PackedStringArray("Collider", "_collisionShape", "_visual") instance=ExtResource("2_p4a7n")]
-transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, -0.5, 0)
-script = ExtResource("3_0rc7j")
-Collider = NodePath("SnapRange")
-_collisionShape = NodePath("SnapRange/SnapRangeCollider")
-_visual = NodePath("VisualIndicator")
-
-[node name="SurfaceAttatchPoint" type="Node3D" parent="." instance=ExtResource("4_w3sd8")]
-transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, -0.5, 0)
-script = ExtResource("3_0rc7j")
-
-[node name="capsule1" type="Node3D" parent="." instance=ExtResource("5_pbpt2")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+[node name="SurfaceAttatchPoint" type="Node3D" parent="." instance=ExtResource("4_3aa8t")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.5, 0)
+script = ExtResource("3_2qqie")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.05, 0)
-shape = SubResource("CylinderShape3D_rycbp")
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = SubResource("CylinderShape3D_x4wjh")
+
+[node name="engine2" type="Node3D" parent="." instance=ExtResource("5_tkaqe")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="EngineComponent" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+script = ExtResource("6_p4a7n")
+MaxThrust = 30000.0
+Isp = 3500.0
+Propellants = [SubResource("Resource_hcopj"), SubResource("Resource_kbxpd")]

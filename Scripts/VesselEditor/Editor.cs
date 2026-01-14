@@ -156,5 +156,9 @@ public partial class Editor : Node3D
 	public override void _UnhandledInput(InputEvent inputEvent)
 	{
 		if (inputEvent is InputEventMouseButton mouseButton) HandleToolInput(mouseButton);
+		if (inputEvent is InputEventKey { Pressed: false , Keycode: Key.L})
+		{
+			VesselFileTools.LoadVesselFromFile("");
+		}
 	}
 }

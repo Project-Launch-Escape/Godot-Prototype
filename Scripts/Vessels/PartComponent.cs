@@ -9,7 +9,7 @@ public abstract partial class PartComponent : Node3D
 	public Vessel ParentVessel => ParentPart.ParentVessel;
 	public FuelSystem ConnectedFuelSystem => ParentPart.ConnectedFuelSystem;
 
-	[Export] protected double BaseMass;
+	[Export] public double BaseMass { get; private set; }
 	public double Mass => GetMass();
 
 	protected virtual double GetMass() => BaseMass;

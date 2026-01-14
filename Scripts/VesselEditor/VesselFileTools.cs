@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Godot;
 using GodotPrototype.Scripts.VesselEditor.EditorUI;
+using GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 using GodotPrototype.Scripts.Vessels;
 using FileAccess = Godot.FileAccess;
 
@@ -25,6 +26,18 @@ public static class VesselFileTools
 		GD.Print(jsonString);
 		save.StoreLine(jsonString);
 		save.Close();
+	}
+
+	public static void LoadVesselFromFile(string path)
+	{
+		var savePath = Editor.VesselFileDirectory + "vessel.json";
+		var save = FileAccess.Open(savePath, FileAccess.ModeFlags.Read);
+		var json = save.GetAsText();
+
+		var vesselPartJSON = JsonSerializer.Deserialize<VesselPartJSON>(json, DefaultOptions);
+
+		var part = vesselPartJSON.ToPart();
+		Editor.EditorNode.AddChild(part);
 	}
 
 	public static PackedScene GetPartSceneFromName(string partName)

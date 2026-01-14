@@ -1,7 +1,8 @@
+using System.Text.Json.Serialization;
 using Godot;
 using GodotPrototype.Scripts.Vessels;
 
-namespace GodotPrototype.Scripts.VesselEditor;
+namespace GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 
 public class VesselPartJSON
 {
@@ -17,8 +18,7 @@ public class VesselPartJSON
 	public Vector3 Rotation; // Uses Euler angles to save Space
 	public Vector3 UnsnappedRotation;
 
-	public PartComponent[] Components;
-	
+	public PartComponentJSON[] Components;
 	
 
 	public VesselPartJSON(VesselPart part, int index, int parentIndex)
@@ -34,7 +34,25 @@ public class VesselPartJSON
 		Rotation = part.Rotation;
 		UnsnappedRotation = part.UnsnappedBasis.GetEuler();
 
-		Components = part.Components;
+		Components = new PartComponentJSON[part.Components.Length];
+		for (int i = 0; i < Components.Length; i++)
+		{
+			Components[i] = PartComponentJSON.ComponentToJsonCompatible(part.Components[i], i);
+		}
+	}
+	
+	[JsonConstructor]
+	public VesselPartJSON(int partIndex, string partDefID, int parentIndex, int parentSnapPointIndex, int snapPointIndex, Vector3 position, Vector3 rotation, Vector3 unsnappedRotation, PartComponentJSON[] components)
+	{
+		PartIndex = partIndex;
+		PartDefID = partDefID;
+		ParentIndex = parentIndex;
+		ParentSnapPointIndex = parentSnapPointIndex;
+		SnapPointIndex = snapPointIndex;
+		Position = position;
+		Rotation = rotation;
+		UnsnappedRotation = unsnappedRotation;
+		Components = components;
 	}
 
 	private static int GetIndexOfSnapPointAttachedTo(VesselPart part, VesselPart otherPart)
@@ -56,5 +74,22 @@ public class VesselPartJSON
 		}
 
 		return snapPointIndex;
+	}
+
+	public VesselPart ToPart()
+	{
+		var part = PartDefinition.PartDefByID[PartDefID].Scene.Instantiate<VesselPart>();
+
+		part.PartDefID = PartDefID;
+		part.Position = Position;
+		part.Rotation = Rotation;
+		part.UnsnappedBasis = Basis.FromEuler(UnsnappedRotation);
+
+		for (int i = 0; i < part.Components.Length; i++)
+		{
+			Components[i].InitializeComponent(part.Components[i]);
+		}
+
+		return part;
 	}
 }

@@ -1,13 +1,13 @@
 {
   "PartIndex": 0,
-  "PartDefID": "CAPSULE_1a4b",
+  "PartDefID": "ENGINE_132h",
   "ParentIndex": 0,
   "ParentSnapPointIndex": -2,
   "SnapPointIndex": -2,
   "Position": {
-    "X": -0.13564914,
-    "Y": 1.4885648,
-    "Z": -0.66029596
+    "X": -1.9570999,
+    "Y": 0.9033096,
+    "Z": -2.6698732
   },
   "Rotation": {
     "X": -0,
@@ -19,5 +19,11 @@
     "Y": 0,
     "Z": 0
   },
-  "Components": []
+  "Components": [
+    {
+      "ComponentType": "Engine",
+      "Index": 0,
+      "BaseMass": 0
+    }
+  ]
 }
