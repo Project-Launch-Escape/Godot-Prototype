@@ -12,6 +12,10 @@ namespace GodotPrototype.Scripts.Vessels;
 [GlobalClass, Icon("res://Resources/Icons/VesselIcon.png")]
 public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
 {
+	public static readonly List<Vessel> AllVessels = [];
+	public static Vessel ActiveVessel;
+	
+	
 	public RelativePosition PositionRel = new (new Vector3d(-2514749.0,-2714.0,0));
 	public RelativeVelocity VelocityRel = new (new Vector3d(50, 150, -1350));
 	private Vector3d _acceleration = new();
@@ -37,14 +41,8 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
 	private DebugVector _gravityVector;
 	private DebugVector _thrustVector;
 
-	public VesselPart RootPart;
-	public List<VesselPart> Parts = []; 
+	public PartTree PartAssembly;
 	public List<FuelSystem> FuelSystems = [];
-	public List<RocketEngine> Engines = [];
-
-
-	public static readonly List<Vessel> AllVessels = [];
-	public static Vessel ActiveVessel;
 
 	public double Throttle;
 	
@@ -80,17 +78,14 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
 
 	private void InitializePartsFromFile(string filePath)
 	{
-		RootPart = ResourceLoader.Load<PackedScene>(filePath).Instantiate<VesselPart>();
-		RootPart.Position = Vector3.Zero;
-		AddChild(RootPart);
+		var root = ResourceLoader.Load<PackedScene>(filePath).Instantiate<VesselPart>();
+		root.Position = Vector3.Zero;
+		AddChild(root);
+
+		PartAssembly = new PartTree(root, this);
 		
-		Parts = RootPart.GetAllDescendantParts();
-		Parts.Add(RootPart);
-		foreach (var part in Parts)
+		foreach (var part in PartAssembly.Parts)
 		{
-			part.ParentVessel = this;
-			part.ConnectedFuelSystem = FuelSystems[0];
-			part.InitializePart();
 			foreach (var partChild in part.GetChildren())
 			{
 				if (partChild is CollisionShape3D) partChild.Reparent(this);
@@ -135,7 +130,7 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
 
 	private void PhysicsUpdateNewton(double dtPhys)
 	{
-		Mass = (float)GetVesselMass();
+		Mass = (float)PartAssembly.GetTotalMass();
 		
 		var currentSOI = PositionRel.FindHighestSOI();
 		if (ParentBody != currentSOI)
@@ -154,7 +149,7 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
 		}
 
 		var velprev = new Vector3d(LinearVelocity);
-		foreach (var engine in Engines)
+		foreach (var engine in PartAssembly.Engines)
 		{
 			engine.FireEngine(Throttle, dtPhys);
 		}
@@ -195,8 +190,6 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
 	{
 		ApplyCentralImpulse((Vector3)impulse);
 	}
-
-	private double GetVesselMass() => Parts.Sum(part => part.Mass);
 
 	public void RenderUpdate()
 	{

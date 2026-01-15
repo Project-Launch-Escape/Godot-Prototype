@@ -20,7 +20,7 @@ public static class VesselFileTools
 		var savePath = Editor.VesselFileDirectory + "vessel.json";
 		var save = FileAccess.Open(savePath, FileAccess.ModeFlags.Write);
 
-		var jsonReady = new VesselPartJSON(part, 0, 0);
+		var jsonReady = new PartTreeJSON(part);
 		var jsonString = JsonSerializer.Serialize(jsonReady, DefaultOptions);
 		
 		GD.Print(jsonString);

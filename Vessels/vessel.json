@@ -1,29 +1,97 @@
 {
-  "PartIndex": 0,
-  "PartDefID": "ENGINE_132h",
-  "ParentIndex": 0,
-  "ParentSnapPointIndex": -2,
-  "SnapPointIndex": -2,
-  "Position": {
-    "X": -1.9570999,
-    "Y": 0.9033096,
-    "Z": -2.6698732
-  },
-  "Rotation": {
-    "X": -0,
-    "Y": 0,
-    "Z": 0
-  },
-  "UnsnappedRotation": {
-    "X": -0,
-    "Y": 0,
-    "Z": 0
-  },
-  "Components": [
+  "Parts": [
     {
-      "ComponentType": "Engine",
-      "Index": 0,
-      "BaseMass": 0
+      "PartIndex": 0,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": -1,
+      "ParentSnapPointIndex": -2,
+      "SnapPointIndex": -2,
+      "Position": {
+        "X": -0.79673684,
+        "Y": 1.8505032,
+        "Z": -0.66987324
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "PartIndex": 1,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 0,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 0,
+      "Position": {
+        "X": 1.1920929E-07,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 1.7484558E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "PartIndex": 2,
+      "PartDefID": "ENGINE_132h",
+      "ParentIndex": 1,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 0,
+      "Position": {
+        "X": 0,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 1.7484558E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "Engine",
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
     }
   ]
 }

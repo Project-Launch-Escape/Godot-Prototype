@@ -15,7 +15,7 @@ public partial class VesselPart : StaticBody3D
 	public bool SurfaceAttatchable => SurfaceAttatchPoint != null;
 
 	public Vessel ParentVessel;
-	public VesselPart VesselRootPart => ParentVessel.RootPart;
+	public VesselPart VesselRootPart => ParentVessel.PartAssembly.RootPart;
 	public VesselPart ParentPart => GetParent() as VesselPart;
 	public List<VesselPart> ChildParts => GetChildParts();
 
@@ -48,7 +48,7 @@ public partial class VesselPart : StaticBody3D
 					ConnectedFuelSystem.AddTank(tank);
 					break;
 				case RocketEngine engine:
-					ParentVessel.Engines.Add(engine);
+					ParentVessel.PartAssembly.Engines.Add(engine);
 					break;
 			}
 		}
