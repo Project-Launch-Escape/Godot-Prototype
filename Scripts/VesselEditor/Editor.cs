@@ -2,6 +2,7 @@ using Godot;
 using Godot.Collections;
 using GodotPrototype.Scripts.VesselEditor.EditorUI;
 using GodotPrototype.Scripts.VesselEditor.EditorUI.ContextMenus;
+using GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 using GodotPrototype.Scripts.Vessels;
 using Array = System.Array;
 using PartSelector = GodotPrototype.Scripts.VesselEditor.EditorUI.PartSelector;

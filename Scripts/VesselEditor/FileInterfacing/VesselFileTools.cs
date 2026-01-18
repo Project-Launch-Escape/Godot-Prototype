@@ -1,29 +1,28 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Godot;
-using GodotPrototype.Scripts.VesselEditor.EditorUI;
-using GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 using GodotPrototype.Scripts.Vessels;
 using FileAccess = Godot.FileAccess;
 
-namespace GodotPrototype.Scripts.VesselEditor;
+namespace GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 
 public static class VesselFileTools
 {
 	private static readonly JsonSerializerOptions DefaultOptions = new()
 	{
 		WriteIndented = true,
-		IncludeFields = true,
+		IncludeFields = true
 	};
 	public static void SavePartToFile(VesselPart part, bool includeDescendents = true)
 	{
-		var savePath = Editor.VesselFileDirectory + "vessel.json";
+		var fileName = "vessel.json";
+		
+		var savePath = Editor.VesselFileDirectory + fileName;
 		var save = FileAccess.Open(savePath, FileAccess.ModeFlags.Write);
 
 		var jsonReady = new PartTreeJSON(part);
 		var jsonString = JsonSerializer.Serialize(jsonReady, DefaultOptions);
 		
-		GD.Print(jsonString);
+		GD.Print($"Json Stored Successfully at ({savePath})!");
 		save.StoreLine(jsonString);
 		save.Close();
 	}
@@ -34,10 +33,10 @@ public static class VesselFileTools
 		var save = FileAccess.Open(savePath, FileAccess.ModeFlags.Read);
 		var json = save.GetAsText();
 
-		var vesselPartJSON = JsonSerializer.Deserialize<VesselPartJSON>(json, DefaultOptions);
+		var partTreeJSON = JsonSerializer.Deserialize<PartTreeJSON>(json, DefaultOptions);
 
-		var part = vesselPartJSON.ToPart();
-		Editor.EditorNode.AddChild(part);
+		var partTree = partTreeJSON.ToPartTree();
+		Editor.EditorNode.AddChild(partTree.RootPart);
 	}
 
 	public static PackedScene GetPartSceneFromName(string partName)

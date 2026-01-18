@@ -19,7 +19,9 @@ public class VesselPartJSON
 	public Vector3 UnsnappedRotation;
 
 	public PartComponentJSON[] Components;
-	
+
+	public bool IsRootPart() => ParentIndex == -1;
+	public bool IsSurfaceAttached => SnapPointIndex == -1;
 
 	public VesselPartJSON(VesselPart part, int index, int parentIndex)
 	{
@@ -57,23 +59,15 @@ public class VesselPartJSON
 
 	private static int GetIndexOfSnapPointAttachedTo(VesselPart part, VesselPart otherPart)
 	{
-		var snapPointIndex = -1;
-		if (part != null && otherPart != null)
+		if (part == null || otherPart == null) return -2;
+		
+		var snapPoints = part.SnapPoints;
+		for (int i = 0; i < snapPoints.Length; i++)
 		{
-			var snapPoints = part.SnapPoints;
-			for (int i = 0; i < snapPoints.Length; i++)
-			{
-				if (snapPoints[i].AttachedPart != otherPart) continue;
-				snapPointIndex = i;
-				break;
-			}
-		}
-		else
-		{
-			snapPointIndex = -2;
+			if (snapPoints[i].AttachedPart == otherPart) return i;
 		}
 
-		return snapPointIndex;
+		return -1;
 	}
 
 	public VesselPart ToPart()
@@ -84,6 +78,7 @@ public class VesselPartJSON
 		part.Position = Position;
 		part.Rotation = Rotation;
 		part.UnsnappedBasis = Basis.FromEuler(UnsnappedRotation);
+		part.PartDefID = PartDefID;
 
 		for (int i = 0; i < part.Components.Length; i++)
 		{

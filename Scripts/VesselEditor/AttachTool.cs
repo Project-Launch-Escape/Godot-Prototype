@@ -34,25 +34,7 @@ public partial class AttachTool : Node3D, IToolable
 		var parentSnapPoint = _hoveredSnapPoint;
 		if (parentSnapPoint == null) return;
 
-		var childPart = _childSnapPoint.Parent;
-		var parentPart = parentSnapPoint.Parent;
-		if (childPart == parentPart || parentPart.GetAllDescendantParts().Contains(childPart)) return;
-		
-		var newBasis = parentSnapPoint.GlobalBasis * _childSnapPoint.Basis;
-		newBasis = newBasis.Rotated(newBasis.Z.Normalized(), Mathf.Pi);
-		
-		childPart.Basis = newBasis;
-		childPart.GlobalPosition = Vector3.Zero;
-		
-		childPart.GlobalPosition += parentSnapPoint.GlobalPosition - _childSnapPoint.GlobalPosition;
-		
-
-		if (parentPart.GetAllDescendantParts().Contains(childPart)) return;
-		childPart.Reparent(parentPart);
-		parentPart.ChildParts.Add(childPart);
-		
-		_childSnapPoint.AttachTo(parentSnapPoint);
-		parentSnapPoint.AttachTo(_childSnapPoint);
+		_childSnapPoint.SnapParentPartToSnapPoint(parentSnapPoint);
 		
 		parentSnapPoint.SetVisualState(SnapPoint.SnapPointVisualState.Normal);
 		_childSnapPoint.SetVisualState(SnapPoint.SnapPointVisualState.Normal);

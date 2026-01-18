@@ -14,8 +14,10 @@ public partial class PlaceTool : Node3D, IToolable
 	private SnapPoint _attachingSnapPoint;
 	private VesselPart _otherAttachingPart;
 	private SnapPoint _otherAttachingSnapPoint;
-	
-	private bool IsSnapped => _otherAttachingSnapPoint != null;
+
+	private bool IsAttaching => _otherAttachingPart != null;
+	private bool IsSnapping => _otherAttachingSnapPoint != null;
+	private bool IsSurfaceAttaching => _otherAttachingSnapPoint == null && _otherAttachingPart != null;
 	
 	private float _placingDist = 5f;
 
@@ -115,7 +117,7 @@ public partial class PlaceTool : Node3D, IToolable
 			if (snapPoint.Occupied) continue;
 			
 			placingSnapPoint = snapPoint;
-			rayParameters.To = baseTransform.Origin + (placingSnapPoint.GlobalPosition - placingSnapPoint.Parent.GlobalPosition);
+			rayParameters.To = baseTransform.Origin + (placingSnapPoint.GlobalPosition - placingSnapPoint.ParentPart.GlobalPosition);
 
 			var rayResult = physicsSpaceState.IntersectRay(rayParameters);
 			if (rayResult.Count == 0) continue;
@@ -131,7 +133,7 @@ public partial class PlaceTool : Node3D, IToolable
 			if (angleBetween > snapAngleTolerance) continue;
 
 			_otherAttachingSnapPoint = otherSnapPoint;
-			_otherAttachingPart = otherSnapPoint.Parent;
+			_otherAttachingPart = otherSnapPoint.ParentPart;
 			break;
 		}
 
@@ -228,18 +230,17 @@ public partial class PlaceTool : Node3D, IToolable
 	}
 	private void PlacePart()
 	{
-		if (_otherAttachingPart != null) // Runs when surface attaching or snapping
+		if (IsAttaching)
 		{
-			if (_currentPlacingPart.GetAllDescendantParts().Contains(_otherAttachingPart)) return;
-			_currentPlacingPart.Reparent(_otherAttachingPart);
-			_otherAttachingPart.ChildParts.Add(_currentPlacingPart);
-		}
-		if (_otherAttachingSnapPoint != null) // Runs only when snapping , not surface attaching
-		{
-			if (_attachingSnapPoint != null)
+			if (!IsSurfaceAttaching) // Runs only when snapping , not surface attaching
 			{
-				_otherAttachingSnapPoint.AttachTo(_attachingSnapPoint);
-				_attachingSnapPoint.AttachTo(_otherAttachingSnapPoint);
+				SnapPoint.AttachSnapPointTo(_attachingSnapPoint, _otherAttachingSnapPoint);
+			}
+			else
+			{
+				if (_currentPlacingPart.GetAllDescendantParts().Contains(_otherAttachingPart)) return;
+				_currentPlacingPart.Reparent(_otherAttachingPart);
+				_otherAttachingPart.ChildParts.Add(_currentPlacingPart);
 			}
 		}
 		

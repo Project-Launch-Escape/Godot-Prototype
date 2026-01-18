@@ -61,7 +61,7 @@ public partial class TranslateTool : Node3D, IToolable
 	
 	public override void _Input(InputEvent inputEvent)
 	{
-		if (Editor.IsToolEnabled(EditorTool.Transform)) return;
+		if (!Editor.IsToolEnabled(EditorTool.Transform)) return;
 		switch (inputEvent)
 		{
 			case InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true } when !Editor.IsToolActive(EditorTool.Place) :

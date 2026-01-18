@@ -1,15 +1,16 @@
 {
   "Parts": [
     {
+      "IsSurfaceAttached": false,
       "PartIndex": 0,
       "PartDefID": "CAPSULE_1a4b",
       "ParentIndex": -1,
       "ParentSnapPointIndex": -2,
       "SnapPointIndex": -2,
       "Position": {
-        "X": -0.79673684,
-        "Y": 1.8505032,
-        "Z": -0.66987324
+        "X": 3.188766,
+        "Y": 4.122587,
+        "Z": 0.98694515
       },
       "Rotation": {
         "X": -0,
@@ -24,6 +25,7 @@
       "Components": []
     },
     {
+      "IsSurfaceAttached": false,
       "PartIndex": 1,
       "PartDefID": "TANK_12g3",
       "ParentIndex": 0,
@@ -65,7 +67,32 @@
       ]
     },
     {
+      "IsSurfaceAttached": false,
       "PartIndex": 2,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 0,
+      "ParentSnapPointIndex": 0,
+      "SnapPointIndex": 0,
+      "Position": {
+        "X": 0,
+        "Y": 0.8000002,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": -3.1415925
+      },
+      "UnsnappedRotation": {
+        "X": 3.1415925,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 3,
       "PartDefID": "ENGINE_132h",
       "ParentIndex": 1,
       "ParentSnapPointIndex": 1,
@@ -92,6 +119,990 @@
           "BaseMass": 0
         }
       ]
+    },
+    {
+      "IsSurfaceAttached": true,
+      "PartIndex": 4,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 1,
+      "ParentSnapPointIndex": -1,
+      "SnapPointIndex": -1,
+      "Position": {
+        "X": 0.98464334,
+        "Y": 0.015720487,
+        "Z": 0.17454857
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 2.9661446,
+        "Z": 0
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": true,
+      "PartIndex": 5,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 1,
+      "ParentSnapPointIndex": -1,
+      "SnapPointIndex": -1,
+      "Position": {
+        "X": -0.9743396,
+        "Y": 0.003625393,
+        "Z": -0.22500348
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": -0.22695075,
+        "Z": 0
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": true,
+      "PartIndex": 6,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 1,
+      "ParentSnapPointIndex": -1,
+      "SnapPointIndex": -1,
+      "Position": {
+        "X": -0.016585708,
+        "Y": 1.300508,
+        "Z": 0.4997177
+      },
+      "Rotation": {
+        "X": 4.37114E-08,
+        "Y": -0.033177976,
+        "Z": -4.3711395E-08
+      },
+      "UnsnappedRotation": {
+        "X": -1.5707964,
+        "Y": -1.5707964,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 7,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 4,
+      "ParentSnapPointIndex": 0,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": -8.940697E-08,
+        "Y": 1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -2.6054024E-15,
+        "Y": 1.4901163E-08,
+        "Z": 1.7484557E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 8,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 4,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": 1.3411045E-07,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -3.5538964E-16,
+        "Y": 1.4901163E-08,
+        "Z": -3.1415925
+      },
+      "UnsnappedRotation": {
+        "X": 3.1415925,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 9,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 5,
+      "ParentSnapPointIndex": 0,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": -2.3841858E-07,
+        "Y": 1.4999998,
+        "Z": 5.9604645E-08
+      },
+      "Rotation": {
+        "X": 2.0368969E-14,
+        "Y": -1.4901159E-08,
+        "Z": 1.7484557E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 10,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 5,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": 2.3841858E-07,
+        "Y": -1.5,
+        "Z": -5.9604645E-08
+      },
+      "Rotation": {
+        "X": 1.4566244E-14,
+        "Y": -1.4901159E-08,
+        "Z": -3.1415925
+      },
+      "UnsnappedRotation": {
+        "X": 3.1415925,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 11,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 6,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 0,
+      "Position": {
+        "X": 1.1920929E-07,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 1.7484558E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 12,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 6,
+      "ParentSnapPointIndex": 0,
+      "SnapPointIndex": 0,
+      "Position": {
+        "X": 0,
+        "Y": 0.8000002,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": -3.1415925
+      },
+      "UnsnappedRotation": {
+        "X": 3.1415925,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 13,
+      "PartDefID": "ENGINE_132h",
+      "ParentIndex": 11,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 0,
+      "Position": {
+        "X": 0,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 1.7484558E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "Engine",
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": true,
+      "PartIndex": 14,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 11,
+      "ParentSnapPointIndex": -1,
+      "SnapPointIndex": -1,
+      "Position": {
+        "X": 0.98464334,
+        "Y": 0.015720487,
+        "Z": 0.17454857
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 2.9661446,
+        "Z": 0
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": true,
+      "PartIndex": 15,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 11,
+      "ParentSnapPointIndex": -1,
+      "SnapPointIndex": -1,
+      "Position": {
+        "X": -0.9743396,
+        "Y": 0.003625393,
+        "Z": -0.22500348
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": -0.22695075,
+        "Z": 0
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 16,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 14,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": 1.3411045E-07,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -3.5538964E-16,
+        "Y": 1.4901163E-08,
+        "Z": -3.1415925
+      },
+      "UnsnappedRotation": {
+        "X": 3.1415925,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 17,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 14,
+      "ParentSnapPointIndex": 0,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": -5.9604645E-08,
+        "Y": 1.5,
+        "Z": 1.1920929E-07
+      },
+      "Rotation": {
+        "X": 7.1054274E-15,
+        "Y": 1.2423528E-21,
+        "Z": 1.7484561E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 18,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 15,
+      "ParentSnapPointIndex": 0,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": -2.3841858E-07,
+        "Y": 1.4999998,
+        "Z": 5.9604645E-08
+      },
+      "Rotation": {
+        "X": 2.0368969E-14,
+        "Y": -1.4901159E-08,
+        "Z": 1.7484557E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 19,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 15,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": 2.3841858E-07,
+        "Y": -1.5,
+        "Z": -5.9604645E-08
+      },
+      "Rotation": {
+        "X": 1.4566244E-14,
+        "Y": -1.4901159E-08,
+        "Z": -3.1415925
+      },
+      "UnsnappedRotation": {
+        "X": 3.1415925,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 20,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 12,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 0,
+      "Position": {
+        "X": 1.1920929E-07,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 1.7484558E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 21,
+      "PartDefID": "ENGINE_132h",
+      "ParentIndex": 20,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 0,
+      "Position": {
+        "X": 0,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 1.7484558E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "Engine",
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": true,
+      "PartIndex": 22,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 20,
+      "ParentSnapPointIndex": -1,
+      "SnapPointIndex": -1,
+      "Position": {
+        "X": 0.98464334,
+        "Y": 0.015720487,
+        "Z": 0.17454857
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 2.9661446,
+        "Z": 0
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": true,
+      "PartIndex": 23,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 20,
+      "ParentSnapPointIndex": -1,
+      "SnapPointIndex": -1,
+      "Position": {
+        "X": -0.9743396,
+        "Y": 0.003625393,
+        "Z": -0.22500348
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": -0.22695075,
+        "Z": 0
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 24,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 22,
+      "ParentSnapPointIndex": 0,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": -8.940697E-08,
+        "Y": 1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -2.6054024E-15,
+        "Y": 1.4901163E-08,
+        "Z": 1.7484557E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 25,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 22,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": 1.3411045E-07,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -3.5538964E-16,
+        "Y": 1.4901163E-08,
+        "Z": -3.1415925
+      },
+      "UnsnappedRotation": {
+        "X": 3.1415925,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 26,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 23,
+      "ParentSnapPointIndex": 0,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": -2.3841858E-07,
+        "Y": 1.4999998,
+        "Z": 5.9604645E-08
+      },
+      "Rotation": {
+        "X": 2.0368969E-14,
+        "Y": -1.4901159E-08,
+        "Z": 1.7484557E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 27,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 23,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": 2.3841858E-07,
+        "Y": -1.5,
+        "Z": -5.9604645E-08
+      },
+      "Rotation": {
+        "X": 1.4566244E-14,
+        "Y": -1.4901159E-08,
+        "Z": -3.1415925
+      },
+      "UnsnappedRotation": {
+        "X": 3.1415925,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 28,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 2,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 0,
+      "Position": {
+        "X": 1.1920929E-07,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 1.7484558E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 29,
+      "PartDefID": "ENGINE_132h",
+      "ParentIndex": 28,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 0,
+      "Position": {
+        "X": 0,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 1.7484558E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "Engine",
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": true,
+      "PartIndex": 30,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 28,
+      "ParentSnapPointIndex": -1,
+      "SnapPointIndex": -1,
+      "Position": {
+        "X": 0.98464334,
+        "Y": 0.015720487,
+        "Z": 0.17454857
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": 2.9661446,
+        "Z": 0
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": true,
+      "PartIndex": 31,
+      "PartDefID": "TANK_12g3",
+      "ParentIndex": 28,
+      "ParentSnapPointIndex": -1,
+      "SnapPointIndex": -1,
+      "Position": {
+        "X": -0.9743396,
+        "Y": 0.003625393,
+        "Z": -0.22500348
+      },
+      "Rotation": {
+        "X": -0,
+        "Y": -0.22695075,
+        "Z": 0
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": [
+        {
+          "ComponentType": "FuelTank",
+          "FuelLevels": [
+            {
+              "FuelType": "Methane",
+              "Level": 300,
+              "Max": 300
+            },
+            {
+              "FuelType": "Oxidizer",
+              "Level": 100,
+              "Max": 100
+            }
+          ],
+          "Index": 0,
+          "BaseMass": 0
+        }
+      ]
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 32,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 30,
+      "ParentSnapPointIndex": 0,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": -8.940697E-08,
+        "Y": 1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -2.6054024E-15,
+        "Y": 1.4901163E-08,
+        "Z": 1.7484557E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 33,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 30,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": 1.3411045E-07,
+        "Y": -1.5,
+        "Z": 0
+      },
+      "Rotation": {
+        "X": -3.5538964E-16,
+        "Y": 1.4901163E-08,
+        "Z": -3.1415925
+      },
+      "UnsnappedRotation": {
+        "X": 3.1415925,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 34,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 31,
+      "ParentSnapPointIndex": 0,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": -2.3841858E-07,
+        "Y": 1.4999998,
+        "Z": 5.9604645E-08
+      },
+      "Rotation": {
+        "X": 2.0368969E-14,
+        "Y": -1.4901159E-08,
+        "Z": 1.7484557E-07
+      },
+      "UnsnappedRotation": {
+        "X": -0,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
+    },
+    {
+      "IsSurfaceAttached": false,
+      "PartIndex": 35,
+      "PartDefID": "CAPSULE_1a4b",
+      "ParentIndex": 31,
+      "ParentSnapPointIndex": 1,
+      "SnapPointIndex": 1,
+      "Position": {
+        "X": 2.3841858E-07,
+        "Y": -1.5,
+        "Z": -5.9604645E-08
+      },
+      "Rotation": {
+        "X": 1.4566244E-14,
+        "Y": -1.4901159E-08,
+        "Z": -3.1415925
+      },
+      "UnsnappedRotation": {
+        "X": 3.1415925,
+        "Y": 0,
+        "Z": 0
+      },
+      "Components": []
     }
   ]
 }

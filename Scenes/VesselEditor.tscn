@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://b4ajfh7q5214k"]
+[gd_scene load_steps=31 format=3 uid="uid://b4ajfh7q5214k"]
 
 [ext_resource type="Script" uid="uid://ba3yuukuk7yel" path="res://Scripts/VesselEditor/Editor.cs" id="1_a5mxq"]
 [ext_resource type="Script" uid="uid://b2ucfws7t3bhu" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
@@ -21,7 +21,6 @@
 [ext_resource type="Texture2D" uid="uid://bt31em58k1gc3" path="res://Resources/UITextures/InputIcons/LeftClick.png" id="14_jts1t"]
 [ext_resource type="PackedScene" uid="uid://ba0yb6a4ei3ua" path="res://Scenes/VesselEditorUI/PartContextUI/MenuComponents/ValueInput.tscn" id="15_s2kt1"]
 [ext_resource type="Texture2D" uid="uid://b1ov6e8mhffhi" path="res://Resources/UITextures/InputIcons/RightClick.png" id="15_sprtt"]
-[ext_resource type="PackedScene" uid="uid://bp0y71wbm8kj" path="res://Resources/Parts/Scenes/tank.tscn" id="22_sprtt"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vqfw5"]
 sky_top_color = Color(0.177378, 0.470621, 0.689949, 1)
@@ -110,7 +109,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.74222, 0, 0)
 
 [node name="Cube" parent="." instance=ExtResource("5_60qqo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.32511, 0, 0)
-PartDefID = "CUBE_6f6f"
 
 [node name="GizmoTranslate" parent="." instance=ExtResource("8_txf6a")]
 visible = false
@@ -210,7 +208,3 @@ ComponentMenus = Dictionary[int, PackedScene]({
 })
 ContextMenuScene = ExtResource("12_giy6m")
 ValueInputScene = ExtResource("15_s2kt1")
-
-[node name="Tank" parent="." instance=ExtResource("22_sprtt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6208291, 0, 2.7114475)
-PartDefID = "TANK_12g3"

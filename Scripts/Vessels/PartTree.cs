@@ -16,13 +16,16 @@ public class PartTree
         Parts = [];
     }
 
-    public PartTree(VesselPart root, Vessel vessel)
+    public PartTree(VesselPart root)
     {
         RootPart = root;
-        ParentVessel = vessel;
-        
         Parts = [root];
         Parts.AddRange(root.GetAllDescendantParts());
+    }
+
+    public PartTree(VesselPart root, Vessel vessel) : this(root)
+    {
+        ParentVessel = vessel;
     }
 
     public void InitializeParts()
