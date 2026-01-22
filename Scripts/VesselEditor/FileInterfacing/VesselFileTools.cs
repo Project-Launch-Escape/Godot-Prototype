@@ -12,33 +12,57 @@ public static class VesselFileTools
 		WriteIndented = true,
 		IncludeFields = true
 	};
-	public static void SavePartToFile(VesselPart part, bool includeDescendents = true)
+	public static void SaveEditorStateToFile(string path)
 	{
-		var fileName = "vessel.json";
-		
-		var savePath = Editor.VesselFileDirectory + fileName;
-		var save = FileAccess.Open(savePath, FileAccess.ModeFlags.Write);
+		var save = FileAccess.Open(path, FileAccess.ModeFlags.Write);
 
-		var jsonReady = new PartTreeJSON(part);
-		var jsonString = JsonSerializer.Serialize(jsonReady, DefaultOptions);
+		var jsonString = GetEditorFileJsonString(Editor.EditorNode.GetRootParts());
 		
-		GD.Print($"Json Stored Successfully at ({savePath})!");
+		GD.Print($"Json Stored Successfully at ({path})!");
 		save.StoreLine(jsonString);
 		save.Close();
 	}
 
-	public static void LoadVesselFromFile(string path)
+	public static string GetEditorFileJsonString(VesselPart[] rootParts)
 	{
-		var savePath = Editor.VesselFileDirectory + "vessel.json";
-		var save = FileAccess.Open(savePath, FileAccess.ModeFlags.Read);
-		var json = save.GetAsText();
-
-		var partTreeJSON = JsonSerializer.Deserialize<PartTreeJSON>(json, DefaultOptions);
-
-		var partTree = partTreeJSON.ToPartTree();
-		Editor.EditorNode.AddChild(partTree.RootPart);
+		var jsonReady = new EditorFile(rootParts);
+		return JsonSerializer.Serialize(jsonReady, DefaultOptions);
 	}
 
+	public static void LoadEditorFileFromFilePath(string filePath)
+	{
+		var editorFile = GetEditorFileFromFilePath(filePath);
+		Editor.EditorNode.ClearEditor();
+		editorFile.LoadEditorFile();
+	}
+	public static EditorFile GetEditorFileFromFilePath(string filePath)
+	{
+		var save = FileAccess.Open(filePath, FileAccess.ModeFlags.Read);
+		var jsonString = save.GetAsText();
+		return GetEditorFileFromJson(jsonString);
+	}
+	public static EditorFile GetEditorFileFromJson(string jsonString)
+	{
+		return JsonSerializer.Deserialize<EditorFile>(jsonString, DefaultOptions);
+	}
+
+	public static string GetPartTreeJsonString(VesselPart rootPart)
+	{
+		var jsonReady = new PartTreeJSON(rootPart);
+		return JsonSerializer.Serialize(jsonReady, DefaultOptions);
+	}
+	public static VesselPart GetVesselRootFromJson(string jsonString)
+	{
+		var partTreeJSON = JsonSerializer.Deserialize<PartTreeJSON>(jsonString, DefaultOptions);
+
+		var partTree = partTreeJSON.ToPartTree();
+		return partTree.RootPart;
+	}
+	
+
+
+	
+	
 	public static PackedScene GetPartSceneFromName(string partName)
 	{
 		var fileNames = DirAccess.GetFilesAt(Editor.PartDefinitionDirectory);

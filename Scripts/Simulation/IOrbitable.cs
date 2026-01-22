@@ -2,7 +2,7 @@ using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.Simulation;
 
-public interface IOrbitable
+public interface IOrbiter
 {
     public string Name => this is Celestial celestial? celestial.Name : ((Vessel)this).Name;
 

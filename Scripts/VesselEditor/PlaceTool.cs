@@ -48,13 +48,13 @@ public partial class PlaceTool : Node3D, IToolable
 		}
 		
 		var rayResults = Editor.GetMouseHoveredRayResults();
-
 		if (rayResults.Count == 0 || TranslateTool.GizmoActive) return;
+		
 		var selectedPart = (VesselPart)rayResults["collider"];
 		if (Shift)
 		{
 			selectedPart = Editor.DuplicatePart(selectedPart);
-			AddChild(selectedPart);
+			Editor.EditorNode.AddChild(selectedPart);
 		}
 
 		_currentPlacingPart = selectedPart;
@@ -70,9 +70,7 @@ public partial class PlaceTool : Node3D, IToolable
 				snapPoint.Unattatch();
 			}
 		}
-		selectedPart.ParentPart?.ChildParts.Remove(selectedPart);
 		selectedPart.Reparent(this);
-		//_unsnappedTransform = _currentPlacingPart.Transform;
 	}
 	
 	private void ProcessPlacingPartState()
@@ -83,7 +81,6 @@ public partial class PlaceTool : Node3D, IToolable
 		
 		var partTransform = GetPlacingPartTransform();
 		_currentPlacingPart.Transform = partTransform;
-		//_unsnappedTransform = _currentPlacingPart.Basis;
 	}
 
 	private Transform3D GetPlacingPartTransform()
@@ -213,7 +210,7 @@ public partial class PlaceTool : Node3D, IToolable
 		_currentPlacingPart = (VesselPart)partDefs[n].Scene.Instantiate();
 		_currentPlacingPart.PartDefID = partDefs[n].ID;
 		
-		AddChild(_currentPlacingPart);
+		Editor.EditorNode.AddChild(_currentPlacingPart);
 	}
 
 	private void DeselectPart()
@@ -240,7 +237,6 @@ public partial class PlaceTool : Node3D, IToolable
 			{
 				if (_currentPlacingPart.GetAllDescendantParts().Contains(_otherAttachingPart)) return;
 				_currentPlacingPart.Reparent(_otherAttachingPart);
-				_otherAttachingPart.ChildParts.Add(_currentPlacingPart);
 			}
 		}
 		
@@ -269,6 +265,9 @@ public partial class PlaceTool : Node3D, IToolable
 			case InputEventKey { Keycode: Key.Shift} key:
 				Shift = key.Pressed;
 				break;
+			case InputEventKey { Keycode: Key.C, CtrlPressed: true }:
+				
+				break;
 			case InputEventKey { Keycode: Key.A, Pressed: false} when IsToolActive:
 				_currentPlacingPart.RotateZ(Mathf.Pi / 2);
 				_currentPlacingPart.UnsnappedBasis = _currentPlacingPart.UnsnappedBasis.Rotated(Vector3.Back, Mathf.Pi / 2);
@@ -292,9 +291,6 @@ public partial class PlaceTool : Node3D, IToolable
 			case InputEventKey { Keycode: Key.E, Pressed: false} when IsToolActive:
 				_currentPlacingPart.RotateY(-Mathf.Pi / 2);
 				_currentPlacingPart.UnsnappedBasis = _currentPlacingPart.UnsnappedBasis.Rotated(Vector3.Up, -Mathf.Pi / 2);
-				break;
-			case InputEventKey { Keycode: Key.P, Pressed: false} when IsToolActive:
-				Editor.SaveVessel(_currentPlacingPart);
 				break;
 			case InputEventMouseButton { ButtonIndex: MouseButton.WheelUp } when IsToolActive && Shift:
 				_placingDist += 1;

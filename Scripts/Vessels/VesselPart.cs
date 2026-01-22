@@ -70,23 +70,12 @@ public partial class VesselPart : StaticBody3D
 	public List<VesselPart> GetChildParts()
 	{
 		var childParts = new List<VesselPart>();
-		
+
 		foreach (var child in GetChildren())
 		{
 			if (child is VesselPart childPart) childParts.Add(childPart);
 		}
-		return childParts;
-	}
 
-	public void SetDescendantOwner(bool set)
-	{
-		foreach (var descendant in GetAllDescendantParts())
-		{
-			descendant.Owner = set ? this : null;
-			foreach (var component in Components)
-			{
-				component.Owner = set ? this : null;
-			}
-		}
+		return childParts;
 	}
 }

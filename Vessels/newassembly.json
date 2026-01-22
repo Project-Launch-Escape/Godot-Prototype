@@ -1,0 +1,414 @@
+{
+  "Assemblies": [
+    {
+      "Parts": [
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 0,
+          "PartDefID": "CAPSULE_1a4b",
+          "ParentIndex": -1,
+          "ParentSnapPointIndex": -2,
+          "SnapPointIndex": -2,
+          "Position": {
+            "X": -3.323555,
+            "Y": 4.309418,
+            "Z": 2.5262794
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": []
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 1,
+          "PartDefID": "TANK_12g3",
+          "ParentIndex": 0,
+          "ParentSnapPointIndex": 1,
+          "SnapPointIndex": 0,
+          "Position": {
+            "X": 2.3841858E-07,
+            "Y": -1.5,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.7484558E-07
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": [
+            {
+              "ComponentType": "FuelTank",
+              "FuelLevels": [
+                {
+                  "FuelType": "Methane",
+                  "Level": 300,
+                  "Max": 300
+                },
+                {
+                  "FuelType": "Oxidizer",
+                  "Level": 100,
+                  "Max": 100
+                }
+              ],
+              "Index": 0,
+              "BaseMass": 0
+            }
+          ]
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 2,
+          "PartDefID": "ENGINE_132h",
+          "ParentIndex": 1,
+          "ParentSnapPointIndex": 1,
+          "SnapPointIndex": 0,
+          "Position": {
+            "X": 2.3841858E-07,
+            "Y": -1.4999999,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.7484558E-07
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": [
+            {
+              "ComponentType": "Engine",
+              "Index": 0,
+              "BaseMass": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Parts": [
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 0,
+          "PartDefID": "CAPSULE_1a4b",
+          "ParentIndex": -1,
+          "ParentSnapPointIndex": -2,
+          "SnapPointIndex": -2,
+          "Position": {
+            "X": 0.1007949,
+            "Y": 4.668902,
+            "Z": 2.5262794
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": []
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 1,
+          "PartDefID": "CUBE_6f6f",
+          "ParentIndex": 0,
+          "ParentSnapPointIndex": 1,
+          "SnapPointIndex": 2,
+          "Position": {
+            "X": 8.940697E-08,
+            "Y": -0.99999976,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.7484558E-07
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": []
+        },
+        {
+          "IsSurfaceAttached": true,
+          "PartIndex": 2,
+          "PartDefID": "CAPSULE_1a4b",
+          "ParentIndex": 0,
+          "ParentSnapPointIndex": -1,
+          "SnapPointIndex": -1,
+          "Position": {
+            "X": 0.215223,
+            "Y": -0.2535658,
+            "Z": 0.9765594
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 1.7877177,
+            "Z": 1.5707964
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": []
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 3,
+          "PartDefID": "CUBE_6f6f",
+          "ParentIndex": 1,
+          "ParentSnapPointIndex": 3,
+          "SnapPointIndex": 2,
+          "Position": {
+            "X": 8.940697E-08,
+            "Y": -1,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.7484558E-07
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": []
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 4,
+          "PartDefID": "CUBE_6f6f",
+          "ParentIndex": 3,
+          "ParentSnapPointIndex": 3,
+          "SnapPointIndex": 2,
+          "Position": {
+            "X": 8.195639E-08,
+            "Y": -1,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.7484558E-07
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": []
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 5,
+          "PartDefID": "CUBE_6f6f",
+          "ParentIndex": 3,
+          "ParentSnapPointIndex": 0,
+          "SnapPointIndex": 2,
+          "Position": {
+            "X": 1,
+            "Y": 0,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.5707964
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.5707963
+          },
+          "Components": []
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 6,
+          "PartDefID": "ENGINE_132h",
+          "ParentIndex": 4,
+          "ParentSnapPointIndex": 3,
+          "SnapPointIndex": 0,
+          "Position": {
+            "X": 8.940697E-08,
+            "Y": -1,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.7484558E-07
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": [
+            {
+              "ComponentType": "Engine",
+              "Index": 0,
+              "BaseMass": 0
+            }
+          ]
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 7,
+          "PartDefID": "CUBE_6f6f",
+          "ParentIndex": 5,
+          "ParentSnapPointIndex": 3,
+          "SnapPointIndex": 2,
+          "Position": {
+            "X": 8.195639E-08,
+            "Y": -1,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.7484558E-07
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": []
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 8,
+          "PartDefID": "ENGINE_132h",
+          "ParentIndex": 7,
+          "ParentSnapPointIndex": 3,
+          "SnapPointIndex": 0,
+          "Position": {
+            "X": 8.940697E-08,
+            "Y": -1,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.7484558E-07
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": [
+            {
+              "ComponentType": "Engine",
+              "Index": 0,
+              "BaseMass": 0
+            }
+          ]
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 9,
+          "PartDefID": "CUBE_6f6f",
+          "ParentIndex": 7,
+          "ParentSnapPointIndex": 5,
+          "SnapPointIndex": 2,
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": -1
+          },
+          "Rotation": {
+            "X": -1.5707964,
+            "Y": -3.1415925,
+            "Z": 0
+          },
+          "UnsnappedRotation": {
+            "X": -8.742278E-08,
+            "Y": 1.5707963,
+            "Z": 1.5707964
+          },
+          "Components": []
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 10,
+          "PartDefID": "CUBE_6f6f",
+          "ParentIndex": 9,
+          "ParentSnapPointIndex": 3,
+          "SnapPointIndex": 2,
+          "Position": {
+            "X": 8.195639E-08,
+            "Y": -1,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.7484558E-07
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": []
+        },
+        {
+          "IsSurfaceAttached": false,
+          "PartIndex": 11,
+          "PartDefID": "ENGINE_132h",
+          "ParentIndex": 10,
+          "ParentSnapPointIndex": 3,
+          "SnapPointIndex": 0,
+          "Position": {
+            "X": 8.940697E-08,
+            "Y": -1,
+            "Z": 0
+          },
+          "Rotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 1.7484558E-07
+          },
+          "UnsnappedRotation": {
+            "X": -0,
+            "Y": 0,
+            "Z": 0
+          },
+          "Components": [
+            {
+              "ComponentType": "Engine",
+              "Index": 0,
+              "BaseMass": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

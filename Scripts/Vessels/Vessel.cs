@@ -6,11 +6,12 @@ using GodotPrototype.Scripts.Simulation.DoublePrecision;
 using GodotPrototype.Scripts.Simulation.Physics;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 using GodotPrototype.Scripts.UserInterface;
+using GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 
 namespace GodotPrototype.Scripts.Vessels;
 
 [GlobalClass, Icon("res://Resources/Icons/VesselIcon.png")]
-public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
+public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 {
 	public static readonly List<Vessel> AllVessels = [];
 	public static Vessel ActiveVessel;
@@ -53,7 +54,7 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
 		FlightCamera.AddToRenderSpaceUpdate(this);
 		
 		FuelSystems.Add(new FuelSystem());
-		InitializePartsFromFile("res://Vessels/save.tscn");
+		InitializePartsFromFile("vessel.json");
 		
 		var parentBody = Celestial.CelestialDict["Luna"];
 		//PositionLocal = parentBody.GetSurfacePosition(0, Math.PI / 2);
@@ -78,11 +79,13 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
 
 	private void InitializePartsFromFile(string filePath)
 	{
-		var root = ResourceLoader.Load<PackedScene>(filePath).Instantiate<VesselPart>();
+		/*
+		var root = VesselFileTools.GetPartTreeFromFilePath(filePath);
 		root.Position = Vector3.Zero;
 		AddChild(root);
 
 		PartAssembly = new PartTree(root, this);
+		PartAssembly.InitializeParts();
 		
 		foreach (var part in PartAssembly.Parts)
 		{
@@ -91,6 +94,7 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbitable
 				if (partChild is CollisionShape3D) partChild.Reparent(this);
 			}
 		}
+		*/
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state)

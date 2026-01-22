@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://b4ajfh7q5214k"]
+[gd_scene load_steps=33 format=3 uid="uid://b4ajfh7q5214k"]
 
 [ext_resource type="Script" uid="uid://ba3yuukuk7yel" path="res://Scripts/VesselEditor/Editor.cs" id="1_a5mxq"]
 [ext_resource type="Script" uid="uid://b2ucfws7t3bhu" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
@@ -21,6 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://bt31em58k1gc3" path="res://Resources/UITextures/InputIcons/LeftClick.png" id="14_jts1t"]
 [ext_resource type="PackedScene" uid="uid://ba0yb6a4ei3ua" path="res://Scenes/VesselEditorUI/PartContextUI/MenuComponents/ValueInput.tscn" id="15_s2kt1"]
 [ext_resource type="Texture2D" uid="uid://b1ov6e8mhffhi" path="res://Resources/UITextures/InputIcons/RightClick.png" id="15_sprtt"]
+[ext_resource type="Script" uid="uid://cyy1ta1vnyqhc" path="res://Scripts/VesselEditor/EditorUI/SaveLoadUI.cs" id="22_sprtt"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vqfw5"]
 sky_top_color = Color(0.177378, 0.470621, 0.689949, 1)
@@ -85,6 +86,13 @@ border_width_right = 5
 border_width_bottom = 5
 border_color = Color(0.59, 0.29814667, 0.2773, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e6dcg"]
+bg_color = Color(0.32360998, 0.3066, 0.42, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
 [node name="VesselEditor" type="Node3D"]
 script = ExtResource("1_a5mxq")
 
@@ -125,6 +133,7 @@ script = ExtResource("7_r60lh")
 texture_filter = 1
 anchors_preset = 9
 anchor_bottom = 1.0
+offset_top = 91.0
 offset_right = 300.0
 offset_bottom = -237.0
 grow_vertical = 2
@@ -138,12 +147,13 @@ icon_mode = 0
 fixed_icon_size = Vector2i(75, 75)
 script = ExtResource("7_y6rsm")
 
-[node name="ToolSelector" type="ItemList" parent="UI" node_paths=PackedStringArray("_leftOutline", "_rightOutline")]
+[node name="SelectorPanel" type="ItemList" parent="UI" node_paths=PackedStringArray("_leftOutline", "_rightOutline")]
 texture_filter = 1
-offset_left = 400.0
-offset_top = 10.0
-offset_right = 787.0
-offset_bottom = 110.0
+clip_contents = false
+offset_left = 406.0
+offset_top = 55.0
+offset_right = 793.0
+offset_bottom = 155.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/v_separation = 12
 theme_override_font_sizes/font_size = 16
@@ -167,7 +177,7 @@ script = ExtResource("9_bgqvo")
 _leftOutline = NodePath("LeftClickOutline")
 _rightOutline = NodePath("RightClickOutline")
 
-[node name="LeftClickOutline" type="Panel" parent="UI/ToolSelector"]
+[node name="LeftClickOutline" type="Panel" parent="UI/SelectorPanel"]
 layout_mode = 0
 offset_left = 6.0
 offset_top = 5.0
@@ -176,7 +186,7 @@ offset_bottom = 94.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_h32pl")
 
-[node name="RightClickOutline" type="Panel" parent="UI/ToolSelector"]
+[node name="RightClickOutline" type="Panel" parent="UI/SelectorPanel"]
 layout_mode = 0
 offset_left = 98.0
 offset_top = 5.0
@@ -185,18 +195,20 @@ offset_bottom = 94.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_frkoo")
 
-[node name="LeftClickHint" type="TextureRect" parent="UI"]
-offset_left = 356.0
-offset_top = 12.0
-offset_right = 396.0
-offset_bottom = 52.0
+[node name="LeftClickHint" type="TextureRect" parent="UI/SelectorPanel"]
+layout_mode = 0
+offset_left = -49.0
+offset_top = 4.0
+offset_right = -9.0
+offset_bottom = 44.0
 texture = ExtResource("14_jts1t")
 
-[node name="RightClickHint" type="TextureRect" parent="UI"]
-offset_left = 356.0
-offset_top = 59.0
-offset_right = 396.0
-offset_bottom = 99.0
+[node name="RightClickHint" type="TextureRect" parent="UI/SelectorPanel"]
+layout_mode = 0
+offset_left = -49.0
+offset_top = 51.0
+offset_right = -9.0
+offset_bottom = 91.0
 texture = ExtResource("15_sprtt")
 
 [node name="ContextMenuController" type="Node" parent="UI"]
@@ -208,3 +220,59 @@ ComponentMenus = Dictionary[int, PackedScene]({
 })
 ContextMenuScene = ExtResource("12_giy6m")
 ValueInputScene = ExtResource("15_s2kt1")
+
+[node name="ActionBar" type="Node" parent="UI" node_paths=PackedStringArray("_fileWindow", "ActionBar", "_currentFilelabel")]
+script = ExtResource("22_sprtt")
+_fileWindow = NodePath("FileDialog")
+ActionBar = NodePath("MenuBar")
+_currentFilelabel = NodePath("TopBar/CurrentFile")
+
+[node name="FileDialog" type="FileDialog" parent="UI/ActionBar"]
+oversampling_override = 1.0
+root_subfolder = "Vessels/"
+filters = PackedStringArray("*.json")
+hidden_files_toggle_enabled = false
+favorites_enabled = false
+recent_list_enabled = false
+
+[node name="TopBar" type="Panel" parent="UI/ActionBar"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 32.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_e6dcg")
+
+[node name="CurrentFile" type="Label" parent="UI/ActionBar/TopBar"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -36.0
+offset_top = 5.0
+offset_right = 37.0
+offset_bottom = 28.0
+grow_horizontal = 2
+text = "FileName"
+horizontal_alignment = 1
+
+[node name="MenuBar" type="MenuBar" parent="UI/ActionBar"]
+offset_left = 8.0
+offset_right = 550.0
+offset_bottom = 40.0
+flat = true
+
+[node name="File" type="PopupMenu" parent="UI/ActionBar/MenuBar"]
+title = "File"
+size = Vector2i(200, 200)
+theme_override_constants/item_start_padding = 10
+theme_override_constants/item_end_padding = 100
+hide_on_checkable_item_selection = false
+item_count = 4
+item_0/text = "New Assembly"
+item_0/id = 3
+item_1/text = "Save"
+item_1/id = 0
+item_2/text = "Save as"
+item_2/id = 1
+item_3/text = "Load"
+item_3/id = 2

@@ -1,6 +1,7 @@
 using Godot;
 using GodotPrototype.Scripts.Simulation;
 using GodotPrototype.Scripts.Simulation.Physics;
+using GodotPrototype.Scripts.VesselEditor;
 using GodotPrototype.Scripts.Vessels;
 using OrbitMesh = GodotPrototype.Scripts.UserInterface.UIElements.OrbitMesh;
 
@@ -28,6 +29,8 @@ public partial class CelestialInitializer : Node
 	{
 		OrbitMesh.DefaultMeshParent = this;
 		FuelType.InitializeFuelTypes();
+		Editor.InitializeParts();
+		SnapPoint.SetVisualVisibility(false);
 	}
 
 	public override void _Ready()

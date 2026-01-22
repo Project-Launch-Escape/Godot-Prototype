@@ -32,10 +32,10 @@ public class PartTree
     {
         foreach (var part in Parts)
         {
-            part.InitializePart();
             if (!HasParentVessel) continue;
             part.ParentVessel = ParentVessel;
             part.ConnectedFuelSystem = ParentVessel.FuelSystems[0];
+            part.InitializePart();
         }
     }
     

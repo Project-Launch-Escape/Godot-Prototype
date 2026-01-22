@@ -14,7 +14,7 @@ public class Orbit : OrbitalElements
 	public Color Color;
 
 	public OrbitMesh OrbitLineNode;
-	public IOrbitable OrbitingObject;
+	public IOrbiter OrbitingObject;
 
 	public bool IsEscapeTrajectory => FindIfIsEscapeTrajectory();
 	public Range TrueAnomalyRange => GetTrueAnomalyRange(); // True Anomaly range assuming infinite SOI

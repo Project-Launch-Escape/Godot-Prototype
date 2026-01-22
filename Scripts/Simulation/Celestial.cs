@@ -10,7 +10,7 @@ using GodotPrototype.Scripts.UserInterface.UIElements.OrbitMarkers;
 namespace GodotPrototype.Scripts.Simulation;
 
 [GlobalClass, Icon("res://Resources/Icons/CelestialIcon.png")]
-public partial class Celestial : Node3D, IRenderable, IOrbitable, IDepictable
+public partial class Celestial : Node3D, IRenderable, IOrbiter, IDepictable
 {
 	public static readonly List<Celestial> AllCelestials = [];
 	public static readonly Dictionary<string, Celestial> CelestialDict = [];

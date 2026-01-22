@@ -45,15 +45,8 @@ public partial class SnapPoint : Node3D
 		
 		if (parentPart.GetAllDescendantParts().Contains(childPart)) return;
 
-		if (childPart.IsInsideTree())
-		{
-			childPart.Reparent(parentPart);
-			parentPart.ChildParts.Add(childPart);
-		}
-		else
-		{
-			parentPart.AddChild(childPart);
-		}
+		if (childPart.IsInsideTree()) childPart.Reparent(parentPart);
+		else parentPart.AddChild(childPart);
 		
 		parent.AttachTo(child);
 		child.AttachTo(parent);
@@ -61,7 +54,6 @@ public partial class SnapPoint : Node3D
 
 	public void Unattatch()
 	{
-		//AttachedPart.ChildParts.Remove(Parent);
 		AttachedSnapPoint = null;
 		_collisionShape.Disabled = false;
 		SetVisualState(SnapPointVisualState.Normal);

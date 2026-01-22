@@ -20,8 +20,6 @@ public partial class Editor : Node3D
 	public static EditorTool ToolLeft = EditorTool.Place;
 	public static EditorTool ToolRight = EditorTool.Modify;
 	
-	//private Node3D _copiedNode; Ctrl+C functionality to be added
-	
 	public static Editor EditorNode;
 
 
@@ -57,7 +55,7 @@ public partial class Editor : Node3D
 		}
 	}
 
-	private static void InitializeParts()
+	public static void InitializeParts()
 	{
 		var fileNames = DirAccess.GetFilesAt(PartDefinitionDirectory);
 		foreach (var fileName in fileNames)
@@ -66,7 +64,19 @@ public partial class Editor : Node3D
 			var partFile = ResourceLoader.Load<PartDefinition>(filePath);
 			PartDefinition.AddDefinition(partFile);
 		}
-		PartSelector.SelectorNode.InitializeParts(PartDefinition.PartDefinitions);
+		PartSelector.SelectorNode?.InitializeParts(PartDefinition.PartDefinitions);
+	}
+	
+	public VesselPart[] GetRootParts()
+	{
+		var rootParts = new List<VesselPart>();
+
+		foreach (var child in GetChildren())
+		{
+			if (child is VesselPart childPart) rootParts.Add(childPart);
+		}
+
+		return rootParts.ToArray();
 	}
 
 	private static void HandleToolInput(InputEventMouseButton mouseInput)
@@ -123,34 +133,18 @@ public partial class Editor : Node3D
 		else ToolRight = tool;
 	}
 
-	public static VesselPart DuplicatePart(VesselPart duplicant, bool includeDescendants = true)
+	public static VesselPart DuplicatePart(VesselPart duplicant)
 	{
-		duplicant.SetDescendantOwner(includeDescendants);
-
-		var scene = new PackedScene();
-		scene.Pack(duplicant);
-		if (includeDescendants) duplicant.SetDescendantOwner(false);
-		
-		var newPart = scene.Instantiate<VesselPart>();
-		//GD.Print("\n", $"OG: Mass: {duplicant.Mass}, SO: {duplicant.SnapPoints[0].Occupied}, {duplicant.ChildParts[0]}", "\n",
-		//$"OG: Mass: {newPart.Mass}, SO: {newPart.SnapPoints[0].Occupied}, {newPart.ChildParts[0]}");
-		return newPart;
+		var jsonString = VesselFileTools.GetPartTreeJsonString(duplicant);
+		return VesselFileTools.GetVesselRootFromJson(jsonString);
 	}
 
-	public static void SaveVessel(VesselPart vesselRootPart)
+	public void ClearEditor()
 	{
-		//vesselRootPart = DuplicatePart(vesselRootPart);
-		vesselRootPart.SetDescendantOwner(true);
-		
-		var scene = new PackedScene();
-		scene.Pack(vesselRootPart);
-		var error = ResourceSaver.Save(scene, VesselFileDirectory + "save.tscn");
-		if (error is not Error.Ok) GD.PrintErr(error);
-		
-		VesselFileTools.SavePartToFile(vesselRootPart);
-		
-		vesselRootPart.SetDescendantOwner(false);
-		//vesselRootPart.QueueFree();
+		foreach (var root in GetRootParts())
+		{
+			root.QueueFree();
+		}
 	}
 
 
@@ -159,7 +153,7 @@ public partial class Editor : Node3D
 		if (inputEvent is InputEventMouseButton mouseButton) HandleToolInput(mouseButton);
 		if (inputEvent is InputEventKey { Pressed: false , Keycode: Key.L})
 		{
-			VesselFileTools.LoadVesselFromFile("");
+			VesselFileTools.LoadEditorFileFromFilePath("res://Vessels/EditorSave.json");
 		}
 	}
 }
