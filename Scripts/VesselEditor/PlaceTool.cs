@@ -1,6 +1,8 @@
+using System.Text.Json;
 using Godot;
 using Godot.Collections;
 using GodotPrototype.Scripts.VesselEditor.EditorUI;
+using GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.VesselEditor;
@@ -8,7 +10,7 @@ namespace GodotPrototype.Scripts.VesselEditor;
 public partial class PlaceTool : Node3D, IToolable
 {
 	public static PlaceTool ToolNode;
-	private Camera3D Camera => Editor.Camera;
+	private VesselEditorCamera Camera => Editor.Camera;
 	
 	private VesselPart _currentPlacingPart;
 	private SnapPoint _attachingSnapPoint;
@@ -182,35 +184,40 @@ public partial class PlaceTool : Node3D, IToolable
 		}
 		var mouseDirection = Camera.ProjectRayNormal(GetViewport().GetMousePosition());
 		
-		var cameraPositionWithoutY = Camera.GlobalPosition with { Y = 0 };
+		var cameraPositionWithoutY = Camera.GlobalPosition - Camera.Origin with { Y = 0 };
 		var planeNormal = -cameraPositionWithoutY.Normalized();
-		var plane = new Plane(planeNormal, _placingDist - cameraPositionWithoutY.Length());
+		var plane = new Plane(planeNormal, planeNormal * _placingDist + cameraPositionWithoutY);
 		
-		var rayIntersection = plane.IntersectsRay(Camera.GlobalPosition, mouseDirection);
+		var rayIntersection = plane.IntersectsRay(Camera.GlobalPosition - Camera.Origin, mouseDirection);
 		newPos = rayIntersection ?? _currentPlacingPart.Position;
-		newTransform.Origin = newPos;
+		
+		newTransform.Origin = newPos + Camera.Origin;
 		newTransform.Basis = _currentPlacingPart.UnsnappedBasis;
 		
 		return newTransform;
 	}
 	
 	
-	// All of this is temporary for now
 	public void SelectPart(int n)
+	{
+		var partDefs = PartDefinition.PartDefinitions;
+		
+		var newPart = (VesselPart)partDefs[n].Scene.Instantiate();
+		newPart.PartDefID = partDefs[n].ID;
+		
+		SelectPart(newPart);
+	}
+
+	public void SelectPart(VesselPart part)
 	{
 		var distTemp = _placingDist;
 		DeselectPart();
-
-		var partDefs = PartDefinition.PartDefinitions;
-		if (n < 0 || n >= partDefs.Count) return;
 		_placingDist = distTemp; // So it doesn't reset
-
 		IsToolActive = true;
 		SnapPoint.SetVisualVisibility(true);
-		_currentPlacingPart = (VesselPart)partDefs[n].Scene.Instantiate();
-		_currentPlacingPart.PartDefID = partDefs[n].ID;
-		
-		Editor.EditorNode.AddChild(_currentPlacingPart);
+
+		_currentPlacingPart = part;
+		if (!part.IsInsideTree()) Editor.EditorNode.AddChild(_currentPlacingPart);
 	}
 
 	private void DeselectPart()
@@ -245,6 +252,26 @@ public partial class PlaceTool : Node3D, IToolable
 		if (!Editor.IsToolEnabled(EditorTool.Attach)) SnapPoint.SetVisualVisibility(false);
 	}
 
+	private void CopyPlacingToClipboard()
+	{
+		var json = VesselFileTools.GetPartTreeJsonString(_currentPlacingPart);
+		DisplayServer.ClipboardSet(json);
+	}
+	private void PasteVesselFromClipboard()
+	{
+		var json = DisplayServer.ClipboardGet();
+		
+		try
+		{
+			var rootPart = VesselFileTools.GetVesselRootFromJson(json);
+			SelectPart(rootPart);
+		}
+		catch (JsonException)
+		{
+			GD.PrintErr("Pasted string failed to parse");
+		}
+	}
+
 	public void OnToolEnable()
 	{
 		
@@ -265,8 +292,11 @@ public partial class PlaceTool : Node3D, IToolable
 			case InputEventKey { Keycode: Key.Shift} key:
 				Shift = key.Pressed;
 				break;
-			case InputEventKey { Keycode: Key.C, CtrlPressed: true }:
-				
+			case InputEventKey { Keycode: Key.C, CtrlPressed: true, ShiftPressed: false}:
+				CopyPlacingToClipboard();
+				break;
+			case InputEventKey { Keycode: Key.V, CtrlPressed: true, ShiftPressed: false}:
+				PasteVesselFromClipboard();
 				break;
 			case InputEventKey { Keycode: Key.A, Pressed: false} when IsToolActive:
 				_currentPlacingPart.RotateZ(Mathf.Pi / 2);

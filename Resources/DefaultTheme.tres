@@ -1,0 +1,60 @@
+[gd_resource type="Theme" load_steps=11 format=3 uid="uid://b0s7ysif5h015"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pnrau"]
+bg_color = Color(0.3599999, 0.24, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stf6b"]
+bg_color = Color(0.36078432, 0.23921569, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3n56c"]
+bg_color = Color(0.43437994, 0.3034, 0.74, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mlg4q"]
+resource_local_to_scene = true
+bg_color = Color(0.600306, 0.49007517, 0.87175065, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yn3i3"]
+bg_color = Color(0.3599999, 0.24, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vxw05"]
+bg_color = Color(0.5258517, 0.3963963, 0.8131244, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ui8s"]
+bg_color = Color(0.6970378, 0.6242353, 0.89812523, 1)
+border_color = Color(0.2051174, 0.20511746, 0.20511726, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="SystemFont" id="SystemFont_pnrau"]
+font_names = PackedStringArray("Lexend")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wa4v5"]
+bg_color = Color(0.2, 0.2, 0.25, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pai62"]
+bg_color = Color(0.3096, 0.28440002, 0.36, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[resource]
+default_font = SubResource("SystemFont_pnrau")
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_disabled_color = Color(1, 1, 1, 0.5568628)
+Button/styles/disabled = SubResource("StyleBoxFlat_pnrau")
+Button/styles/focus = SubResource("StyleBoxFlat_stf6b")
+Button/styles/hover = SubResource("StyleBoxFlat_3n56c")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_mlg4q")
+Button/styles/normal = SubResource("StyleBoxFlat_yn3i3")
+Button/styles/pressed = SubResource("StyleBoxFlat_vxw05")
+FileDialog/styles/panel = SubResource("StyleBoxFlat_7ui8s")
+Label/fonts/font = SubResource("SystemFont_pnrau")
+Panel/styles/panel = SubResource("StyleBoxFlat_wa4v5")
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_pai62")

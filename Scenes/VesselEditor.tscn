@@ -1,10 +1,9 @@
-[gd_scene load_steps=33 format=3 uid="uid://b4ajfh7q5214k"]
+[gd_scene load_steps=41 format=3 uid="uid://b4ajfh7q5214k"]
 
 [ext_resource type="Script" uid="uid://ba3yuukuk7yel" path="res://Scripts/VesselEditor/Editor.cs" id="1_a5mxq"]
 [ext_resource type="Script" uid="uid://b2ucfws7t3bhu" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
-[ext_resource type="PackedScene" uid="uid://0genpyip5sjc" path="res://Scenes/sphere.tscn" id="4_tshso"]
-[ext_resource type="PackedScene" uid="uid://d3t3v4jewjjhr" path="res://Resources/Parts/Scenes/cube.tscn" id="5_60qqo"]
 [ext_resource type="Script" uid="uid://mvrdcf02w5px" path="res://Scripts/VesselEditor/PlaceTool.cs" id="6_2h56u"]
+[ext_resource type="Theme" uid="uid://b0s7ysif5h015" path="res://Resources/DefaultTheme.tres" id="6_sprtt"]
 [ext_resource type="Texture2D" uid="uid://ucmrdfypttq0" path="res://Resources/UITextures/SelectionIcon.png" id="7_bgqvo"]
 [ext_resource type="Script" uid="uid://ctm5cnctg8ixr" path="res://Scripts/VesselEditor/AttachTool.cs" id="7_r60lh"]
 [ext_resource type="Script" uid="uid://cf5feccw1v1gv" path="res://Scripts/VesselEditor/EditorUI/PartSelector.cs" id="7_y6rsm"]
@@ -21,12 +20,14 @@
 [ext_resource type="Texture2D" uid="uid://bt31em58k1gc3" path="res://Resources/UITextures/InputIcons/LeftClick.png" id="14_jts1t"]
 [ext_resource type="PackedScene" uid="uid://ba0yb6a4ei3ua" path="res://Scenes/VesselEditorUI/PartContextUI/MenuComponents/ValueInput.tscn" id="15_s2kt1"]
 [ext_resource type="Texture2D" uid="uid://b1ov6e8mhffhi" path="res://Resources/UITextures/InputIcons/RightClick.png" id="15_sprtt"]
+[ext_resource type="Texture2D" uid="uid://cnkewuikd751w" path="res://Resources/UITextures/EditorBasePlate.png" id="21_jts1t"]
+[ext_resource type="Script" uid="uid://dj7fasubd5ro2" path="res://Scripts/VesselEditor/EditorUI/LaunchMenu.cs" id="22_e6dcg"]
 [ext_resource type="Script" uid="uid://cyy1ta1vnyqhc" path="res://Scripts/VesselEditor/EditorUI/SaveLoadUI.cs" id="22_sprtt"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vqfw5"]
-sky_top_color = Color(0.177378, 0.470621, 0.689949, 1)
+sky_top_color = Color(0.3758172, 0.33451146, 0.9318945, 1)
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
-ground_bottom_color = Color(0.13471, 0.220951, 0.325942, 1)
+ground_bottom_color = Color(0.19520012, 0.17199865, 0.41558966, 1)
 ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
 
 [sub_resource type="Sky" id="Sky_6kmqj"]
@@ -34,7 +35,6 @@ sky_material = SubResource("ProceduralSkyMaterial_vqfw5")
 
 [sub_resource type="Environment" id="Environment_175yu"]
 background_mode = 2
-background_color = Color(0.0931457, 0.471752, 0.711669, 1)
 background_intensity = 20000.0
 sky = SubResource("Sky_6kmqj")
 ambient_light_source = 2
@@ -49,8 +49,6 @@ glow_enabled = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bgqvo"]
 bg_color = Color(0.2754, 0.31200668, 0.34, 1)
-border_width_left = 5
-border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
 
@@ -61,13 +59,8 @@ content_margin_right = 4.0
 content_margin_bottom = 4.0
 bg_color = Color(0.26400003, 0.2904, 0.33, 1)
 border_width_left = 4
-border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
 corner_detail = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h32pl"]
@@ -87,11 +80,57 @@ border_width_bottom = 5
 border_color = Color(0.59, 0.29814667, 0.2773, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e6dcg"]
-bg_color = Color(0.32360998, 0.3066, 0.42, 1)
+bg_color = Color(0.36782667, 0.2744, 0.49, 1)
+border_width_bottom = 2
+border_color = Color(0.0866409, 0.08256657, 0.12683016, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sprtt"]
+content_margin_top = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vmihi"]
+content_margin_top = 5.0
+bg_color = Color(0, 0, 0, 0.3254902)
+expand_margin_left = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_asrsh"]
+content_margin_top = 5.0
+bg_color = Color(0, 0, 0, 0.101960786)
+expand_margin_left = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eu1sv"]
+bg_color = Color(0.2052, 0.27486005, 0.36, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpblq"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+expand_margin_left = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sprtt"]
+albedo_texture = ExtResource("21_jts1t")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_e6dcg"]
+size = Vector2(10, 10)
+orientation = 1
 
 [node name="VesselEditor" type="Node3D"]
 script = ExtResource("1_a5mxq")
@@ -106,17 +145,12 @@ attributes = SubResource("CameraAttributesPractical_vqfw5")
 fov = 70.0
 script = ExtResource("2_npby0")
 CameraSensitivity = 0.2
+MoveSpeed = 0.001
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.629456, 0.777036, 0, -0.777036, 0.629456, 0, 0, 0)
 light_intensity_lux = 50000.0
 light_temperature = 8000.0
-
-[node name="Sphere" parent="." instance=ExtResource("4_tshso")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.74222, 0, 0)
-
-[node name="Cube" parent="." instance=ExtResource("5_60qqo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.32511, 0, 0)
 
 [node name="GizmoTranslate" parent="." instance=ExtResource("8_txf6a")]
 visible = false
@@ -133,10 +167,11 @@ script = ExtResource("7_r60lh")
 texture_filter = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_top = 91.0
+offset_top = 32.0
 offset_right = 300.0
-offset_bottom = -237.0
+offset_bottom = -296.0
 grow_vertical = 2
+theme = ExtResource("6_sprtt")
 theme_override_styles/panel = SubResource("StyleBoxFlat_bgqvo")
 allow_rmb_select = true
 max_text_lines = 3
@@ -150,10 +185,11 @@ script = ExtResource("7_y6rsm")
 [node name="SelectorPanel" type="ItemList" parent="UI" node_paths=PackedStringArray("_leftOutline", "_rightOutline")]
 texture_filter = 1
 clip_contents = false
-offset_left = 406.0
-offset_top = 55.0
-offset_right = 793.0
-offset_bottom = 155.0
+offset_left = 295.0
+offset_top = 29.0
+offset_right = 682.0
+offset_bottom = 129.0
+theme = ExtResource("6_sprtt")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/v_separation = 12
 theme_override_font_sizes/font_size = 16
@@ -197,18 +233,18 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_frkoo")
 
 [node name="LeftClickHint" type="TextureRect" parent="UI/SelectorPanel"]
 layout_mode = 0
-offset_left = -49.0
-offset_top = 4.0
-offset_right = -9.0
-offset_bottom = 44.0
+offset_left = 387.0
+offset_top = 7.0
+offset_right = 427.0
+offset_bottom = 47.0
 texture = ExtResource("14_jts1t")
 
 [node name="RightClickHint" type="TextureRect" parent="UI/SelectorPanel"]
 layout_mode = 0
-offset_left = -49.0
-offset_top = 51.0
-offset_right = -9.0
-offset_bottom = 91.0
+offset_left = 387.0
+offset_top = 59.0
+offset_right = 427.0
+offset_bottom = 99.0
 texture = ExtResource("15_sprtt")
 
 [node name="ContextMenuController" type="Node" parent="UI"]
@@ -221,15 +257,12 @@ ComponentMenus = Dictionary[int, PackedScene]({
 ContextMenuScene = ExtResource("12_giy6m")
 ValueInputScene = ExtResource("15_s2kt1")
 
-[node name="ActionBar" type="Node" parent="UI" node_paths=PackedStringArray("_fileWindow", "ActionBar", "_currentFilelabel")]
-script = ExtResource("22_sprtt")
-_fileWindow = NodePath("FileDialog")
-ActionBar = NodePath("MenuBar")
-_currentFilelabel = NodePath("TopBar/CurrentFile")
+[node name="ActionBar" type="Node" parent="UI"]
 
 [node name="FileDialog" type="FileDialog" parent="UI/ActionBar"]
 oversampling_override = 1.0
-root_subfolder = "Vessels/"
+position = Vector2i(100, 100)
+root_subfolder = "Saves/Vessels/"
 filters = PackedStringArray("*.json")
 hidden_files_toggle_enabled = false
 favorites_enabled = false
@@ -240,6 +273,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 32.0
 grow_horizontal = 2
+theme = ExtResource("6_sprtt")
 theme_override_styles/panel = SubResource("StyleBoxFlat_e6dcg")
 
 [node name="CurrentFile" type="Label" parent="UI/ActionBar/TopBar"]
@@ -252,21 +286,33 @@ offset_top = 5.0
 offset_right = 37.0
 offset_bottom = 28.0
 grow_horizontal = 2
-text = "FileName"
 horizontal_alignment = 1
 
 [node name="MenuBar" type="MenuBar" parent="UI/ActionBar"]
-offset_left = 8.0
+offset_left = 14.0
 offset_right = 550.0
-offset_bottom = 40.0
-flat = true
+offset_bottom = 34.0
+theme = ExtResource("6_sprtt")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_sprtt")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_sprtt")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_vmihi")
+theme_override_styles/hover = SubResource("StyleBoxFlat_asrsh")
+switch_on_hover = false
+
+[node name="FileMenuBehavior" type="Node" parent="UI/ActionBar/MenuBar" node_paths=PackedStringArray("_filePopupMenu", "_fileWindow", "_currentFilelabel")]
+script = ExtResource("22_sprtt")
+_filePopupMenu = NodePath("../File")
+_fileWindow = NodePath("../../FileDialog")
+_currentFilelabel = NodePath("../../TopBar/CurrentFile")
 
 [node name="File" type="PopupMenu" parent="UI/ActionBar/MenuBar"]
-title = "File"
-size = Vector2i(200, 200)
+oversampling_override = 1.0
+title = "  File  "
+size = Vector2i(239, 200)
 theme_override_constants/item_start_padding = 10
 theme_override_constants/item_end_padding = 100
 hide_on_checkable_item_selection = false
+allow_search = false
 item_count = 4
 item_0/text = "New Assembly"
 item_0/id = 3
@@ -276,3 +322,78 @@ item_2/text = "Save as"
 item_2/id = 1
 item_3/text = "Load"
 item_3/id = 2
+
+[node name="LaunchMenuBehavior" type="Node" parent="UI/ActionBar/MenuBar" node_paths=PackedStringArray("_launchMenu", "_landedChecker", "_celestialInput", "_launchSettingsPanel", "_closeButton")]
+script = ExtResource("22_e6dcg")
+_launchMenu = NodePath("../Launch")
+_landedChecker = NodePath("../../Launch Settings/VBoxContainer/SurfaceInput/CheckBox")
+_celestialInput = NodePath("../../Launch Settings/VBoxContainer/CelestialInput/LineEdit")
+_launchSettingsPanel = NodePath("../../Launch Settings")
+_closeButton = NodePath("../../Launch Settings/CloseButton")
+
+[node name="Launch" type="PopupMenu" parent="UI/ActionBar/MenuBar"]
+title = "  Launch  "
+size = Vector2i(200, 200)
+theme_override_constants/item_start_padding = 10
+theme_override_constants/item_end_padding = 100
+hide_on_checkable_item_selection = false
+allow_search = false
+item_count = 2
+item_0/text = "Select Launch Vehicle"
+item_0/id = 0
+item_1/text = "Open Launch Configuration"
+item_1/id = 1
+
+[node name="Launch Settings" type="Panel" parent="UI/ActionBar"]
+visible = false
+offset_left = 592.0
+offset_top = 179.0
+offset_right = 797.0
+offset_bottom = 316.0
+theme = ExtResource("6_sprtt")
+theme_override_styles/panel = SubResource("StyleBoxFlat_eu1sv")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ActionBar/Launch Settings"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 27.0
+offset_right = 199.0
+offset_bottom = 131.0
+theme_override_constants/separation = 10
+
+[node name="SurfaceInput" type="Label" parent="UI/ActionBar/Launch Settings/VBoxContainer"]
+layout_mode = 2
+text = "Start On Surface?"
+
+[node name="CheckBox" type="CheckBox" parent="UI/ActionBar/Launch Settings/VBoxContainer/SurfaceInput"]
+layout_mode = 0
+offset_left = 166.0
+offset_right = 186.0
+offset_bottom = 20.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_xpblq")
+
+[node name="CelestialInput" type="Label" parent="UI/ActionBar/Launch Settings/VBoxContainer"]
+layout_mode = 2
+text = "Celestial:"
+
+[node name="LineEdit" type="LineEdit" parent="UI/ActionBar/Launch Settings/VBoxContainer/CelestialInput"]
+layout_mode = 0
+offset_left = 78.0
+offset_top = -4.0
+offset_right = 189.0
+offset_bottom = 24.0
+theme = ExtResource("6_sprtt")
+placeholder_text = "_"
+
+[node name="CloseButton" type="Button" parent="UI/ActionBar/Launch Settings"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 201.0
+offset_bottom = 24.0
+text = "X"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
+material_override = SubResource("StandardMaterial3D_sprtt")
+mesh = SubResource("QuadMesh_e6dcg")

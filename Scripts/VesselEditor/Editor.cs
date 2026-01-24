@@ -11,11 +11,12 @@ namespace GodotPrototype.Scripts.VesselEditor;
 
 public partial class Editor : Node3D
 {
-	public static Camera3D Camera;
+	public static VesselEditorCamera Camera;
 	
 	public const string PartSceneDirectory = "res://Resources/Parts/Scenes/";
 	public const string PartDefinitionDirectory = "res://Resources/Parts/Definitions/";
-	public const string VesselFileDirectory = "res://Vessels/";
+	public const string VesselFileDirectory = "res://Saves/Vessels/";
+	public const string SavesDirectory = "res://Saves/";
 	
 	public static EditorTool ToolLeft = EditorTool.Place;
 	public static EditorTool ToolRight = EditorTool.Modify;
@@ -29,7 +30,7 @@ public partial class Editor : Node3D
 		FuelType.InitializeFuelTypes();
 		EditorNode = this;
 		SnapPoint.SetVisualVisibility(false);
-		Camera = GetViewport().GetCamera3D();
+		Camera = (VesselEditorCamera)GetViewport().GetCamera3D();
 	}
 
 	public static bool IsToolEnabled(EditorTool tool) => tool == ToolLeft || tool == ToolRight;
@@ -151,9 +152,5 @@ public partial class Editor : Node3D
 	public override void _UnhandledInput(InputEvent inputEvent)
 	{
 		if (inputEvent is InputEventMouseButton mouseButton) HandleToolInput(mouseButton);
-		if (inputEvent is InputEventKey { Pressed: false , Keycode: Key.L})
-		{
-			VesselFileTools.LoadEditorFileFromFilePath("res://Vessels/EditorSave.json");
-		}
 	}
 }

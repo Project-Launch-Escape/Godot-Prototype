@@ -5,8 +5,8 @@ namespace GodotPrototype.Scripts.VesselEditor.EditorUI;
 
 public partial class SaveLoadUI : Node
 {
+	[Export] private PopupMenu _filePopupMenu;
 	[Export] private FileDialog _fileWindow;
-	[Export] public MenuBar ActionBar;
 	[Export] private Label _currentFilelabel;
 	
 	private string _currentFilePath;
@@ -22,8 +22,7 @@ public partial class SaveLoadUI : Node
 
 	public override void _Ready()
 	{
-		var filePopup = ActionBar.GetMenuPopup(0);
-		filePopup.IdPressed += OnFileItemClicked;
+		_filePopupMenu.IdPressed += OnFileItemClicked;
 		_fileWindow.FileSelected += OnFileSelect;
 	}
 
@@ -75,7 +74,11 @@ public partial class SaveLoadUI : Node
 
 	private void OnSaveClicked()
 	{
-		if (string.IsNullOrEmpty(CurentFilePath)) return;
+		if (string.IsNullOrEmpty(CurentFilePath))
+		{
+			OnSaveAsClicked();
+			return;
+		}
 		VesselFileTools.SaveEditorStateToFile(CurentFilePath);
 	}
 
@@ -106,6 +109,12 @@ public partial class SaveLoadUI : Node
 				break;
 			case InputEventKey {Keycode: Key.S, CtrlPressed: true, ShiftPressed: true}:
 				OnSaveAsClicked();
+				break;
+			case InputEventKey {Keycode: Key.O, CtrlPressed: true, ShiftPressed: false}:
+				OnLoadClicked();
+				break;
+			case InputEventKey {Keycode: Key.N, CtrlPressed: true, ShiftPressed: false}:
+				OnNewClicked();
 				break;
 		}
 	}

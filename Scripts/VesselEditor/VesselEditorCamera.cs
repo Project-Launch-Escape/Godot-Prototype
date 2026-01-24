@@ -4,7 +4,7 @@ namespace GodotPrototype.Scripts.VesselEditor;
 
 public partial class VesselEditorCamera : Camera3D
 {
-	public readonly Vector3 Origin = Vector3.Zero;
+	public Vector3 Origin = Vector3.Zero;
 
 	[ExportGroup("Camera Settings")]
 	[Export]
@@ -18,6 +18,9 @@ public partial class VesselEditorCamera : Camera3D
 
 	[Export]
 	public float CameraSensitivity = 0.1f;
+	
+	[Export]
+	public float MoveSpeed = 0.1f;
 
 	private float _cameraYaw;
 	private float _cameraPitch;
@@ -45,6 +48,9 @@ public partial class VesselEditorCamera : Camera3D
 			case InputEventMouseButton { ButtonIndex: MouseButton.WheelUp or MouseButton.WheelDown } inputEventMouseButton when !Shift:
 				UpdateInputScroll(inputEventMouseButton);
 				break;
+			case InputEventMouseMotion { ButtonMask: MouseButtonMask.Middle} mouseMotion when Shift:
+				UpdateInputMove(mouseMotion);
+				break;
 		}
 	}
 
@@ -58,6 +64,13 @@ public partial class VesselEditorCamera : Camera3D
 	{
 		_cameraZoom += inputEventMouseButton.ButtonIndex == MouseButton.WheelUp ? -1 : 1;
 		_cameraZoom = Mathf.Clamp(_cameraZoom, MinCameraZoom, MaxCameraZoom);
+	}
+
+	private void UpdateInputMove(InputEventMouseMotion mouseMotion)
+	{
+		var adjustedSpeed = MoveSpeed * _cameraZoom;
+		Origin += -Basis.X * mouseMotion.Relative.X * adjustedSpeed;
+		Origin += Basis.Y * mouseMotion.Relative.Y * adjustedSpeed;
 	}
 
 	private void SetCameraTransform(float yaw, float pitch)

@@ -54,21 +54,13 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		FlightCamera.AddToRenderSpaceUpdate(this);
 		
 		FuelSystems.Add(new FuelSystem());
-		InitializePartsFromFile("vessel.json");
-		
-		var parentBody = Celestial.CelestialDict["Luna"];
-		//PositionLocal = parentBody.GetSurfacePosition(0, Math.PI / 2);
-		//VelocityLocal = Vector3d.One;
-		
-		Trajectory = new Trajectory(PositionLocal, VelocityLocal, parentBody, new Color(0.9f, 0.4f, 0.8f));
-		PositionRel.ParentPosition = parentBody.PositionRel;
-		VelocityRel.ReferenceVelocity = parentBody.VelocityRel;
-		ParentBody = parentBody;
+		InitializeFromLaunchFile();
+		SnapPoint.SetVisualVisibility(false);
 
 		_gravityVector = DebugVector.CreateVector(Vector3d.Zero, Vector3d.Zero, new Color(0, 1, 0), this);
 		_thrustVector = DebugVector.CreateVector(Vector3d.Zero, Vector3d.Zero, new Color(1f, 0.85f, 0.1f), this);
 		
-		LocalSurface.OnSOIChange(parentBody);
+		LocalSurface.OnSOIChange(ParentBody);
 		GlobalValues.FOPosition = new RelativePosition(PositionRel);
 		
 		Position = Vector3.Zero;
@@ -77,10 +69,12 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		MaxContactsReported = 10;
 	}
 
-	private void InitializePartsFromFile(string filePath)
+	private void InitializeFromLaunchFile()
 	{
-		/*
-		var root = VesselFileTools.GetPartTreeFromFilePath(filePath);
+		var launchFile = VesselFileTools.GetLaunchFile();
+		var partTree = launchFile.PartTree.ToPartTree();
+
+		var root = partTree.RootPart;
 		root.Position = Vector3.Zero;
 		AddChild(root);
 
@@ -94,7 +88,25 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 				if (partChild is CollisionShape3D) partChild.Reparent(this);
 			}
 		}
-		*/
+		
+		var parentBody = Celestial.CelestialDict[launchFile.StartingCelestial];
+		if (launchFile.StartOnSurface)
+		{
+			PositionLocal = parentBody.GetSurfacePosition(0, Math.PI / 2);
+			VelocityLocal = Vector3d.One;
+		}
+		else
+		{
+			var orbitRadius = parentBody.Radius * 3;
+			var orbitalVelocity = Math.Sqrt(parentBody.Mu / orbitRadius);
+			PositionLocal = new Vector3d(orbitRadius, 0.01 * orbitRadius, 0.01 * orbitRadius);
+			VelocityLocal = new Vector3d(0, orbitalVelocity * 0.2, orbitalVelocity);
+		}
+		
+		Trajectory = new Trajectory(PositionLocal, VelocityLocal, parentBody, new Color(0.9f, 0.4f, 0.8f));
+		PositionRel.ParentPosition = parentBody.PositionRel;
+		VelocityRel.ReferenceVelocity = parentBody.VelocityRel;
+		ParentBody = parentBody;
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state)

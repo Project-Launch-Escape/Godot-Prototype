@@ -7,6 +7,8 @@ namespace GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 
 public static class VesselFileTools
 {
+	private const string LaunchFilePath = Editor.SavesDirectory + "launch.json";
+	
 	private static readonly JsonSerializerOptions DefaultOptions = new()
 	{
 		WriteIndented = true,
@@ -45,6 +47,7 @@ public static class VesselFileTools
 	{
 		return JsonSerializer.Deserialize<EditorFile>(jsonString, DefaultOptions);
 	}
+	
 
 	public static string GetPartTreeJsonString(VesselPart rootPart)
 	{
@@ -58,11 +61,28 @@ public static class VesselFileTools
 		var partTree = partTreeJSON.ToPartTree();
 		return partTree.RootPart;
 	}
-	
+
+	public static void SaveLaunchFile(LaunchFile launchFile)
+	{
+		var jsonString = JsonSerializer.Serialize(launchFile, DefaultOptions);
+		var save = FileAccess.Open(LaunchFilePath, FileAccess.ModeFlags.Write);
+		
+		save.StoreLine(jsonString);
+		GD.Print("Saved Launch File Successfully!");
+	}
+
+	public static LaunchFile GetLaunchFile()
+	{
+		var save = FileAccess.Open(LaunchFilePath, FileAccess.ModeFlags.Read);
+		var jsonString = save.GetAsText();
+
+		var launchFile = JsonSerializer.Deserialize<LaunchFile>(jsonString, DefaultOptions);
+		return launchFile;
+	}
 
 
-	
-	
+
+
 	public static PackedScene GetPartSceneFromName(string partName)
 	{
 		var fileNames = DirAccess.GetFilesAt(Editor.PartDefinitionDirectory);
