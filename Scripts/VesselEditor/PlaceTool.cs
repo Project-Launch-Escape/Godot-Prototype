@@ -56,7 +56,7 @@ public partial class PlaceTool : Node3D, IToolable
 		if (Shift)
 		{
 			selectedPart = Editor.DuplicatePart(selectedPart);
-			Editor.EditorNode.AddChild(selectedPart);
+			AddChild(selectedPart);
 		}
 
 		_currentPlacingPart = selectedPart;
@@ -217,7 +217,7 @@ public partial class PlaceTool : Node3D, IToolable
 		SnapPoint.SetVisualVisibility(true);
 
 		_currentPlacingPart = part;
-		if (!part.IsInsideTree()) Editor.EditorNode.AddChild(_currentPlacingPart);
+		if (!part.IsInsideTree()) AddChild(_currentPlacingPart);
 	}
 
 	private void DeselectPart()

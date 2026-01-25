@@ -194,9 +194,10 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/v_separation = 12
 theme_override_font_sizes/font_size = 16
 theme_override_styles/panel = SubResource("StyleBoxFlat_y6rsm")
+allow_search = false
 wraparound_items = false
 item_count = 4
-max_columns = 10
+max_columns = 0
 same_column_width = true
 fixed_column_width = 90
 icon_mode = 0
@@ -393,7 +394,7 @@ offset_right = 201.0
 offset_bottom = 24.0
 text = "X"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Baseplate" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
 material_override = SubResource("StandardMaterial3D_sprtt")
 mesh = SubResource("QuadMesh_e6dcg")

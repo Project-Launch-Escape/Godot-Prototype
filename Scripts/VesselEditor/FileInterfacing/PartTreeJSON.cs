@@ -66,7 +66,7 @@ public class PartTreeJSON
 				}
 				else
 				{
-					var snapPoint = part.SnapPoints[partJSON.SnapPointIndex]; // TODO: Handle Surface Attachment
+					var snapPoint = part.SnapPoints[partJSON.SnapPointIndex];
 					var parentSnapPoint = initializedParts[partJSON.ParentIndex].SnapPoints[partJSON.ParentSnapPointIndex];
 				
 					SnapPoint.AttachSnapPointTo(snapPoint, parentSnapPoint);

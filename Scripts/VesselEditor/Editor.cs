@@ -72,7 +72,7 @@ public partial class Editor : Node3D
 	{
 		var rootParts = new List<VesselPart>();
 
-		foreach (var child in GetChildren())
+		foreach (var child in PlaceTool.ToolNode.GetChildren())
 		{
 			if (child is VesselPart childPart) rootParts.Add(childPart);
 		}

@@ -29,7 +29,7 @@ public class EditorFile
 		foreach (var partTreeJson in Assemblies)
 		{
 			var partTree = partTreeJson.ToPartTree();
-			Editor.EditorNode.AddChild(partTree.RootPart);
+			PlaceTool.ToolNode.AddChild(partTree.RootPart);
 		}
 	}
 }
