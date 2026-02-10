@@ -292,10 +292,10 @@ public partial class PlaceTool : Node3D, IToolable
 			case InputEventKey { Keycode: Key.Shift} key:
 				Shift = key.Pressed;
 				break;
-			case InputEventKey { Keycode: Key.C, CtrlPressed: true, ShiftPressed: false}:
+			case InputEventKey { Keycode: Key.C,Pressed: false, CtrlPressed: true, ShiftPressed: false}:
 				CopyPlacingToClipboard();
 				break;
-			case InputEventKey { Keycode: Key.V, CtrlPressed: true, ShiftPressed: false}:
+			case InputEventKey { Keycode: Key.V, Pressed: false, CtrlPressed: true, ShiftPressed: false}:
 				PasteVesselFromClipboard();
 				break;
 			case InputEventKey { Keycode: Key.A, Pressed: false} when IsToolActive:

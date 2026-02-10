@@ -10,9 +10,9 @@
 		  "ParentSnapPointIndex": -2,
 		  "SnapPointIndex": -2,
 		  "Position": {
-			"X": 0.20548034,
-			"Y": 3.7191439,
-			"Z": -0.47128248
+			"X": 0.29785118,
+			"Y": 4.314824,
+			"Z": 0.24575558
 		  },
 		  "Rotation": {
 			"X": -0,
@@ -54,12 +54,12 @@
 			  "FuelLevels": [
 				{
 				  "FuelType": "Methane",
-				  "Level": 300,
+				  "Level": 200,
 				  "Max": 300
 				},
 				{
 				  "FuelType": "Oxidizer",
-				  "Level": 100,
+				  "Level": 66.7,
 				  "Max": 100
 				}
 			  ],
@@ -96,12 +96,12 @@
 			  "FuelLevels": [
 				{
 				  "FuelType": "Methane",
-				  "Level": 300,
+				  "Level": 200,
 				  "Max": 300
 				},
 				{
 				  "FuelType": "Oxidizer",
-				  "Level": 100,
+				  "Level": 66.7,
 				  "Max": 100
 				}
 			  ],
@@ -138,12 +138,12 @@
 			  "FuelLevels": [
 				{
 				  "FuelType": "Methane",
-				  "Level": 300,
+				  "Level": 200,
 				  "Max": 300
 				},
 				{
 				  "FuelType": "Oxidizer",
-				  "Level": 100,
+				  "Level": 66.7,
 				  "Max": 100
 				}
 			  ],
@@ -234,12 +234,12 @@
 			  "FuelLevels": [
 				{
 				  "FuelType": "Methane",
-				  "Level": 300,
+				  "Level": 200,
 				  "Max": 300
 				},
 				{
 				  "FuelType": "Oxidizer",
-				  "Level": 100,
+				  "Level": 66.7,
 				  "Max": 100
 				}
 			  ],
@@ -330,12 +330,12 @@
 			  "FuelLevels": [
 				{
 				  "FuelType": "Methane",
-				  "Level": 300,
+				  "Level": 200,
 				  "Max": 300
 				},
 				{
 				  "FuelType": "Oxidizer",
-				  "Level": 100,
+				  "Level": 66.7,
 				  "Max": 100
 				}
 			  ],

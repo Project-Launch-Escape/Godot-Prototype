@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://b4ajfh7q5214k"]
+[gd_scene format=3 uid="uid://b4ajfh7q5214k"]
 
 [ext_resource type="Script" uid="uid://ba3yuukuk7yel" path="res://Scripts/VesselEditor/Editor.cs" id="1_a5mxq"]
 [ext_resource type="Script" uid="uid://b2ucfws7t3bhu" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
@@ -23,6 +23,8 @@
 [ext_resource type="Texture2D" uid="uid://cnkewuikd751w" path="res://Resources/UITextures/EditorBasePlate.png" id="21_jts1t"]
 [ext_resource type="Script" uid="uid://dj7fasubd5ro2" path="res://Scripts/VesselEditor/EditorUI/LaunchMenu.cs" id="22_e6dcg"]
 [ext_resource type="Script" uid="uid://cyy1ta1vnyqhc" path="res://Scripts/VesselEditor/EditorUI/SaveLoadUI.cs" id="22_sprtt"]
+[ext_resource type="Script" uid="uid://ddk5fqdp5jm5s" path="res://Scripts/UserInterface/Draggable.cs" id="23_vmihi"]
+[ext_resource type="Script" uid="uid://tdqm2rseea2r" path="res://Scripts/UserInterface/XButton.cs" id="24_asrsh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vqfw5"]
 sky_top_color = Color(0.3758172, 0.33451146, 0.9318945, 1)
@@ -112,8 +114,38 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o2me5"]
+bg_color = Color(0.8, 0.8, 0.8, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4v23d"]
+size = Vector2(205, 25)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xpblq"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+expand_margin_left = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_llbc2"]
+bg_color = Color(0.6, 0.6, 0.6, 0.19607843)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+expand_margin_left = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hiywy"]
+bg_color = Color(0.6, 0.6, 0.6, 0.39607844)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -132,14 +164,14 @@ texture_filter = 0
 size = Vector2(10, 10)
 orientation = 1
 
-[node name="VesselEditor" type="Node3D"]
+[node name="VesselEditor" type="Node3D" unique_id=271238879]
 script = ExtResource("1_a5mxq")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1569562206]
 environment = SubResource("Environment_175yu")
 camera_attributes = SubResource("CameraAttributesPractical_y6rsm")
 
-[node name="Camera" type="Camera3D" parent="."]
+[node name="Camera" type="Camera3D" parent="." unique_id=607649261]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00630343, 0.679551, 2.27911)
 attributes = SubResource("CameraAttributesPractical_vqfw5")
 fov = 70.0
@@ -147,23 +179,23 @@ script = ExtResource("2_npby0")
 CameraSensitivity = 0.2
 MoveSpeed = 0.001
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=390424122]
 transform = Transform3D(1, 0, 0, 0, 0.629456, 0.777036, 0, -0.777036, 0.629456, 0, 0, 0)
 light_intensity_lux = 50000.0
 light_temperature = 8000.0
 
-[node name="GizmoTranslate" parent="." instance=ExtResource("8_txf6a")]
+[node name="GizmoTranslate" parent="." unique_id=414266561 instance=ExtResource("8_txf6a")]
 visible = false
 
-[node name="PlaceTool" type="Node3D" parent="."]
+[node name="PlaceTool" type="Node3D" parent="." unique_id=51490111]
 script = ExtResource("6_2h56u")
 
-[node name="AttachTool" type="Node3D" parent="."]
+[node name="AttachTool" type="Node3D" parent="." unique_id=1646522949]
 script = ExtResource("7_r60lh")
 
-[node name="UI" type="Node" parent="."]
+[node name="UI" type="Node" parent="." unique_id=1465199739]
 
-[node name="PartSelector" type="ItemList" parent="UI"]
+[node name="PartSelector" type="ItemList" parent="UI" unique_id=955661169]
 texture_filter = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -174,6 +206,7 @@ grow_vertical = 2
 theme = ExtResource("6_sprtt")
 theme_override_styles/panel = SubResource("StyleBoxFlat_bgqvo")
 allow_rmb_select = true
+allow_search = false
 max_text_lines = 3
 max_columns = 3
 same_column_width = true
@@ -182,7 +215,7 @@ icon_mode = 0
 fixed_icon_size = Vector2i(75, 75)
 script = ExtResource("7_y6rsm")
 
-[node name="SelectorPanel" type="ItemList" parent="UI" node_paths=PackedStringArray("_leftOutline", "_rightOutline")]
+[node name="SelectorPanel" type="ItemList" parent="UI" unique_id=819977049 node_paths=PackedStringArray("_leftOutline", "_rightOutline")]
 texture_filter = 1
 clip_contents = false
 offset_left = 295.0
@@ -214,7 +247,7 @@ script = ExtResource("9_bgqvo")
 _leftOutline = NodePath("LeftClickOutline")
 _rightOutline = NodePath("RightClickOutline")
 
-[node name="LeftClickOutline" type="Panel" parent="UI/SelectorPanel"]
+[node name="LeftClickOutline" type="Panel" parent="UI/SelectorPanel" unique_id=613371189]
 layout_mode = 0
 offset_left = 6.0
 offset_top = 5.0
@@ -223,7 +256,7 @@ offset_bottom = 94.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_h32pl")
 
-[node name="RightClickOutline" type="Panel" parent="UI/SelectorPanel"]
+[node name="RightClickOutline" type="Panel" parent="UI/SelectorPanel" unique_id=549492834]
 layout_mode = 0
 offset_left = 98.0
 offset_top = 5.0
@@ -232,7 +265,7 @@ offset_bottom = 94.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_frkoo")
 
-[node name="LeftClickHint" type="TextureRect" parent="UI/SelectorPanel"]
+[node name="LeftClickHint" type="TextureRect" parent="UI/SelectorPanel" unique_id=717455556]
 layout_mode = 0
 offset_left = 387.0
 offset_top = 7.0
@@ -240,7 +273,7 @@ offset_right = 427.0
 offset_bottom = 47.0
 texture = ExtResource("14_jts1t")
 
-[node name="RightClickHint" type="TextureRect" parent="UI/SelectorPanel"]
+[node name="RightClickHint" type="TextureRect" parent="UI/SelectorPanel" unique_id=71364092]
 layout_mode = 0
 offset_left = 387.0
 offset_top = 59.0
@@ -248,7 +281,7 @@ offset_right = 427.0
 offset_bottom = 99.0
 texture = ExtResource("15_sprtt")
 
-[node name="ContextMenuController" type="Node" parent="UI"]
+[node name="ContextMenuController" type="Node" parent="UI" unique_id=1053408522]
 script = ExtResource("10_5ps10")
 ComponentMenus = Dictionary[int, PackedScene]({
 0: ExtResource("11_du1xg"),
@@ -258,26 +291,28 @@ ComponentMenus = Dictionary[int, PackedScene]({
 ContextMenuScene = ExtResource("12_giy6m")
 ValueInputScene = ExtResource("15_s2kt1")
 
-[node name="ActionBar" type="Node" parent="UI"]
+[node name="ActionBar" type="Node" parent="UI" unique_id=480296986]
 
-[node name="FileDialog" type="FileDialog" parent="UI/ActionBar"]
+[node name="FileDialog" type="FileDialog" parent="UI/ActionBar" unique_id=1333556255]
 oversampling_override = 1.0
 position = Vector2i(100, 100)
-root_subfolder = "Saves/Vessels/"
+root_subfolder = "res://Saves/Vessels/"
 filters = PackedStringArray("*.json")
 hidden_files_toggle_enabled = false
 favorites_enabled = false
 recent_list_enabled = false
 
-[node name="TopBar" type="Panel" parent="UI/ActionBar"]
-anchors_preset = 10
+[node name="TopBar" type="Panel" parent="UI/ActionBar" unique_id=1425911047]
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
+offset_left = -1920.0
 offset_bottom = 32.0
-grow_horizontal = 2
+grow_horizontal = 0
 theme = ExtResource("6_sprtt")
 theme_override_styles/panel = SubResource("StyleBoxFlat_e6dcg")
 
-[node name="CurrentFile" type="Label" parent="UI/ActionBar/TopBar"]
+[node name="CurrentFile" type="Label" parent="UI/ActionBar/TopBar" unique_id=1722824502]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -289,7 +324,7 @@ offset_bottom = 28.0
 grow_horizontal = 2
 horizontal_alignment = 1
 
-[node name="MenuBar" type="MenuBar" parent="UI/ActionBar"]
+[node name="MenuBar" type="MenuBar" parent="UI/ActionBar" unique_id=1868541427]
 offset_left = 14.0
 offset_right = 550.0
 offset_bottom = 34.0
@@ -298,15 +333,15 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_sprtt")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_sprtt")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_vmihi")
 theme_override_styles/hover = SubResource("StyleBoxFlat_asrsh")
-switch_on_hover = false
+prefer_global_menu = false
 
-[node name="FileMenuBehavior" type="Node" parent="UI/ActionBar/MenuBar" node_paths=PackedStringArray("_filePopupMenu", "_fileWindow", "_currentFilelabel")]
+[node name="FileMenuBehavior" type="Node" parent="UI/ActionBar/MenuBar" unique_id=1909087568 node_paths=PackedStringArray("_filePopupMenu", "_fileWindow", "_currentFilelabel")]
 script = ExtResource("22_sprtt")
 _filePopupMenu = NodePath("../File")
 _fileWindow = NodePath("../../FileDialog")
 _currentFilelabel = NodePath("../../TopBar/CurrentFile")
 
-[node name="File" type="PopupMenu" parent="UI/ActionBar/MenuBar"]
+[node name="File" type="PopupMenu" parent="UI/ActionBar/MenuBar" unique_id=1334226219]
 oversampling_override = 1.0
 title = "  File  "
 size = Vector2i(239, 200)
@@ -324,15 +359,14 @@ item_2/id = 1
 item_3/text = "Load"
 item_3/id = 2
 
-[node name="LaunchMenuBehavior" type="Node" parent="UI/ActionBar/MenuBar" node_paths=PackedStringArray("_launchMenu", "_landedChecker", "_celestialInput", "_launchSettingsPanel", "_closeButton")]
+[node name="LaunchMenuBehavior" type="Node" parent="UI/ActionBar/MenuBar" unique_id=1214832934 node_paths=PackedStringArray("_launchMenu", "_landedChecker", "_celestialInput", "_launchSettingsPanel")]
 script = ExtResource("22_e6dcg")
 _launchMenu = NodePath("../Launch")
-_landedChecker = NodePath("../../Launch Settings/VBoxContainer/SurfaceInput/CheckBox")
-_celestialInput = NodePath("../../Launch Settings/VBoxContainer/CelestialInput/LineEdit")
-_launchSettingsPanel = NodePath("../../Launch Settings")
-_closeButton = NodePath("../../Launch Settings/CloseButton")
+_landedChecker = NodePath("../../LaunchSettings/Panel/VBoxContainer/SurfaceInput/CheckBox")
+_celestialInput = NodePath("../../LaunchSettings/Panel/VBoxContainer/CelestialInput/LineEdit")
+_launchSettingsPanel = NodePath("../../LaunchSettings/Panel")
 
-[node name="Launch" type="PopupMenu" parent="UI/ActionBar/MenuBar"]
+[node name="Launch" type="PopupMenu" parent="UI/ActionBar/MenuBar" unique_id=2001192929]
 title = "  Launch  "
 size = Vector2i(200, 200)
 theme_override_constants/item_start_padding = 10
@@ -345,16 +379,49 @@ item_0/id = 0
 item_1/text = "Open Launch Configuration"
 item_1/id = 1
 
-[node name="Launch Settings" type="Panel" parent="UI/ActionBar"]
-visible = false
-offset_left = 592.0
-offset_top = 179.0
-offset_right = 797.0
-offset_bottom = 316.0
+[node name="LaunchSettings" type="Control" parent="UI/ActionBar" unique_id=806813462 node_paths=PackedStringArray("MouseCollider")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 567.0
+offset_top = 202.0
+offset_right = 772.0
+offset_bottom = 339.0
+mouse_filter = 2
+script = ExtResource("23_vmihi")
+MouseCollider = NodePath("Panel/Header/MouseCollider")
+metadata/_custom_type_script = "uid://ddk5fqdp5jm5s"
+
+[node name="Panel" type="Panel" parent="UI/ActionBar/LaunchSettings" unique_id=2122585129]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 theme = ExtResource("6_sprtt")
 theme_override_styles/panel = SubResource("StyleBoxFlat_eu1sv")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/ActionBar/Launch Settings"]
+[node name="Header" type="Panel" parent="UI/ActionBar/LaunchSettings/Panel" unique_id=1588654802]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 4.0
+offset_top = 3.0
+offset_right = -4.0
+offset_bottom = 25.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o2me5")
+
+[node name="MouseCollider" type="Area2D" parent="UI/ActionBar/LaunchSettings/Panel/Header" unique_id=896019084]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UI/ActionBar/LaunchSettings/Panel/Header/MouseCollider" unique_id=602284422]
+position = Vector2(98.5, 9.5)
+shape = SubResource("RectangleShape2D_4v23d")
+debug_color = Color(1.00111965e-05, 0.5885128, 0.6864257, 0.14509805)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ActionBar/LaunchSettings/Panel" unique_id=9082249]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 27.0
@@ -362,39 +429,52 @@ offset_right = 199.0
 offset_bottom = 131.0
 theme_override_constants/separation = 10
 
-[node name="SurfaceInput" type="Label" parent="UI/ActionBar/Launch Settings/VBoxContainer"]
+[node name="SurfaceInput" type="Label" parent="UI/ActionBar/LaunchSettings/Panel/VBoxContainer" unique_id=1947247931]
 layout_mode = 2
 text = "Start On Surface?"
 
-[node name="CheckBox" type="CheckBox" parent="UI/ActionBar/Launch Settings/VBoxContainer/SurfaceInput"]
+[node name="CheckBox" type="CheckBox" parent="UI/ActionBar/LaunchSettings/Panel/VBoxContainer/SurfaceInput" unique_id=1985402425]
 layout_mode = 0
 offset_left = 166.0
 offset_right = 186.0
 offset_bottom = 20.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_xpblq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xpblq")
+theme_override_styles/hover = SubResource("StyleBoxFlat_llbc2")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_hiywy")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_xpblq")
+theme_override_styles/focus = SubResource("StyleBoxFlat_xpblq")
 
-[node name="CelestialInput" type="Label" parent="UI/ActionBar/Launch Settings/VBoxContainer"]
+[node name="CelestialInput" type="Label" parent="UI/ActionBar/LaunchSettings/Panel/VBoxContainer" unique_id=240568878]
 layout_mode = 2
 text = "Celestial:"
 
-[node name="LineEdit" type="LineEdit" parent="UI/ActionBar/Launch Settings/VBoxContainer/CelestialInput"]
+[node name="LineEdit" type="LineEdit" parent="UI/ActionBar/LaunchSettings/Panel/VBoxContainer/CelestialInput" unique_id=958200972]
 layout_mode = 0
 offset_left = 78.0
 offset_top = -4.0
 offset_right = 189.0
 offset_bottom = 24.0
 theme = ExtResource("6_sprtt")
-placeholder_text = "_"
 
-[node name="CloseButton" type="Button" parent="UI/ActionBar/Launch Settings"]
-layout_mode = 0
+[node name="CloseButton" type="Button" parent="UI/ActionBar/LaunchSettings/Panel" unique_id=199423283 node_paths=PackedStringArray("_toHide")]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 4.0
-offset_top = 4.0
-offset_right = 201.0
-offset_bottom = 24.0
+offset_top = -25.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
 text = "X"
+script = ExtResource("24_asrsh")
+_toHide = NodePath("../..")
+metadata/_custom_type_script = "uid://tdqm2rseea2r"
 
-[node name="Baseplate" type="MeshInstance3D" parent="."]
+[node name="Baseplate" type="MeshInstance3D" parent="." unique_id=1212966459]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
 material_override = SubResource("StandardMaterial3D_sprtt")
 mesh = SubResource("QuadMesh_e6dcg")

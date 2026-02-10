@@ -104,16 +104,16 @@ public partial class SaveLoadUI : Node
 	{
 		switch (inputEvent)
 		{
-			case InputEventKey {Keycode: Key.S, CtrlPressed: true, ShiftPressed: false}:
+			case InputEventKey {Keycode: Key.S, Pressed: false, CtrlPressed: true, ShiftPressed: false}:
 				OnSaveClicked();
 				break;
-			case InputEventKey {Keycode: Key.S, CtrlPressed: true, ShiftPressed: true}:
+			case InputEventKey {Keycode: Key.S, Pressed: false, CtrlPressed: true, ShiftPressed: true}:
 				OnSaveAsClicked();
 				break;
-			case InputEventKey {Keycode: Key.O, CtrlPressed: true, ShiftPressed: false}:
+			case InputEventKey {Keycode: Key.O, Pressed: false, CtrlPressed: true, ShiftPressed: false}:
 				OnLoadClicked();
 				break;
-			case InputEventKey {Keycode: Key.N, CtrlPressed: true, ShiftPressed: false}:
+			case InputEventKey {Keycode: Key.N, Pressed: false, CtrlPressed: true, ShiftPressed: false}:
 				OnNewClicked();
 				break;
 		}

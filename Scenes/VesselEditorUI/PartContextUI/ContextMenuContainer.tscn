@@ -1,7 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://crnsjo4ueukmv"]
+[gd_scene format=3 uid="uid://crnsjo4ueukmv"]
 
 [ext_resource type="Script" uid="uid://bpyf0s7lfq8oc" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/ContextMenu.cs" id="1_i2txm"]
 [ext_resource type="Texture2D" uid="uid://bsjietnkjvvrp" path="res://Resources/UITextures/XIcon.png" id="2_ay3f2"]
+[ext_resource type="Script" uid="uid://tdqm2rseea2r" path="res://Scripts/UserInterface/XButton.cs" id="3_371w0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i2txm"]
+size = Vector2(350, 48)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ssbxe"]
 content_margin_left = 0.0
@@ -30,21 +34,36 @@ border_color = Color(0.023529412, 0.023529412, 0.023529412, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_i2txm"]
-size = Vector2(350, 48)
+[node name="ContextMenu" type="Control" unique_id=423842149 node_paths=PackedStringArray("_componentMenuContainer", "_partNameLabel", "MouseCollider")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 351.0
+offset_bottom = 298.0
+mouse_filter = 2
+script = ExtResource("1_i2txm")
+_componentMenuContainer = NodePath("ContextMenuPanel/ComponentMenuContainer")
+_partNameLabel = NodePath("ContextMenuPanel/Header/PartName")
+MouseCollider = NodePath("Drag Collider")
+metadata/_custom_type_script = "uid://ddk5fqdp5jm5s"
 
-[node name="ContextMenuContainer" type="Panel" node_paths=PackedStringArray("_componentMenuContainer", "_xButton", "_partNameLabel", "_dragCollider")]
-offset_right = 350.0
-offset_bottom = 300.0
+[node name="Drag Collider" type="Area2D" parent="." unique_id=2089178055]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Drag Collider" unique_id=1696069209]
+position = Vector2(175, 24)
+shape = SubResource("RectangleShape2D_i2txm")
+debug_color = Color(0, 0.5950001, 0.7, 0)
+
+[node name="ContextMenuPanel" type="Panel" parent="." unique_id=831325137]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.99700004
+anchor_bottom = 1.0070001
+offset_right = 0.052978516
+offset_bottom = -0.08602905
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_ssbxe")
-script = ExtResource("1_i2txm")
-_componentMenuContainer = NodePath("ComponentMenuContainer")
-_xButton = NodePath("Header/X Button")
-_partNameLabel = NodePath("Header/PartName")
-_dragCollider = NodePath("Header/Drag Collider")
 
-[node name="Header" type="Panel" parent="."]
+[node name="Header" type="Panel" parent="ContextMenuPanel" unique_id=1165975683]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -53,19 +72,23 @@ grow_horizontal = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_i2txm")
 
-[node name="X Button" type="Button" parent="Header"]
+[node name="X Button" type="Button" parent="ContextMenuPanel/Header" unique_id=1524439451 node_paths=PackedStringArray("_toHide")]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -46.0
+offset_left = -48.0
 offset_top = 10.0
 offset_right = -16.0
-offset_bottom = 40.0
+offset_bottom = 42.0
 grow_horizontal = 0
 icon = ExtResource("2_ay3f2")
+script = ExtResource("3_371w0")
+CloseMode = 1
+_toHide = NodePath("../../..")
+metadata/_custom_type_script = "uid://tdqm2rseea2r"
 
-[node name="PartName" type="Label" parent="Header"]
+[node name="PartName" type="Label" parent="ContextMenuPanel/Header" unique_id=36805154]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 12.0
@@ -73,14 +96,7 @@ offset_right = 296.0
 offset_bottom = 35.0
 text = "Part Name"
 
-[node name="Drag Collider" type="Area2D" parent="Header"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Header/Drag Collider"]
-position = Vector2(175, 24)
-shape = SubResource("RectangleShape2D_i2txm")
-debug_color = Color(0, 0.5950001, 0.7, 0)
-
-[node name="ComponentMenuContainer" type="VBoxContainer" parent="."]
+[node name="ComponentMenuContainer" type="VBoxContainer" parent="ContextMenuPanel" unique_id=589901496]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
