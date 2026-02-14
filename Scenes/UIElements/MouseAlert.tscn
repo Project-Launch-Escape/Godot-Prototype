@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://cagnvn136i58w"]
+
+[ext_resource type="Script" uid="uid://jillfm645jty" path="res://Scripts/VesselEditor/EditorUI/MouseAlert.cs" id="1_ypwgw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4v23d"]
+bg_color = Color(1, 0.42000002, 0.60366666, 0.42352942)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.75686, 0.82, 0.6396, 0.4509804)
+
+[sub_resource type="LabelSettings" id="LabelSettings_livhk"]
+font_size = 12
+
+[node name="MouseAlert" type="Panel" unique_id=1715353006 node_paths=PackedStringArray("_text")]
+custom_minimum_size = Vector2(0, 20)
+offset_right = 216.0
+offset_bottom = 20.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4v23d")
+script = ExtResource("1_ypwgw")
+_text = NodePath("Label")
+
+[node name="Label" type="Label" parent="." unique_id=190547116]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 274.0
+offset_bottom = 18.0
+text = "Right Click to Select Launch Vehicle"
+label_settings = SubResource("LabelSettings_livhk")

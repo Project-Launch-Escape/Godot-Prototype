@@ -25,6 +25,8 @@
 [ext_resource type="Script" uid="uid://cyy1ta1vnyqhc" path="res://Scripts/VesselEditor/EditorUI/SaveLoadUI.cs" id="22_sprtt"]
 [ext_resource type="Script" uid="uid://ddk5fqdp5jm5s" path="res://Scripts/UserInterface/Draggable.cs" id="23_vmihi"]
 [ext_resource type="Script" uid="uid://tdqm2rseea2r" path="res://Scripts/UserInterface/XButton.cs" id="24_asrsh"]
+[ext_resource type="Script" uid="uid://cqpxgfj5c61sb" path="res://Scripts/VesselEditor/EditorUI/MouseAlertHandler.cs" id="26_eu1sv"]
+[ext_resource type="PackedScene" uid="uid://cagnvn136i58w" path="res://Scenes/UIElements/MouseAlert.tscn" id="27_xpblq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vqfw5"]
 sky_top_color = Color(0.3758172, 0.33451146, 0.9318945, 1)
@@ -48,6 +50,14 @@ glow_enabled = true
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_y6rsm"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_vqfw5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sprtt"]
+albedo_texture = ExtResource("21_jts1t")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_e6dcg"]
+size = Vector2(10, 10)
+orientation = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bgqvo"]
 bg_color = Color(0.2754, 0.31200668, 0.34, 1)
@@ -156,14 +166,6 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 expand_margin_left = 2.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sprtt"]
-albedo_texture = ExtResource("21_jts1t")
-texture_filter = 0
-
-[sub_resource type="QuadMesh" id="QuadMesh_e6dcg"]
-size = Vector2(10, 10)
-orientation = 1
-
 [node name="VesselEditor" type="Node3D" unique_id=271238879]
 script = ExtResource("1_a5mxq")
 
@@ -192,6 +194,11 @@ script = ExtResource("6_2h56u")
 
 [node name="AttachTool" type="Node3D" parent="." unique_id=1646522949]
 script = ExtResource("7_r60lh")
+
+[node name="Baseplate" type="MeshInstance3D" parent="." unique_id=1212966459]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
+material_override = SubResource("StandardMaterial3D_sprtt")
+mesh = SubResource("QuadMesh_e6dcg")
 
 [node name="UI" type="Node" parent="." unique_id=1465199739]
 
@@ -303,12 +310,10 @@ favorites_enabled = false
 recent_list_enabled = false
 
 [node name="TopBar" type="Panel" parent="UI/ActionBar" unique_id=1425911047]
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = 10
 anchor_right = 1.0
-offset_left = -1920.0
 offset_bottom = 32.0
-grow_horizontal = 0
+grow_horizontal = 2
 theme = ExtResource("6_sprtt")
 theme_override_styles/panel = SubResource("StyleBoxFlat_e6dcg")
 
@@ -474,7 +479,13 @@ script = ExtResource("24_asrsh")
 _toHide = NodePath("../..")
 metadata/_custom_type_script = "uid://tdqm2rseea2r"
 
-[node name="Baseplate" type="MeshInstance3D" parent="." unique_id=1212966459]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
-material_override = SubResource("StandardMaterial3D_sprtt")
-mesh = SubResource("QuadMesh_e6dcg")
+[node name="MouseAlerts" type="VBoxContainer" parent="UI" unique_id=2053145272]
+offset_left = 988.0
+offset_top = 211.0
+offset_right = 1214.0
+offset_bottom = 383.0
+script = ExtResource("26_eu1sv")
+_alertScene = ExtResource("27_xpblq")
+
+[node name="MouseAlert" parent="UI/MouseAlerts" unique_id=1715353006 instance=ExtResource("27_xpblq")]
+layout_mode = 2

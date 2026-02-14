@@ -11,6 +11,7 @@ public partial class LaunchMenu : Node
 	[Export] private LineEdit _celestialInput;
 
 	[Export] private Control _launchSettingsPanel;
+	private const string LaunchSelectTipIndentifier = "launchvehicle";
 
 
 	private bool _selectingVessel;
@@ -38,7 +39,9 @@ public partial class LaunchMenu : Node
 
 	private void OnSelectLaunchVehicleSelected()
 	{
+		const string selectTip = "Middle Click to select Launch Vehicle";
 		_selectingVessel = true;
+		MouseAlertHandler.CreateMouseAlert(selectTip, float.MaxValue, LaunchSelectTipIndentifier);
 	}
 
 	private void SelectVehicle()
@@ -53,6 +56,7 @@ public partial class LaunchMenu : Node
 		};
 		VesselFileTools.SaveLaunchFile(launchFile);
 		_selectingVessel = false;
+		MouseAlertHandler.RemoveMouseAlert(LaunchSelectTipIndentifier);
 	}
 	
 	private void OnOpenLaunchConfigSelected()
