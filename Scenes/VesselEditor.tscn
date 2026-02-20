@@ -3,24 +3,26 @@
 [ext_resource type="Script" uid="uid://ba3yuukuk7yel" path="res://Scripts/VesselEditor/Editor.cs" id="1_a5mxq"]
 [ext_resource type="Script" uid="uid://b2ucfws7t3bhu" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
 [ext_resource type="Script" uid="uid://mvrdcf02w5px" path="res://Scripts/VesselEditor/PlaceTool.cs" id="6_2h56u"]
+[ext_resource type="Script" uid="uid://bdi1g4eb5anis" path="res://Scripts/VesselEditor/RerootTool.cs" id="6_hiywy"]
 [ext_resource type="Theme" uid="uid://b0s7ysif5h015" path="res://Resources/DefaultTheme.tres" id="6_sprtt"]
-[ext_resource type="Texture2D" uid="uid://ucmrdfypttq0" path="res://Resources/UITextures/SelectionIcon.png" id="7_bgqvo"]
+[ext_resource type="Texture2D" uid="uid://ucmrdfypttq0" path="res://Resources/UITextures/VesselEditor/SelectionIcon.png" id="7_bgqvo"]
 [ext_resource type="Script" uid="uid://ctm5cnctg8ixr" path="res://Scripts/VesselEditor/AttachTool.cs" id="7_r60lh"]
 [ext_resource type="Script" uid="uid://cf5feccw1v1gv" path="res://Scripts/VesselEditor/EditorUI/PartSelector.cs" id="7_y6rsm"]
-[ext_resource type="Texture2D" uid="uid://b7oqx0id03mtt" path="res://Resources/UITextures/TransformIcon.png" id="8_5ps10"]
+[ext_resource type="Texture2D" uid="uid://b7oqx0id03mtt" path="res://Resources/UITextures/VesselEditor/TransformIcon.png" id="8_5ps10"]
 [ext_resource type="PackedScene" uid="uid://wdmru320mfw3" path="res://Scenes/gizmo_translate.tscn" id="8_txf6a"]
 [ext_resource type="Script" uid="uid://cgylab4b4dsrr" path="res://Scripts/VesselEditor/EditorUI/ToolSelector.cs" id="9_bgqvo"]
-[ext_resource type="Texture2D" uid="uid://d1jm80ty1h10" path="res://Resources/UITextures/ModifyIcon.png" id="9_h32pl"]
+[ext_resource type="Texture2D" uid="uid://d1jm80ty1h10" path="res://Resources/UITextures/VesselEditor/ModifyIcon.png" id="9_h32pl"]
 [ext_resource type="Script" uid="uid://c8oshc1a3mc63" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/ContextMenuController.cs" id="10_5ps10"]
 [ext_resource type="PackedScene" uid="uid://b4el8s1os3ibp" path="res://Scenes/VesselEditorUI/PartContextUI/FuelTankContext.tscn" id="11_du1xg"]
 [ext_resource type="PackedScene" uid="uid://c0c02n4buej3s" path="res://Scenes/VesselEditorUI/PartContextUI/EngineContext.tscn" id="12_6e330"]
 [ext_resource type="PackedScene" uid="uid://crnsjo4ueukmv" path="res://Scenes/VesselEditorUI/PartContextUI/ContextMenuContainer.tscn" id="12_giy6m"]
-[ext_resource type="Texture2D" uid="uid://p3tdndsckdy5" path="res://Resources/UITextures/AttachIcon.png" id="12_r60lh"]
+[ext_resource type="Texture2D" uid="uid://p3tdndsckdy5" path="res://Resources/UITextures/VesselEditor/AttachIcon.png" id="12_r60lh"]
 [ext_resource type="PackedScene" uid="uid://cumveuqyrmds2" path="res://Scenes/VesselEditorUI/PartContextUI/DefaultContext.tscn" id="13_6e330"]
+[ext_resource type="Texture2D" uid="uid://cxlm4t1dwxsra" path="res://Resources/UITextures/VesselEditor/RerootIcon.png" id="14_hiywy"]
 [ext_resource type="Texture2D" uid="uid://bt31em58k1gc3" path="res://Resources/UITextures/InputIcons/LeftClick.png" id="14_jts1t"]
 [ext_resource type="PackedScene" uid="uid://ba0yb6a4ei3ua" path="res://Scenes/VesselEditorUI/PartContextUI/MenuComponents/ValueInput.tscn" id="15_s2kt1"]
 [ext_resource type="Texture2D" uid="uid://b1ov6e8mhffhi" path="res://Resources/UITextures/InputIcons/RightClick.png" id="15_sprtt"]
-[ext_resource type="Texture2D" uid="uid://cnkewuikd751w" path="res://Resources/UITextures/EditorBasePlate.png" id="21_jts1t"]
+[ext_resource type="Texture2D" uid="uid://cnkewuikd751w" path="res://Resources/UITextures/VesselEditor/EditorBasePlate.png" id="21_jts1t"]
 [ext_resource type="Script" uid="uid://dj7fasubd5ro2" path="res://Scripts/VesselEditor/EditorUI/LaunchMenu.cs" id="22_e6dcg"]
 [ext_resource type="Script" uid="uid://cyy1ta1vnyqhc" path="res://Scripts/VesselEditor/EditorUI/SaveLoadUI.cs" id="22_sprtt"]
 [ext_resource type="Script" uid="uid://ddk5fqdp5jm5s" path="res://Scripts/UserInterface/Draggable.cs" id="23_vmihi"]
@@ -188,12 +190,19 @@ light_temperature = 8000.0
 
 [node name="GizmoTranslate" parent="." unique_id=414266561 instance=ExtResource("8_txf6a")]
 visible = false
+_coarseGridSize = 0.5
+_fineGridSize = 0.125
+_coarseAngleSnapInterval = 22.5
+_fineAngleSnapInterval = 5.625
 
 [node name="PlaceTool" type="Node3D" parent="." unique_id=51490111]
 script = ExtResource("6_2h56u")
 
 [node name="AttachTool" type="Node3D" parent="." unique_id=1646522949]
 script = ExtResource("7_r60lh")
+
+[node name="RerootTool" type="Node3D" parent="." unique_id=131776395]
+script = ExtResource("6_hiywy")
 
 [node name="Baseplate" type="MeshInstance3D" parent="." unique_id=1212966459]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
@@ -227,7 +236,7 @@ texture_filter = 1
 clip_contents = false
 offset_left = 295.0
 offset_top = 29.0
-offset_right = 682.0
+offset_right = 779.0
 offset_bottom = 129.0
 theme = ExtResource("6_sprtt")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -236,7 +245,7 @@ theme_override_font_sizes/font_size = 16
 theme_override_styles/panel = SubResource("StyleBoxFlat_y6rsm")
 allow_search = false
 wraparound_items = false
-item_count = 4
+item_count = 5
 max_columns = 0
 same_column_width = true
 fixed_column_width = 90
@@ -250,6 +259,8 @@ item_2/text = "Modify"
 item_2/icon = ExtResource("9_h32pl")
 item_3/text = "Attach"
 item_3/icon = ExtResource("12_r60lh")
+item_4/text = "Reroot"
+item_4/icon = ExtResource("14_hiywy")
 script = ExtResource("9_bgqvo")
 _leftOutline = NodePath("LeftClickOutline")
 _rightOutline = NodePath("RightClickOutline")
@@ -274,17 +285,17 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_frkoo")
 
 [node name="LeftClickHint" type="TextureRect" parent="UI/SelectorPanel" unique_id=717455556]
 layout_mode = 0
-offset_left = 387.0
+offset_left = 486.0
 offset_top = 7.0
-offset_right = 427.0
+offset_right = 526.0
 offset_bottom = 47.0
 texture = ExtResource("14_jts1t")
 
 [node name="RightClickHint" type="TextureRect" parent="UI/SelectorPanel" unique_id=71364092]
 layout_mode = 0
-offset_left = 387.0
+offset_left = 486.0
 offset_top = 59.0
-offset_right = 427.0
+offset_right = 526.0
 offset_bottom = 99.0
 texture = ExtResource("15_sprtt")
 
@@ -486,6 +497,3 @@ offset_right = 1214.0
 offset_bottom = 383.0
 script = ExtResource("26_eu1sv")
 _alertScene = ExtResource("27_xpblq")
-
-[node name="MouseAlert" parent="UI/MouseAlerts" unique_id=1715353006 instance=ExtResource("27_xpblq")]
-layout_mode = 2

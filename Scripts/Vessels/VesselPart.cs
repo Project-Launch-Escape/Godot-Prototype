@@ -13,9 +13,12 @@ public partial class VesselPart : StaticBody3D
 	[Export] public SnapPoint SurfaceAttatchPoint;
 
 	public bool SurfaceAttatchable => SurfaceAttatchPoint != null;
+	public bool IsSurfaceAttached => ParentPart != null && ParentPart.SnapPoints.All(parentPartSnapPoint => parentPartSnapPoint.AttachedPart != this);
 
-	public Vessel ParentVessel;
-	public VesselPart VesselRootPart => ParentVessel.PartAssembly.RootPart;
+	public PartTree ParentTree;
+	
+	public VesselPart VesselRootPart => ParentTree.RootPart;
+	public Vessel ParentVessel => ParentTree.ParentVessel;
 	public VesselPart ParentPart => GetParent() as VesselPart;
 	public List<VesselPart> ChildParts => GetChildParts();
 

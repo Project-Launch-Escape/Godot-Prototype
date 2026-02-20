@@ -2,22 +2,24 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brunu8ex73nng"
-path="res://.godot/imported/NavRectangleCameraPoint.png-280f82f84e1fa6de9048e1d5d2fc74eb.ctex"
+uid="uid://bqgono483jqpp"
+path="res://.godot/imported/PipeIcon.png-3c95d4f4c51b2a3ea3bd6668536e3ac7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/NavRectangleCameraPoint.png"
-dest_files=["res://.godot/imported/NavRectangleCameraPoint.png-280f82f84e1fa6de9048e1d5d2fc74eb.ctex"]
+source_file="res://Resources/UITextures/VesselEditor/PipeIcon.png"
+dest_files=["res://.godot/imported/PipeIcon.png-3c95d4f4c51b2a3ea3bd6668536e3ac7.ctex"]
 
 [params]
 
 compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
@@ -25,6 +27,10 @@ mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

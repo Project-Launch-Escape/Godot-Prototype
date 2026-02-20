@@ -4,6 +4,7 @@ using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.VesselEditor;
 
+[Icon("res://Resources/UITextures/VesselEditor/AttachIcon.png")]
 public partial class AttachTool : Node3D, IToolable
 {
 	public static AttachTool ToolNode;

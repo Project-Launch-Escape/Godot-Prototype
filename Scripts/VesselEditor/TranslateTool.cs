@@ -4,18 +4,28 @@ using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.VesselEditor;
 
+[Icon("res://Resources/UITextures/VesselEditor/TransformIcon.png")]
 public partial class TranslateTool : Node3D, IToolable
 {
+	public static TranslateTool ToolNode;
+	
 	private const float RayLength = 1000.0f;
-	public static GizmoType SelectedGizmo = GizmoType.None;
-	public static VesselPart SelectedPart;
-	public static bool GizmoActive => SelectedPart != null;
+	private GizmoType _selectedGizmo = GizmoType.None;
+	private VesselPart _selectedPart;
+	public static bool GizmoActive => ToolNode._selectedPart != null;
 	
 	private Transform3D _startTransform;
 	private Basis _startUnsnappedBasis;
 	private Vector3 _startMousePos;
 
-	public static TranslateTool ToolNode;
+	private Vector3 _truePosition;
+
+	[Export] private float _coarseGridSize; // When holding Shift
+	[Export] private float _fineGridSize; // When holding Alt
+	
+	// In degrees
+	[Export] private float _coarseAngleSnapInterval; // When holding Shift
+	[Export] private float _fineAngleSnapInterval; // When holding Alt
 
 	public bool IsToolActive { get; set; }
 	
@@ -69,12 +79,12 @@ public partial class TranslateTool : Node3D, IToolable
 				break;
 			case InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: false } :
 			{
-				SelectedGizmo = GizmoType.None;
+				_selectedGizmo = GizmoType.None;
 				Rotation = Vector3.Zero;
-				if (SelectedPart != null)
+				if (_selectedPart != null)
 				{
-					_startTransform = SelectedPart.Transform;
-					_startUnsnappedBasis = SelectedPart.UnsnappedBasis;
+					_startTransform = _selectedPart.Transform;
+					_startUnsnappedBasis = _selectedPart.UnsnappedBasis;
 				}
 				break;
 			}
@@ -87,7 +97,7 @@ public partial class TranslateTool : Node3D, IToolable
 	public void DeactivateGizmo()
 	{
 		Visible = false;
-		SelectedPart = null;
+		_selectedPart = null;
 	}
 
 	
@@ -118,11 +128,11 @@ public partial class TranslateTool : Node3D, IToolable
 		}
 		
 		Visible = true;
-		SelectedPart = (VesselPart)rayResult["collider"];
-		Position = SelectedPart.GlobalPosition;
+		_selectedPart = (VesselPart)rayResult["collider"];
+		Position = _selectedPart.GlobalPosition;
 		Rotation = new Vector3(0, 0, 0);
-		_startTransform = SelectedPart.Transform;
-		_startUnsnappedBasis = SelectedPart.UnsnappedBasis;
+		_startTransform = _selectedPart.Transform;
+		_startUnsnappedBasis = _selectedPart.UnsnappedBasis;
 	}
 
 	private void SelectHoveredGizmo()
@@ -133,12 +143,12 @@ public partial class TranslateTool : Node3D, IToolable
 		var rayResult = GetWorld3D().DirectSpaceState.IntersectRay(rayParameters);
 		if (rayResult.Count == 0)
 		{
-			SelectedGizmo = GizmoType.None;
+			_selectedGizmo = GizmoType.None;
 			return;
 		}
 		
 		var res = (Node)rayResult["collider"];
-		SelectedGizmo = (string)res.Name switch
+		_selectedGizmo = (string)res.Name switch
 		{
 			// "T" is translation gizmos, "R" is rotation gizmos
 			"RED T Handle" => GizmoType.TransRed,
@@ -147,7 +157,7 @@ public partial class TranslateTool : Node3D, IToolable
 			"RED R Handle" => GizmoType.RotRed,
 			"GREEN R Handle" => GizmoType.RotGreen,
 			"BLUE R Handle" => GizmoType.RotBlue,
-			_ => SelectedGizmo
+			_ => _selectedGizmo
 		};
 		_startMousePos = GetGizmoMousePos();
 	}
@@ -187,36 +197,78 @@ public partial class TranslateTool : Node3D, IToolable
 
 	private void HandleMouseMovement()
 	{
-		if (SelectedGizmo is GizmoType.None) return;
+		if (_selectedGizmo is GizmoType.None) return;
 
-		var axis = AxisFromGizmo(SelectedGizmo);
+		var axis = AxisFromGizmo(_selectedGizmo);
 		var mousePos = GetGizmoMousePos();
 		
-		if (IsTranslational(SelectedGizmo))
+		if (IsTranslational(_selectedGizmo))
 		{
-			mousePos -= _startMousePos;
-			mousePos *= axis; // Only Change Position On Axis
-			SelectedPart.Position = _startTransform.Origin + mousePos;
-			Position = SelectedPart.GlobalPosition; // Apply Change of Position
+			HandleTranslation(axis, mousePos);
 		}
 		else
 		{
-			mousePos = ((Vector3.One - axis) * mousePos).Normalized(); // Only track change in position on plane perpendicular to the axis of rotation
-
-			float theta = SelectedGizmo switch
-			{
-				GizmoType.RotRed => -Mathf.Atan2(mousePos.Y, mousePos.Z),
-				GizmoType.RotGreen => -Mathf.Atan2(mousePos.Z, mousePos.X),
-				GizmoType.RotBlue => -Mathf.Atan2(mousePos.X, mousePos.Y),
-				_ => 0
-			};
-			Rotation = axis * theta; // Apply Change of Rotation
-			SelectedPart.Basis = _startTransform.Basis.Rotated(axis, theta); // startRotation + A * θ;
-
-			SelectedPart.UnsnappedBasis = _startUnsnappedBasis.Rotated(axis, theta);
+			HandleRotation(axis, mousePos);
 		}
 	}
 
+	private void HandleTranslation(Vector3 axis, Vector3 mousePos)
+	{
+		mousePos -= _startMousePos;
+		mousePos *= axis; // Only Change Position On Axis
+
+		var newPosition = _startTransform.Origin + mousePos;
+
+		newPosition = SnapPosition(newPosition);
+			
+		_selectedPart.Position = newPosition;
+		Position = _selectedPart.GlobalPosition; // Apply Change of Position
+	}
+
+	private void HandleRotation(Vector3 axis, Vector3 mousePos)
+	{
+		mousePos = ((Vector3.One - axis) * mousePos).Normalized(); // Only track change in position on plane perpendicular to the axis of rotation
+
+		float theta = _selectedGizmo switch
+		{
+			GizmoType.RotRed => -Mathf.Atan2(mousePos.Y, mousePos.Z),
+			GizmoType.RotGreen => -Mathf.Atan2(mousePos.Z, mousePos.X),
+			GizmoType.RotBlue => -Mathf.Atan2(mousePos.X, mousePos.Y),
+			_ => 0
+		};
+		theta = SnapAngle(theta);
+			
+		Rotation = axis * theta; // Apply Change of Rotation
+		_selectedPart.Basis = _startTransform.Basis.Rotated(axis, theta); // startRotation + A * θ;
+
+		_selectedPart.UnsnappedBasis = _startUnsnappedBasis.Rotated(axis, theta);
+	}
+
+	private Vector3 SnapPosition(Vector3 newPosition)
+	{
+		if (!Input.IsKeyPressed(Key.Shift) && !Input.IsKeyPressed(Key.Alt)) return newPosition; // Handle Snapping
+		
+		var gridSize = Input.IsKeyPressed(Key.Shift) ? _coarseGridSize : _fineGridSize;
+				
+		newPosition /= gridSize;
+		newPosition = new Vector3(Mathf.Round(newPosition.X), Mathf.Round(newPosition.Y), Mathf.Round(newPosition.Z));
+		newPosition *= gridSize;
+			
+		_startTransform = _selectedPart.Transform; // To prevent snaps from reverting once letting go of modifier
+		return newPosition;
+	}
+
+	private float SnapAngle(float theta)
+	{
+		if (!Input.IsKeyPressed(Key.Shift) && !Input.IsKeyPressed(Key.Alt)) return theta; // Handle Snapping
+		
+		var snapInterval = Input.IsKeyPressed(Key.Shift) ? _coarseAngleSnapInterval : _fineAngleSnapInterval;
+		theta = Mathf.RadToDeg(theta);
+		theta = snapInterval * Mathf.Round(theta / snapInterval);
+		theta = Mathf.DegToRad(theta);
+		return theta;
+	}
+	
 	public void OnToolEnable()
 	{ 
 		

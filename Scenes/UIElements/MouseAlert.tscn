@@ -15,7 +15,8 @@ font_size = 12
 
 [node name="MouseAlert" type="Panel" unique_id=1715353006 node_paths=PackedStringArray("_text")]
 custom_minimum_size = Vector2(0, 20)
-offset_right = 216.0
+anchors_preset = -1
+offset_right = 218.0
 offset_bottom = 20.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_4v23d")
 script = ExtResource("1_ypwgw")
@@ -25,7 +26,7 @@ _text = NodePath("Label")
 layout_mode = 0
 offset_left = 3.0
 offset_top = 1.0
-offset_right = 274.0
+offset_right = 207.0
 offset_bottom = 18.0
-text = "Right Click to Select Launch Vehicle"
+text = "Middle Click to Select Launch Vehicle"
 label_settings = SubResource("LabelSettings_livhk")

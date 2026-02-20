@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cubad3nr3nssl"]
+[gd_scene format=3 uid="uid://cubad3nr3nssl"]
 
-[ext_resource type="Texture2D" uid="uid://wwl1jfkjjwu0" path="res://Resources/UITextures/FuelMeter.png" id="1_6fvdw"]
-[ext_resource type="Texture2D" uid="uid://oo7u1hgkho6m" path="res://Resources/UITextures/FuelMeterFill.png" id="2_fxrn6"]
+[ext_resource type="Texture2D" uid="uid://wwl1jfkjjwu0" path="res://Resources/UITextures/FlightScene/FuelMeter.png" id="1_6fvdw"]
+[ext_resource type="Texture2D" uid="uid://oo7u1hgkho6m" path="res://Resources/UITextures/FlightScene/FuelMeterFill.png" id="2_fxrn6"]
 [ext_resource type="Script" uid="uid://7fw2tf021mow" path="res://Scripts/UserInterface/UIElements/FuelMeter.cs" id="3_fxrn6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fxrn6"]

@@ -1,4 +1,6 @@
 using Godot;
+using GodotPrototype.Scripts.VesselEditor;
+using GodotPrototype.Scripts.VesselEditor.EditorUI;
 
 namespace GodotPrototype.Scripts.Vessels;
 
@@ -33,11 +35,67 @@ public class PartTree
         foreach (var part in Parts)
         {
             if (!HasParentVessel) continue;
-            part.ParentVessel = ParentVessel;
+            part.ParentTree = this;
             part.ConnectedFuelSystem = ParentVessel.FuelSystems[0];
             part.InitializePart();
         }
     }
+
+    public void Reroot(VesselPart newRoot)
+    {
+        if (newRoot.IsSurfaceAttached)
+        {
+            MouseAlertHandler.CreateMouseAlert("New Vessel Root cannot be Surface Attached!", 5);
+            return;
+        }
+        
+        RootPart = newRoot;
+        foreach (var part in Parts)
+        {
+            if (part.IsSurfaceAttached) continue;
+            part.Reparent(PlaceTool.ToolNode);
+        }
+
+        List<VesselPart> rerootedParts = [newRoot];
+        
+        AddPartToTree(newRoot);
+
+        return;
+        void AddPartToTree(VesselPart party)
+        {
+            foreach (var snapPoint in party.SnapPoints)
+            {
+                if (!snapPoint.Occupied) continue;
+                var attachedPart = snapPoint.AttachedSnapPoint.ParentPart;
+                if (rerootedParts.Contains(attachedPart)) continue;
+                //TODO: add reversing of surface attachments
+                
+                attachedPart.Reparent(party);
+                rerootedParts.Add(attachedPart);
+                AddPartToTree(attachedPart);
+            }
+        }
+    }
+
+    public void AppendTree(PartTree otherTree)
+    {
+        Parts.AddRange(otherTree.Parts);
+        foreach (var childTreePart in otherTree.Parts)
+        {
+            childTreePart.ParentTree = this;
+        }
+    }
     
     public double GetTotalMass() => Parts.Sum(part => part.Mass);
+
+    public override string ToString()
+    {
+        string str = "Tree with Root [" + RootPart.Name+ "] has " + Parts.Count + " parts, including:\n";
+        foreach (var part in Parts)
+        {
+            str += part.Name + "\n";
+        }
+
+        return str;
+    }
 }

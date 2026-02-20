@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wwl1jfkjjwu0"
-path="res://.godot/imported/FuelMeter.png-cee4e4a35d5baeb661e62a9437504ed1.ctex"
+uid="uid://c0msolk5o6k87"
+path="res://.godot/imported/LockedIcon.png-b0e5c129e53f0e6dce347cb229b416c1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/FuelMeter.png"
-dest_files=["res://.godot/imported/FuelMeter.png-cee4e4a35d5baeb661e62a9437504ed1.ctex"]
+source_file="res://Resources/UITextures/FlightScene/LockedIcon.png"
+dest_files=["res://.godot/imported/LockedIcon.png-b0e5c129e53f0e6dce347cb229b416c1.ctex"]
 
 [params]
 

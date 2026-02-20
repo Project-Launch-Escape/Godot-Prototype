@@ -7,6 +7,7 @@ using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.VesselEditor;
 
+[Icon("res://Resources/UITextures/VesselEditor/SelectionIcon.png")]
 public partial class PlaceTool : Node3D, IToolable
 {
 	public static PlaceTool ToolNode;
@@ -204,6 +205,7 @@ public partial class PlaceTool : Node3D, IToolable
 		
 		var newPart = (VesselPart)partDefs[n].Scene.Instantiate();
 		newPart.PartDefID = partDefs[n].ID;
+		newPart.ParentTree = new PartTree(newPart);
 		
 		SelectPart(newPart);
 	}
@@ -232,18 +234,20 @@ public partial class PlaceTool : Node3D, IToolable
 		if (!Editor.IsToolEnabled(EditorTool.Attach)) SnapPoint.SetVisualVisibility(false);
 		_placingDist = 5f;
 	}
+	
 	private void PlacePart()
 	{
 		if (IsAttaching)
 		{
-			if (!IsSurfaceAttaching) // Runs only when snapping , not surface attaching
-			{
-				SnapPoint.AttachSnapPointTo(_attachingSnapPoint, _otherAttachingSnapPoint);
-			}
-			else
+			if (IsSurfaceAttaching)
 			{
 				if (_currentPlacingPart.GetAllDescendantParts().Contains(_otherAttachingPart)) return;
 				_currentPlacingPart.Reparent(_otherAttachingPart);
+				_otherAttachingPart.ParentTree.AppendTree(_currentPlacingPart.ParentTree);
+			}
+			else // Runs only when snapping , not surface attaching
+			{
+				SnapPoint.AttachSnapPointTo(_attachingSnapPoint, _otherAttachingSnapPoint);
 			}
 		}
 		

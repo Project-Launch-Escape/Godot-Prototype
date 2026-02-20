@@ -48,6 +48,8 @@ public partial class Editor : Node3D
 				return ContextMenuController.ControllerNode;
 			case EditorTool.Attach:
 				return AttachTool.ToolNode;
+			case EditorTool.Reroot:
+				return RerootTool.ToolNode;
 			case EditorTool.FuelPipe:
 				throw new IndexOutOfRangeException("FuelPipe tool is not implemented");
 			case EditorTool.None:

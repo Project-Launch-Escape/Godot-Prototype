@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjgche0rohxb2"
-path="res://.godot/imported/CameraIcon.png-67d52d91ae6856eda8901db5b7a9b92a.ctex"
+uid="uid://dcyy5x6krabtt"
+path="res://.godot/imported/PauseIcon.png-603f1b98cc7785ecb5767b71e0bd8c22.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/CameraIcon.png"
-dest_files=["res://.godot/imported/CameraIcon.png-67d52d91ae6856eda8901db5b7a9b92a.ctex"]
+source_file="res://Resources/UITextures/FlightScene/PauseIcon.png"
+dest_files=["res://.godot/imported/PauseIcon.png-603f1b98cc7785ecb5767b71e0bd8c22.ctex"]
 
 [params]
 

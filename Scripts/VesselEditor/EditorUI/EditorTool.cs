@@ -6,6 +6,7 @@ public enum EditorTool
     Transform,
     Modify,
     Attach,
+    Reroot,
     FuelPipe,
     None
 }

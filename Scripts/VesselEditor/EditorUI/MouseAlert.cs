@@ -7,11 +7,10 @@ public partial class MouseAlert : Control
 	[Export] private Label _text;
 	public float TimeRemaining;
 	private const float FadeOutTime = 1;
-	
+
 	public override void _Process(double delta)
 	{
 		TimeRemaining -= (float)delta;
-		
 		
 		Modulate = new Color(1, 1, 1, Math.Min(1, TimeRemaining / FadeOutTime));
 		if (TimeRemaining <= 0)
@@ -29,5 +28,6 @@ public partial class MouseAlert : Control
 	{
 		_text.Text = text;
 		TimeRemaining = time;
+		Size = _text.Size;
 	}
 }

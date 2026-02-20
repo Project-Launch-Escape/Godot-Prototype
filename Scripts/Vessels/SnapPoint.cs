@@ -47,6 +47,8 @@ public partial class SnapPoint : Node3D
 
 		if (childPart.IsInsideTree()) childPart.Reparent(parentPart);
 		else parentPart.AddChild(childPart);
+
+		parentPart.ParentTree.AppendTree(childPart.ParentTree);
 		
 		parent.AttachTo(child);
 		child.AttachTo(parent);

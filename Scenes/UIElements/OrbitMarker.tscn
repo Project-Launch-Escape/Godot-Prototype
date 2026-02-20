@@ -1,8 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://k4ax0iqe0gxp"]
+[gd_scene format=3 uid="uid://k4ax0iqe0gxp"]
 
 [ext_resource type="Script" uid="uid://hfvycmgej77m" path="res://Scripts/UserInterface/UIElements/OrbitMarkers/ApsisMarker.cs" id="1_32oms"]
-[ext_resource type="Texture2D" uid="uid://c0msolk5o6k87" path="res://Resources/UITextures/LockedIcon.png" id="2_7llfq"]
-[ext_resource type="Texture2D" uid="uid://777y0d7e6nk2" path="res://Resources/UITextures/UnlockedIcon.png" id="3_32oms"]
+[ext_resource type="Texture2D" uid="uid://c0msolk5o6k87" path="res://Resources/UITextures/FlightScene/LockedIcon.png" id="2_7llfq"]
+[ext_resource type="Texture2D" uid="uid://777y0d7e6nk2" path="res://Resources/UITextures/FlightScene/UnlockedIcon.png" id="3_32oms"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yekcl"]
 bg_color = Color(1, 1, 1, 1)

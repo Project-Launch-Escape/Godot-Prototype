@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bekwkkpfweibu"]
+[gd_scene format=3 uid="uid://bekwkkpfweibu"]
 
-[ext_resource type="Texture2D" uid="uid://3ttgmnnurah1" path="res://Resources/UITextures/CelestialIcon.png" id="1_oixwc"]
+[ext_resource type="Texture2D" uid="uid://3ttgmnnurah1" path="res://Resources/UITextures/FlightScene/CelestialIcon.png" id="1_oixwc"]
 [ext_resource type="Script" uid="uid://bptw7vdxk5nm3" path="res://Scripts/UserInterface/UIElements/OrbitMarkers/CelestialMarker.cs" id="2_s34ty"]
 
 [node name="CelestialMarker" type="Control" node_paths=PackedStringArray("_nameText", "_hoverDisplay")]

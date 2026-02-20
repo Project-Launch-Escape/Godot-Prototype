@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://crnsjo4ueukmv"]
 
 [ext_resource type="Script" uid="uid://bpyf0s7lfq8oc" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/ContextMenu.cs" id="1_i2txm"]
-[ext_resource type="Texture2D" uid="uid://bsjietnkjvvrp" path="res://Resources/UITextures/XIcon.png" id="2_ay3f2"]
+[ext_resource type="Texture2D" uid="uid://bsjietnkjvvrp" path="res://Resources/UITextures/VesselEditor/XIcon.png" id="2_ay3f2"]
 [ext_resource type="Script" uid="uid://tdqm2rseea2r" path="res://Scripts/UserInterface/XButton.cs" id="3_371w0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i2txm"]

@@ -3,6 +3,7 @@ using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.VesselEditor.EditorUI.ContextMenus;
 
+[Icon("res://Resources/UITextures/VesselEditor/ModifyIcon.png")]
 public partial class ContextMenuController : Node, IToolable
 {
 	[Export] public Godot.Collections.Dictionary<ComponentType, PackedScene> ComponentMenus;

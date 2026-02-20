@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7oqx0id03mtt"
-path="res://.godot/imported/TransformIcon.png-c43f5dc3c6050694ec2d674b2fa16380.ctex"
+uid="uid://p3tdndsckdy5"
+path="res://.godot/imported/AttachIcon.png-92889100d049f0d77899b69a40ba6892.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/TransformIcon.png"
-dest_files=["res://.godot/imported/TransformIcon.png-c43f5dc3c6050694ec2d674b2fa16380.ctex"]
+source_file="res://Resources/UITextures/VesselEditor/AttachIcon.png"
+dest_files=["res://.godot/imported/AttachIcon.png-92889100d049f0d77899b69a40ba6892.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bsjietnkjvvrp"
-path="res://.godot/imported/XIcon.png-5842bf2036fa2606b1c7a73fa84e355f.ctex"
+uid="uid://3ttgmnnurah1"
+path="res://.godot/imported/CelestialIcon.png-1f249899126c35569717fb16f6e558b3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/XIcon.png"
-dest_files=["res://.godot/imported/XIcon.png-5842bf2036fa2606b1c7a73fa84e355f.ctex"]
+source_file="res://Resources/UITextures/FlightScene/CelestialIcon.png"
+dest_files=["res://.godot/imported/CelestialIcon.png-1f249899126c35569717fb16f6e558b3.ctex"]
 
 [params]
 

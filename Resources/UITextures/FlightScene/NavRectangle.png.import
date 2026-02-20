@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqgono483jqpp"
-path="res://.godot/imported/PipeIcon.png-64965eb802d7c5cb161f7c29dcc1829d.ctex"
+uid="uid://clnr21py3bpk7"
+path="res://.godot/imported/NavRectangle.png-6dcb7678393dc4f463d4314acc58eca2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/PipeIcon.png"
-dest_files=["res://.godot/imported/PipeIcon.png-64965eb802d7c5cb161f7c29dcc1829d.ctex"]
+source_file="res://Resources/UITextures/FlightScene/NavRectangle.png"
+dest_files=["res://.godot/imported/NavRectangle.png-6dcb7678393dc4f463d4314acc58eca2.ctex"]
 
 [params]
 

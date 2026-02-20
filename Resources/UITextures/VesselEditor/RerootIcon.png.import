@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://oo7u1hgkho6m"
-path="res://.godot/imported/FuelMeterFill.png-f221aade322b06cb77892642ce4d3656.ctex"
+uid="uid://cxlm4t1dwxsra"
+path="res://.godot/imported/RerootIcon.png-b457c509cc24afbffef3d31e26332767.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/FuelMeterFill.png"
-dest_files=["res://.godot/imported/FuelMeterFill.png-f221aade322b06cb77892642ce4d3656.ctex"]
+source_file="res://Resources/UITextures/VesselEditor/RerootIcon.png"
+dest_files=["res://.godot/imported/RerootIcon.png-b457c509cc24afbffef3d31e26332767.ctex"]
 
 [params]
 
