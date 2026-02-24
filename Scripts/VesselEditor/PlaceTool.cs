@@ -62,7 +62,7 @@ public partial class PlaceTool : Node3D, IToolable
 
 		_currentPlacingPart = selectedPart;
 		IsToolActive = true;
-		SnapPoint.SetVisualVisibility(true);
+		SnapPoint.SetGlobalVisibility(true);
 
 		if (_currentPlacingPart.GetParent() is VesselPart selectingPartParent)
 		{
@@ -205,7 +205,7 @@ public partial class PlaceTool : Node3D, IToolable
 		
 		var newPart = (VesselPart)partDefs[n].Scene.Instantiate();
 		newPart.PartDefID = partDefs[n].ID;
-		newPart.ParentTree = new PartTree(newPart);
+		//newPart.ParentTree = new PartTree(newPart);
 		
 		SelectPart(newPart);
 	}
@@ -216,7 +216,7 @@ public partial class PlaceTool : Node3D, IToolable
 		DeselectPart();
 		_placingDist = distTemp; // So it doesn't reset
 		IsToolActive = true;
-		SnapPoint.SetVisualVisibility(true);
+		SnapPoint.SetGlobalVisibility(true);
 
 		_currentPlacingPart = part;
 		if (!part.IsInsideTree()) AddChild(_currentPlacingPart);
@@ -231,7 +231,7 @@ public partial class PlaceTool : Node3D, IToolable
 		}
 		
 		IsToolActive = false;
-		if (!Editor.IsToolEnabled(EditorTool.Attach)) SnapPoint.SetVisualVisibility(false);
+		if (!Editor.IsToolEnabled(EditorTool.Attach)) SnapPoint.SetGlobalVisibility(false);
 		_placingDist = 5f;
 	}
 	
@@ -253,7 +253,7 @@ public partial class PlaceTool : Node3D, IToolable
 		
 		_currentPlacingPart = null;
 		IsToolActive = false;
-		if (!Editor.IsToolEnabled(EditorTool.Attach)) SnapPoint.SetVisualVisibility(false);
+		if (!Editor.IsToolEnabled(EditorTool.Attach)) SnapPoint.SetGlobalVisibility(false);
 	}
 
 	private void CopyPlacingToClipboard()

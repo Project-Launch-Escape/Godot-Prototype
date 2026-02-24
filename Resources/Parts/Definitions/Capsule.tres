@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="PartDefinition" load_steps=4 format=3 uid="uid://mbcd11lsktjf"]
+[gd_resource type="Resource" script_class="PartDefinition" format=3 uid="uid://mbcd11lsktjf"]
 
 [ext_resource type="Script" uid="uid://b6mm672vti7v5" path="res://Scripts/Vessels/PartDefinition.cs" id="1_82h26"]
-[ext_resource type="Texture2D" uid="uid://d3gl0uel3anu2" path="res://Resources/Icons/VesselIcon.png" id="1_oqihq"]
+[ext_resource type="Texture2D" uid="uid://dqdfmcy3g1r0a" path="res://Resources/Parts/Icons/CapsuleIcon.png" id="1_oqihq"]
 [ext_resource type="PackedScene" uid="uid://sy4kdr7r0khc" path="res://Resources/Parts/Scenes/capsule.tscn" id="2_mk05g"]
 
 [resource]

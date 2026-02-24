@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="PartDefinition" load_steps=4 format=3 uid="uid://br5pw3trpbjie"]
+[gd_resource type="Resource" script_class="PartDefinition" format=3 uid="uid://br5pw3trpbjie"]
 
-[ext_resource type="Texture2D" uid="uid://cnuwbhn51o7yg" path="res://Resources/Icons/FuelTankIcon.png" id="1_bvlhp"]
+[ext_resource type="Texture2D" uid="uid://b47i3b6o2631i" path="res://Resources/Parts/Icons/FuelTankIcon.png" id="1_bvlhp"]
 [ext_resource type="PackedScene" uid="uid://bp0y71wbm8kj" path="res://Resources/Parts/Scenes/tank.tscn" id="2_j004g"]
 [ext_resource type="Script" uid="uid://b6mm672vti7v5" path="res://Scripts/Vessels/PartDefinition.cs" id="3_k8ste"]
 

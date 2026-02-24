@@ -30,7 +30,7 @@ public partial class CelestialInitializer : Node
 		OrbitMesh.DefaultMeshParent = this;
 		FuelType.InitializeFuelTypes();
 		Editor.InitializeParts();
-		SnapPoint.SetVisualVisibility(false);
+		SnapPoint.SetGlobalVisibility(false);
 	}
 
 	public override void _Ready()

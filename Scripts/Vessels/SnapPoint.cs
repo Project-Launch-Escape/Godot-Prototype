@@ -19,7 +19,7 @@ public partial class SnapPoint : Node3D
 	
 	private static event EventHandler<bool> OnVisualEnabledChanged;
 
-	public static void SetVisualVisibility(bool visible)
+	public static void SetGlobalVisibility(bool visible)
 	{
 		OnVisualEnabledChanged?.Invoke(null, visible);
 	}

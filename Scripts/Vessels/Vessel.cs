@@ -55,7 +55,7 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		
 		FuelSystems.Add(new FuelSystem());
 		InitializeFromLaunchFile();
-		SnapPoint.SetVisualVisibility(false);
+		SnapPoint.SetGlobalVisibility(false);
 
 		_gravityVector = DebugVector.CreateVector(Vector3d.Zero, Vector3d.Zero, new Color(0, 1, 0), this);
 		_thrustVector = DebugVector.CreateVector(Vector3d.Zero, Vector3d.Zero, new Color(1f, 0.85f, 0.1f), this);

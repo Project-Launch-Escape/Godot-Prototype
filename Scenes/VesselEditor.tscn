@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ba3yuukuk7yel" path="res://Scripts/VesselEditor/Editor.cs" id="1_a5mxq"]
 [ext_resource type="Script" uid="uid://b2ucfws7t3bhu" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
+[ext_resource type="Shader" uid="uid://3qgyf5ffkiod" path="res://Resources/Outline.gdshader" id="2_o2me5"]
 [ext_resource type="Script" uid="uid://mvrdcf02w5px" path="res://Scripts/VesselEditor/PlaceTool.cs" id="6_2h56u"]
 [ext_resource type="Script" uid="uid://bdi1g4eb5anis" path="res://Scripts/VesselEditor/RerootTool.cs" id="6_hiywy"]
 [ext_resource type="Theme" uid="uid://b0s7ysif5h015" path="res://Resources/DefaultTheme.tres" id="6_sprtt"]
@@ -30,6 +31,13 @@
 [ext_resource type="Script" uid="uid://cqpxgfj5c61sb" path="res://Scripts/VesselEditor/EditorUI/MouseAlertHandler.cs" id="26_eu1sv"]
 [ext_resource type="PackedScene" uid="uid://cagnvn136i58w" path="res://Scenes/UIElements/MouseAlert.tscn" id="27_xpblq"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4v23d"]
+render_priority = 0
+shader = ExtResource("2_o2me5")
+shader_parameter/samples = 4
+shader_parameter/sensitivity = 0.1
+shader_parameter/edge_fade = 0.015
+
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vqfw5"]
 sky_top_color = Color(0.3758172, 0.33451146, 0.9318945, 1)
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -56,9 +64,10 @@ glow_enabled = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sprtt"]
 albedo_texture = ExtResource("21_jts1t")
 texture_filter = 0
+grow_amount = -0.936
 
 [sub_resource type="QuadMesh" id="QuadMesh_e6dcg"]
-size = Vector2(10, 10)
+size = Vector2(25, 25)
 orientation = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bgqvo"]
@@ -170,6 +179,7 @@ expand_margin_left = 2.0
 
 [node name="VesselEditor" type="Node3D" unique_id=271238879]
 script = ExtResource("1_a5mxq")
+_outlineShader = SubResource("ShaderMaterial_4v23d")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1569562206]
 environment = SubResource("Environment_175yu")
@@ -205,8 +215,9 @@ script = ExtResource("7_r60lh")
 script = ExtResource("6_hiywy")
 
 [node name="Baseplate" type="MeshInstance3D" parent="." unique_id=1212966459]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
 material_override = SubResource("StandardMaterial3D_sprtt")
+cast_shadow = 0
 mesh = SubResource("QuadMesh_e6dcg")
 
 [node name="UI" type="Node" parent="." unique_id=1465199739]

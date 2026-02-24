@@ -36,6 +36,7 @@ public static class VesselFileTools
 		var editorFile = GetEditorFileFromFilePath(filePath);
 		Editor.EditorNode.ClearEditor();
 		editorFile.LoadEditorFile();
+		SnapPoint.SetGlobalVisibility(false);
 	}
 	public static EditorFile GetEditorFileFromFilePath(string filePath)
 	{

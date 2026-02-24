@@ -8,6 +8,8 @@ public partial class VesselPart : StaticBody3D
 {
 	public PartDefinition PartDef => PartDefinition.PartDefByID[PartDefID];
 	public string PartDefID;
+
+	[Export] public MeshInstance3D Mesh;
 	
 	[Export] public SnapPoint[] SnapPoints;
 	[Export] public SnapPoint SurfaceAttatchPoint;
@@ -16,9 +18,9 @@ public partial class VesselPart : StaticBody3D
 	public bool IsSurfaceAttached => ParentPart != null && ParentPart.SnapPoints.All(parentPartSnapPoint => parentPartSnapPoint.AttachedPart != this);
 
 	public PartTree ParentTree;
-	
-	public VesselPart VesselRootPart => ParentTree.RootPart;
+	public VesselPart TreeRootPart => ParentTree.RootPart;
 	public Vessel ParentVessel => ParentTree.ParentVessel;
+	
 	public VesselPart ParentPart => GetParent() as VesselPart;
 	public List<VesselPart> ChildParts => GetChildParts();
 
@@ -32,6 +34,11 @@ public partial class VesselPart : StaticBody3D
 	public string PartName => PartDef.Name;
 
 	public Basis UnsnappedBasis = Basis.Identity;
+
+	public VesselPart()
+	{
+		ParentTree = new PartTree(this);
+	}
 	
 	public override void _Ready()
 	{

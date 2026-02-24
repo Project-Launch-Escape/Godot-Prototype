@@ -22,14 +22,16 @@ public partial class Editor : Node3D
 	public static EditorTool ToolRight = EditorTool.Modify;
 	
 	public static Editor EditorNode;
-
+	
+	[Export] private ShaderMaterial _outlineShader;
+	private List<VesselPart> _hoveredParts = [];
 
 	public override void _Ready()
 	{
 		InitializeParts();
 		FuelType.InitializeFuelTypes();
 		EditorNode = this;
-		SnapPoint.SetVisualVisibility(false);
+		SnapPoint.SetGlobalVisibility(false);
 		Camera = (VesselEditorCamera)GetViewport().GetCamera3D();
 	}
 
@@ -94,7 +96,32 @@ public partial class Editor : Node3D
 		
 		ToolObjFromEnum(tool).HandleTool(mouseInput, Input.IsKeyPressed(Key.Shift), Input.IsKeyPressed(Key.Alt));
 	}
-	
+
+	public override void _Process(double delta)
+	{
+		var hoveredPart = GetMouseHoveredPart();
+		var currentHoveredParts = new List<VesselPart>();
+		if (hoveredPart != null)
+		{
+			currentHoveredParts.Add(hoveredPart);
+			currentHoveredParts.AddRange(hoveredPart.GetAllDescendantParts());
+		}
+		
+		foreach (var currentHoveredPart in currentHoveredParts)
+		{
+			if (_hoveredParts.Contains(currentHoveredPart)) continue;
+			currentHoveredPart.Mesh.GetActiveMaterial(0).NextPass = _outlineShader;
+			_hoveredParts.Add(currentHoveredPart);
+			currentHoveredPart.TreeExiting += () => _hoveredParts.Remove(currentHoveredPart);
+		}
+		foreach (var previousHoveredPart in _hoveredParts.ToList())
+		{
+			if (currentHoveredParts.Contains(previousHoveredPart)) continue;
+			previousHoveredPart.Mesh.GetActiveMaterial(0).NextPass = null;
+			_hoveredParts.Remove(previousHoveredPart);
+		}
+	}
+
 	public static Dictionary GetMouseHoveredRayResults(float distance = 100f, Array<Rid> excludeList = null)
 	{
 		var cameraPos = Camera.GlobalPosition;

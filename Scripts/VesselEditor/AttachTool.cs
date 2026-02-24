@@ -58,11 +58,11 @@ public partial class AttachTool : Node3D, IToolable
 
 	public void OnToolEnable()
 	{
-		SnapPoint.SetVisualVisibility(true);
+		SnapPoint.SetGlobalVisibility(true);
 	}
 	public void OnToolDisable()
 	{
-		SnapPoint.SetVisualVisibility(false);
+		SnapPoint.SetGlobalVisibility(false);
 	}
 
 

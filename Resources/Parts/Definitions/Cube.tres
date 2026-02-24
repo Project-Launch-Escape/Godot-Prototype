@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="PartDefinition" load_steps=4 format=3 uid="uid://cef5j4316swjw"]
+[gd_resource type="Resource" script_class="PartDefinition" format=3 uid="uid://cef5j4316swjw"]
 
-[ext_resource type="Texture2D" uid="uid://baoorl76v6ipw" path="res://Resources/Icons/VesselPartIcon.png" id="1_0dat2"]
+[ext_resource type="Texture2D" uid="uid://bbif1c3jobksu" path="res://Resources/Parts/Icons/CubeIcon.png" id="1_0dat2"]
 [ext_resource type="PackedScene" uid="uid://d3t3v4jewjjhr" path="res://Resources/Parts/Scenes/cube.tscn" id="2_hglbv"]
 [ext_resource type="Script" uid="uid://b6mm672vti7v5" path="res://Scripts/Vessels/PartDefinition.cs" id="3_ltcmd"]
 
