@@ -9,20 +9,16 @@ public class PartTreeJSON
 	public VesselPartJSON[] Parts;
 
 
-	public PartTreeJSON(VesselPart root)
+	public PartTreeJSON(PartTree partTree)
 	{
-		List<VesselPart> vesselParts = [root];
-		vesselParts.AddRange(root.GetAllDescendantParts());
+		Parts = new VesselPartJSON[partTree.Parts.Count];
 
-		Parts = new VesselPartJSON[vesselParts.Count];
-
-		for(int i = 0; i < vesselParts.Count; i++)
+		for(int i = 0; i < partTree.Parts.Count; i++)
 		{
-			var part = vesselParts[i];
-			int parentIndex = vesselParts.IndexOf(part.ParentPart);
+			var part = partTree.Parts[i];
+			int parentIndex = partTree.Parts.IndexOf(part.ParentPart);
 			Parts[i] = new VesselPartJSON(part, i, parentIndex);
 		}
-		
 	}
 	
 	[JsonConstructor]
@@ -69,7 +65,7 @@ public class PartTreeJSON
 					var snapPoint = part.SnapPoints[partJSON.SnapPointIndex];
 					var parentSnapPoint = initializedParts[partJSON.ParentIndex].SnapPoints[partJSON.ParentSnapPointIndex];
 				
-					SnapPoint.AttachSnapPointTo(snapPoint, parentSnapPoint);
+					SnapPoint.AttachSnapPoints(snapPoint, parentSnapPoint);
 				}
 
 				part.Position = partJSON.Position;

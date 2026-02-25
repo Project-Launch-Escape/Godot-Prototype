@@ -227,6 +227,7 @@ public partial class TranslateTool : Node3D, IToolable
 
 	private void HandleRotation(Vector3 axis, Vector3 mousePos)
 	{
+		//TODO: Fix Rotation Snapping with Child Parts
 		mousePos = ((Vector3.One - axis) * mousePos).Normalized(); // Only track change in position on plane perpendicular to the axis of rotation
 
 		float theta = _selectedGizmo switch
@@ -260,7 +261,7 @@ public partial class TranslateTool : Node3D, IToolable
 
 	private float SnapAngle(float theta)
 	{
-		if (!Input.IsKeyPressed(Key.Shift) && !Input.IsKeyPressed(Key.Alt)) return theta; // Handle Snapping
+		if (!Input.IsKeyPressed(Key.Shift) && !Input.IsKeyPressed(Key.Alt)) return theta;
 		
 		var snapInterval = Input.IsKeyPressed(Key.Shift) ? _coarseAngleSnapInterval : _fineAngleSnapInterval;
 		theta = Mathf.RadToDeg(theta);

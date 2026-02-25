@@ -11,9 +11,9 @@
         "ParentSnapPointIndex": -2,
         "SnapPointIndex": -2,
         "Position": {
-          "X": -2.288641,
-          "Y": 1.1454171,
-          "Z": -0.66130686
+          "X": -0.9549901,
+          "Y": 0.7422073,
+          "Z": -0.17614841
         },
         "Rotation": {
           "X": -0,
@@ -26,6 +26,120 @@
           "Z": 0
         },
         "Components": []
+      },
+      {
+        "IsSurfaceAttached": false,
+        "PartIndex": 1,
+        "PartDefID": "TANK_12g3",
+        "ParentIndex": 0,
+        "ParentSnapPointIndex": 1,
+        "SnapPointIndex": 0,
+        "Position": {
+          "X": 1.1920929E-07,
+          "Y": -1.5,
+          "Z": 0
+        },
+        "Rotation": {
+          "X": -0,
+          "Y": 0,
+          "Z": 1.7484558E-07
+        },
+        "UnsnappedRotation": {
+          "X": -0,
+          "Y": 0,
+          "Z": 0
+        },
+        "Components": [
+          {
+            "ComponentType": "FuelTank",
+            "FuelLevels": [
+              {
+                "FuelType": "Methane",
+                "Level": 300,
+                "Max": 300
+              },
+              {
+                "FuelType": "Oxidizer",
+                "Level": 100,
+                "Max": 100
+              }
+            ],
+            "Index": 0,
+            "BaseMass": 0
+          }
+        ]
+      },
+      {
+        "IsSurfaceAttached": false,
+        "PartIndex": 2,
+        "PartDefID": "ENGINE_132h",
+        "ParentIndex": 1,
+        "ParentSnapPointIndex": 1,
+        "SnapPointIndex": 0,
+        "Position": {
+          "X": -5.9604645E-08,
+          "Y": -1.4999998,
+          "Z": 0
+        },
+        "Rotation": {
+          "X": -0,
+          "Y": 0,
+          "Z": 1.7484558E-07
+        },
+        "UnsnappedRotation": {
+          "X": -0,
+          "Y": 0,
+          "Z": 0
+        },
+        "Components": [
+          {
+            "ComponentType": "Engine",
+            "Index": 0,
+            "BaseMass": 0
+          }
+        ]
+      },
+      {
+        "IsSurfaceAttached": true,
+        "PartIndex": 3,
+        "PartDefID": "TANK_12g3",
+        "ParentIndex": 1,
+        "ParentSnapPointIndex": -1,
+        "SnapPointIndex": -1,
+        "Position": {
+          "X": 1,
+          "Y": 0,
+          "Z": -0
+        },
+        "Rotation": {
+          "X": -0,
+          "Y": 2.7462418,
+          "Z": 0
+        },
+        "UnsnappedRotation": {
+          "X": -0,
+          "Y": 0,
+          "Z": 0
+        },
+        "Components": [
+          {
+            "ComponentType": "FuelTank",
+            "FuelLevels": [
+              {
+                "FuelType": "Methane",
+                "Level": 300,
+                "Max": 300
+              },
+              {
+                "FuelType": "Oxidizer",
+                "Level": 100,
+                "Max": 100
+              }
+            ],
+            "Index": 0,
+            "BaseMass": 0
+          }
+        ]
       }
     ]
   }

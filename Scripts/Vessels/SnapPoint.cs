@@ -38,7 +38,7 @@ public partial class SnapPoint : Node3D
 		SetVisualState(SnapPointVisualState.Attached);
 	}
 
-	public static void AttachSnapPointTo(SnapPoint child, SnapPoint parent)
+	public static void AttachSnapPoints(SnapPoint child, SnapPoint parent)
 	{
 		var parentPart = parent.ParentPart;
 		var childPart = child.ParentPart;
@@ -54,10 +54,21 @@ public partial class SnapPoint : Node3D
 		child.AttachTo(parent);
 	}
 
+	public static void UnattachSnapPoints(SnapPoint parent, SnapPoint child)
+	{
+		var parentPart = parent.ParentPart;
+		var childPart = child.ParentPart;
+
+		parentPart.ParentTree.SplitTree(childPart);
+		parent.Unattatch();
+		child.Unattatch();
+	}
+
 	public void Unattatch()
 	{
 		AttachedSnapPoint = null;
 		_collisionShape.Disabled = false;
+		
 		SetVisualState(SnapPointVisualState.Normal);
 	}
 
@@ -69,7 +80,7 @@ public partial class SnapPoint : Node3D
 
 		childPart.Transform = GetSnappedTransform(parentSnapPoint);
 
-		AttachSnapPointTo(childSnapPoint, parentSnapPoint);
+		AttachSnapPoints(childSnapPoint, parentSnapPoint);
 	}
 
 	public Transform3D GetSnappedTransform(SnapPoint parentSnapPoint)

@@ -43,13 +43,14 @@ sky_top_color = Color(0.3758172, 0.33451146, 0.9318945, 1)
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
 ground_bottom_color = Color(0.19520012, 0.17199865, 0.41558966, 1)
 ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_curve = 0.0346743
 
 [sub_resource type="Sky" id="Sky_6kmqj"]
 sky_material = SubResource("ProceduralSkyMaterial_vqfw5")
 
 [sub_resource type="Environment" id="Environment_175yu"]
 background_mode = 2
-background_intensity = 20000.0
+background_color = Color(0.36480132, 0.6511294, 0.9777239, 1)
 sky = SubResource("Sky_6kmqj")
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
@@ -60,6 +61,15 @@ glow_enabled = true
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_y6rsm"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_vqfw5"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_o2me5"]
+radius = 0.063
+height = 0.125
+radial_segments = 10
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4v23d"]
+albedo_color = Color(0.22520828, 4.0080882e-05, 0.23042706, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sprtt"]
 albedo_texture = ExtResource("21_jts1t")
@@ -185,13 +195,17 @@ _outlineShader = SubResource("ShaderMaterial_4v23d")
 environment = SubResource("Environment_175yu")
 camera_attributes = SubResource("CameraAttributesPractical_y6rsm")
 
-[node name="Camera" type="Camera3D" parent="." unique_id=607649261]
+[node name="Camera" type="Camera3D" parent="." unique_id=607649261 node_paths=PackedStringArray("_focusPoint")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00630343, 0.679551, 2.27911)
 attributes = SubResource("CameraAttributesPractical_vqfw5")
 fov = 70.0
 script = ExtResource("2_npby0")
-CameraSensitivity = 0.2
-MoveSpeed = 0.001
+_moveSpeed = 2.5
+_focusPoint = NodePath("FocusSphere")
+
+[node name="FocusSphere" type="MeshInstance3D" parent="Camera" unique_id=522208171]
+mesh = SubResource("SphereMesh_o2me5")
+surface_material_override/0 = SubResource("StandardMaterial3D_4v23d")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=390424122]
 transform = Transform3D(1, 0, 0, 0, 0.629456, 0.777036, 0, -0.777036, 0.629456, 0, 0, 0)
@@ -223,7 +237,6 @@ mesh = SubResource("QuadMesh_e6dcg")
 [node name="UI" type="Node" parent="." unique_id=1465199739]
 
 [node name="PartSelector" type="ItemList" parent="UI" unique_id=955661169]
-texture_filter = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_top = 32.0
@@ -242,12 +255,12 @@ icon_mode = 0
 fixed_icon_size = Vector2i(75, 75)
 script = ExtResource("7_y6rsm")
 
-[node name="SelectorPanel" type="ItemList" parent="UI" unique_id=819977049 node_paths=PackedStringArray("_leftOutline", "_rightOutline")]
+[node name="ToolSelector" type="ItemList" parent="UI" unique_id=819977049 node_paths=PackedStringArray("_leftOutline", "_rightOutline")]
 texture_filter = 1
 clip_contents = false
 offset_left = 295.0
 offset_top = 29.0
-offset_right = 779.0
+offset_right = 784.0
 offset_bottom = 129.0
 theme = ExtResource("6_sprtt")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -276,7 +289,7 @@ script = ExtResource("9_bgqvo")
 _leftOutline = NodePath("LeftClickOutline")
 _rightOutline = NodePath("RightClickOutline")
 
-[node name="LeftClickOutline" type="Panel" parent="UI/SelectorPanel" unique_id=613371189]
+[node name="LeftClickOutline" type="Panel" parent="UI/ToolSelector" unique_id=613371189]
 layout_mode = 0
 offset_left = 6.0
 offset_top = 5.0
@@ -285,7 +298,7 @@ offset_bottom = 94.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_h32pl")
 
-[node name="RightClickOutline" type="Panel" parent="UI/SelectorPanel" unique_id=549492834]
+[node name="RightClickOutline" type="Panel" parent="UI/ToolSelector" unique_id=549492834]
 layout_mode = 0
 offset_left = 98.0
 offset_top = 5.0
@@ -294,7 +307,7 @@ offset_bottom = 94.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_frkoo")
 
-[node name="LeftClickHint" type="TextureRect" parent="UI/SelectorPanel" unique_id=717455556]
+[node name="LeftClickHint" type="TextureRect" parent="UI/ToolSelector" unique_id=717455556]
 layout_mode = 0
 offset_left = 486.0
 offset_top = 7.0
@@ -302,7 +315,7 @@ offset_right = 526.0
 offset_bottom = 47.0
 texture = ExtResource("14_jts1t")
 
-[node name="RightClickHint" type="TextureRect" parent="UI/SelectorPanel" unique_id=71364092]
+[node name="RightClickHint" type="TextureRect" parent="UI/ToolSelector" unique_id=71364092]
 layout_mode = 0
 offset_left = 486.0
 offset_top = 59.0

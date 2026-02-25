@@ -26,7 +26,7 @@ public partial class ToolSelector : ItemList
 		Editor.SelectTool(selectedTool, mouseButton);
 
 		var panelToMove = mouseButton is MouseButton.Left ? _leftOutline : _rightOutline;
-		const int x0 = 6,  dx = 92, y0 = 5;
+		const int x0 = 5,  dx = 94, y0 = 5;
 		panelToMove.Position = new Vector2(x0 + index * dx, y0);
 
 		const int expandMargins = 8;

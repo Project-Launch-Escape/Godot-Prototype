@@ -14,7 +14,7 @@ public class EditorFile
 		for (var i = 0; i < rootParts.Length; i++)
 		{
 			var rootPart = rootParts[i];
-			Assemblies[i] = new PartTreeJSON(rootPart);
+			Assemblies[i] = new PartTreeJSON(rootPart.ParentTree);
 		}
 	}
 

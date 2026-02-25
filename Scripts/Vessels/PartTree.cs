@@ -25,6 +25,12 @@ public class PartTree
         Parts.AddRange(root.GetAllDescendantParts());
     }
 
+    public PartTree(VesselPart rootPart, List<VesselPart> parts)
+    {
+        RootPart = rootPart;
+        Parts = parts;
+    }
+
     public PartTree(VesselPart root, Vessel vessel) : this(root)
     {
         ParentVessel = vessel;
@@ -45,7 +51,7 @@ public class PartTree
     {
         if (newRoot.IsSurfaceAttached)
         {
-            MouseAlertHandler.CreateMouseAlert("New Vessel Root cannot be Surface Attached!", 5);
+            MouseAlertHandler.CreateMouseAlert("New Root cannot be Surface Attached!", 5);
             return;
         }
         
@@ -85,6 +91,21 @@ public class PartTree
             childTreePart.ParentTree = this;
         }
     }
+
+    public void SplitTree(VesselPart newRoot)
+    {
+        List<VesselPart> newTreeParts = [newRoot];
+        newTreeParts.AddRange(newRoot.GetAllDescendantParts());
+
+        var newTree = new PartTree(newRoot, newTreeParts);
+        
+        foreach (var partToRemove in newTreeParts)
+        {
+            Parts.Remove(partToRemove);
+            partToRemove.ParentTree = newTree;
+        }
+    }
+    
     
     public double GetTotalMass() => Parts.Sum(part => part.Mass);
 

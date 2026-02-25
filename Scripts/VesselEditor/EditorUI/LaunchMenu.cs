@@ -49,7 +49,7 @@ public partial class LaunchMenu : Node
 		var part = Editor.GetMouseHoveredPart();
 		if (part == null) return;
 
-		var launchFile = new LaunchFile(part)
+		var launchFile = new LaunchFile(part.ParentTree)
 		{
 			StartingCelestial = _celestialInput.Text,
 			StartOnSurface = _landedChecker.ButtonPressed

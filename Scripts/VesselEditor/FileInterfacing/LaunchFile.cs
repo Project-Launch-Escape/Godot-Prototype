@@ -13,9 +13,9 @@ public class LaunchFile
     [Required] public bool StartOnSurface; // Starts in orbit if false
     public PartTreeJSON PartTree;
 
-    public LaunchFile(VesselPart rootPart)
+    public LaunchFile(PartTree partTree)
     {
-        PartTree = new PartTreeJSON(rootPart);
+        PartTree = new PartTreeJSON(partTree);
     }
 
     [SetsRequiredMembers] [JsonConstructor]

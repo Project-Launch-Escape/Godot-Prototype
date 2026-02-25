@@ -64,13 +64,19 @@ public partial class PlaceTool : Node3D, IToolable
 		IsToolActive = true;
 		SnapPoint.SetGlobalVisibility(true);
 
-		if (_currentPlacingPart.GetParent() is VesselPart selectingPartParent)
+		if (selectedPart.GetParent() is VesselPart selectingPartParent)
 		{
-			foreach (var snapPoint in _currentPlacingPart.SnapPoints)
+			if (!selectedPart.IsSurfaceAttached)
 			{
-				if (selectingPartParent != snapPoint.AttachedPart) continue;
-				snapPoint.AttachedSnapPoint.Unattatch();
-				snapPoint.Unattatch();
+				foreach (var snapPoint in selectedPart.SnapPoints)
+				{
+					if (selectingPartParent != snapPoint.AttachedPart) continue;
+					SnapPoint.UnattachSnapPoints(snapPoint.AttachedSnapPoint, snapPoint);
+				}
+			}
+			else
+			{
+				selectingPartParent.ParentTree.SplitTree(selectedPart);
 			}
 		}
 		selectedPart.Reparent(this);
@@ -185,14 +191,14 @@ public partial class PlaceTool : Node3D, IToolable
 		}
 		var mouseDirection = Camera.ProjectRayNormal(GetViewport().GetMousePosition());
 		
-		var cameraPositionWithoutY = Camera.GlobalPosition - Camera.Origin with { Y = 0 };
+		var cameraPositionWithoutY = Camera.GlobalPosition - Camera.CameraPivot with { Y = 0 };
 		var planeNormal = -cameraPositionWithoutY.Normalized();
 		var plane = new Plane(planeNormal, planeNormal * _placingDist + cameraPositionWithoutY);
 		
-		var rayIntersection = plane.IntersectsRay(Camera.GlobalPosition - Camera.Origin, mouseDirection);
+		var rayIntersection = plane.IntersectsRay(Camera.GlobalPosition - Camera.CameraPivot, mouseDirection);
 		newPos = rayIntersection ?? _currentPlacingPart.Position;
 		
-		newTransform.Origin = newPos + Camera.Origin;
+		newTransform.Origin = newPos + Camera.CameraPivot;
 		newTransform.Basis = _currentPlacingPart.UnsnappedBasis;
 		
 		return newTransform;
@@ -247,7 +253,7 @@ public partial class PlaceTool : Node3D, IToolable
 			}
 			else // Runs only when snapping , not surface attaching
 			{
-				SnapPoint.AttachSnapPointTo(_attachingSnapPoint, _otherAttachingSnapPoint);
+				SnapPoint.AttachSnapPoints(_attachingSnapPoint, _otherAttachingSnapPoint);
 			}
 		}
 		
@@ -258,7 +264,7 @@ public partial class PlaceTool : Node3D, IToolable
 
 	private void CopyPlacingToClipboard()
 	{
-		var json = VesselFileTools.GetPartTreeJsonString(_currentPlacingPart);
+		var json = VesselFileTools.GetPartTreeJsonString(new PartTree(_currentPlacingPart));
 		DisplayServer.ClipboardSet(json);
 	}
 	private void PasteVesselFromClipboard()

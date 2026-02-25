@@ -165,7 +165,7 @@ public partial class Editor : Node3D
 
 	public static VesselPart DuplicatePart(VesselPart duplicant)
 	{
-		var jsonString = VesselFileTools.GetPartTreeJsonString(duplicant);
+		var jsonString = VesselFileTools.GetPartTreeJsonString(new PartTree(duplicant));
 		return VesselFileTools.GetVesselRootFromJson(jsonString);
 	}
 

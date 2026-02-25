@@ -4,23 +4,18 @@ namespace GodotPrototype.Scripts.VesselEditor;
 
 public partial class VesselEditorCamera : Camera3D
 {
-	public Vector3 Origin = Vector3.Zero;
+	public Vector3 CameraPivot = Vector3.Zero;
 
 	[ExportGroup("Camera Settings")]
-	[Export]
-	public float MinCameraZoom = 2f;
 	
-	[Export]
-	public float MaxCameraZoom = 50f;
-	
-	[Export]
-	public float StartCameraZoom = 5f;
+	[Export] private float _minCameraZoom = 2f;
+	[Export] private float _maxCameraZoom = 50f;
+	[Export] private float _startCameraZoom = 5f;
 
-	[Export]
-	public float CameraSensitivity = 0.1f;
-	
-	[Export]
-	public float MoveSpeed = 0.1f;
+	[Export] private float _cameraSensitivity = 0.1f;
+	[Export] private float _moveSpeed = 0.1f;
+
+	[Export] private Node3D _focusPoint;
 
 	private float _cameraYaw;
 	private float _cameraPitch;
@@ -29,13 +24,14 @@ public partial class VesselEditorCamera : Camera3D
 
 	public override void _Ready()
 	{
-		_cameraZoom = StartCameraZoom;
+		_cameraZoom = _startCameraZoom;
 		_cameraPitch = Mathf.DegToRad(30f);
 	}
 
 	public override void _Process(double delta)
 	{
 		SetCameraTransform(_cameraYaw, _cameraPitch);
+		_focusPoint.GlobalPosition = CameraPivot;
 	}
 
 	public override void _Input(InputEvent inputEvent)
@@ -56,29 +52,26 @@ public partial class VesselEditorCamera : Camera3D
 
 	private void UpdateInputPan(InputEventMouseMotion inputEventMouseMotion)
 	{
-		_cameraYaw += Mathf.DegToRad(-inputEventMouseMotion.Relative.X * CameraSensitivity) % Mathf.Pi;
-		_cameraPitch += Mathf.DegToRad(inputEventMouseMotion.Relative.Y * CameraSensitivity);
+		_cameraYaw += Mathf.DegToRad(-inputEventMouseMotion.Relative.X * _cameraSensitivity) % Mathf.Pi;
+		_cameraPitch += Mathf.DegToRad(inputEventMouseMotion.Relative.Y * _cameraSensitivity);
 	}
 
 	private void UpdateInputScroll(InputEventMouseButton inputEventMouseButton)
 	{
 		_cameraZoom += inputEventMouseButton.ButtonIndex == MouseButton.WheelUp ? -1 : 1;
-		_cameraZoom = Mathf.Clamp(_cameraZoom, MinCameraZoom, MaxCameraZoom);
+		_cameraZoom = Mathf.Clamp(_cameraZoom, _minCameraZoom, _maxCameraZoom);
 	}
 
 	private void UpdateInputMove(InputEventMouseMotion mouseMotion)
 	{
-		var adjustedSpeed = MoveSpeed * _cameraZoom;
-		Origin += -Basis.X * mouseMotion.Relative.X * adjustedSpeed;
-		Origin += Basis.Y * mouseMotion.Relative.Y * adjustedSpeed;
+		var adjustedSpeed = _moveSpeed * _cameraZoom / 1000;
+		CameraPivot += -Basis.X * mouseMotion.Relative.X * adjustedSpeed;
+		CameraPivot += Basis.Y * mouseMotion.Relative.Y * adjustedSpeed;
 	}
 
 	private void SetCameraTransform(float yaw, float pitch)
 	{
-		var rotation = new Quaternion(Vector3.Up, yaw) * new Quaternion(Vector3.Right, -pitch);
-		var position = Origin + rotation * new Vector3(0, 0, _cameraZoom);
-		
-		SetPosition(position);
-		SetQuaternion(rotation);
+		Quaternion = new Quaternion(Vector3.Up, yaw) * new Quaternion(Vector3.Right, -pitch);
+		Position = CameraPivot + Quaternion * new Vector3(0, 0, _cameraZoom);
 	}
 }

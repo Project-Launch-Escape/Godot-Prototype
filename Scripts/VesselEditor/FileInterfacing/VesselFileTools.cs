@@ -50,9 +50,9 @@ public static class VesselFileTools
 	}
 	
 
-	public static string GetPartTreeJsonString(VesselPart rootPart)
+	public static string GetPartTreeJsonString(PartTree partTree)
 	{
-		var jsonReady = new PartTreeJSON(rootPart);
+		var jsonReady = new PartTreeJSON(partTree);
 		return JsonSerializer.Serialize(jsonReady, DefaultOptions);
 	}
 	public static VesselPart GetVesselRootFromJson(string jsonString)
