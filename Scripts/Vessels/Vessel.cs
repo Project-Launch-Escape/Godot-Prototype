@@ -6,6 +6,7 @@ using GodotPrototype.Scripts.Simulation.DoublePrecision;
 using GodotPrototype.Scripts.Simulation.Physics;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 using GodotPrototype.Scripts.UserInterface;
+using GodotPrototype.Scripts.UserInterface.UIElements;
 using GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 
 namespace GodotPrototype.Scripts.Vessels;
@@ -98,9 +99,9 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		else
 		{
 			var orbitRadius = parentBody.Radius * 3;
-			var orbitalVelocity = Math.Sqrt(parentBody.Mu / orbitRadius);
+			var orbitalVelocity = 1.3*Math.Sqrt(parentBody.Mu / orbitRadius);
 			PositionLocal = new Vector3d(orbitRadius, 0.01 * orbitRadius, 0.01 * orbitRadius);
-			VelocityLocal = new Vector3d(0, orbitalVelocity * 0.2, orbitalVelocity);
+			VelocityLocal = new Vector3d(0, -orbitalVelocity * 0.05, orbitalVelocity);
 		}
 		
 		Trajectory = new Trajectory(PositionLocal, VelocityLocal, parentBody, new Color(0.9f, 0.4f, 0.8f));
@@ -142,6 +143,9 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		if (PositionRel.ParentPosition != GlobalValues.FOPosition.ParentPosition) GlobalValues.FOPosition.ConvertRef(PositionRel.ParentPosition);
 
 		Trajectory.Update();
+		
+		//var encounterTime = Trajectory.FindEncounter(Trajectory.CurrentOrbit, Celestial.CelestialDict["Luna"], new Range(GlobalValues.Time, GlobalValues.Time + Trajectory.CurrentOrbit.Period));
+		//if (!double.IsNaN(encounterTime) && Engine.GetFramesDrawn() % 48 == 0) GD.Print(GlobalValues.TimeToVerboseString(encounterTime), "\n", encounterTime,"\n", GlobalValues.Time + Trajectory.CurrentOrbit.Period / 2,"\n");
 	}
 
 	private void PhysicsUpdateNewton(double dtPhys)

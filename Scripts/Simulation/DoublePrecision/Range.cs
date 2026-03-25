@@ -9,6 +9,9 @@ public readonly struct Range
     
     public readonly bool Inclusive;
 
+    public bool IsInfinite => double.IsInfinity(MinValue) || double.IsInfinity(MaxValue);
+    public double Width => MaxValue - MinValue;
+
     public Range()
     {
         MinValue = double.NegativeInfinity;

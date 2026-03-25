@@ -40,7 +40,7 @@ public partial class FlightUIController : Node
 		var mousePos = GetViewport().GetMousePosition();
 		
 		HoverIcon closestIcon = null;
-		var closestIconDist = 100000000f;
+		var closestIconDist = double.MaxValue;
 		foreach (var hoverIcon in HoverIcon.HoverIcons)
 		{
 			if (!LockedIcons.Contains(hoverIcon)) hoverIcon.IsHovered = false;

@@ -99,7 +99,7 @@ public class RelativeVelocity
 		ReferenceVelocity = newRef;
 	}
 
-	private Vector3d VelocityRefConverted(RelativeVelocity newRefVelocity)
+	public Vector3d VelocityRefConverted(RelativeVelocity newRefVelocity)
 	{
 		var convertedVelocity = new Vector3d();
 		for (CoordinateSpace layer = 0; layer < (CoordinateSpace)Math.Max((int)CoordLayer, (int)newRefVelocity.CoordLayer) + 1; layer++)

@@ -152,7 +152,7 @@ public partial class OrbitMesh : MeshInstance3D
 		{
 			if (!Visible) return;
 			Visible = false;
-			SetMarkerVisibility(false);
+			//SetMarkerVisibility(false);
 			return;
 		}
 		if (distanceToCamera > fadeStart * (float)_orbit.Apoapsis)
@@ -164,7 +164,7 @@ public partial class OrbitMesh : MeshInstance3D
 			
 			if (Visible) return;
 			Visible = true;
-			SetMarkerVisibility(true);
+			//SetMarkerVisibility(true);
 			return;
 		}
 		if (distanceToCamera < (float)_orbit.Periapsis / fadeEnd)
@@ -172,7 +172,7 @@ public partial class OrbitMesh : MeshInstance3D
 			if (!Visible) return;
 			
 			Visible = false;
-			SetMarkerVisibility(false);
+			//SetMarkerVisibility(false);
 			return;
 		}
 		if (distanceToCamera < (float)_orbit.Periapsis / fadeStart)
@@ -192,6 +192,6 @@ public partial class OrbitMesh : MeshInstance3D
 		SetMaterialAlpha(1f);
 		SetMarkerAlpha(1f);
 		Visible = true;
-		SetMarkerVisibility(true);
+		//SetMarkerVisibility(true);
 	}
 }

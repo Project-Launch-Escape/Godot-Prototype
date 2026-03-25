@@ -6,7 +6,7 @@ namespace GodotPrototype.Scripts.UserInterface.UIElements.OrbitMarkers;
 
 public partial class OrbitMarker : HoverIcon
 {
-	public static Camera3D Camera => GlobalValues.RenderSpaceCamera;
+	protected static Camera3D Camera => GlobalValues.RenderSpaceCamera;
 
 	private static readonly Dictionary<OrbitMarkerType, PackedScene> OrbitMarkerPrefabs = new ()
 	{
@@ -27,6 +27,16 @@ public partial class OrbitMarker : HoverIcon
 
 		return marker;
 	}
+	
+	/*
+	protected virtual bool VisibilityProcess()
+	{
+		var viewport = GetViewport().CanvasTransform.Origin;
+		var behind = (Position.X > viewport.X && Position.X > 0) && (Position.Y > viewport.Y && Position.Y > 0);
+		Visible = !behind && GlobalValues.UIVisible;
+		return Visible;
+	}
+	*/
 
 
 	protected string GetTimeString(double time)

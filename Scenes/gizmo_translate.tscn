@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://wdmru320mfw3"]
+[gd_scene format=3 uid="uid://wdmru320mfw3"]
 
 [ext_resource type="Script" uid="uid://chall127tuyhe" path="res://Scripts/VesselEditor/TranslateTool.cs" id="1_vmmqn"]
 
@@ -65,115 +65,115 @@ albedo_color = Color(0.231373, 0.662745, 0.960784, 1)
 material = SubResource("StandardMaterial3D_dudna")
 size = Vector3(0.1, 0.1, 0.1)
 
-[node name="GizmoTranslate" type="Node3D"]
+[node name="GizmoTranslate" type="Node3D" unique_id=561763759]
 script = ExtResource("1_vmmqn")
 
-[node name="RED T Handle" type="StaticBody3D" parent="."]
+[node name="RED T Handle" type="StaticBody3D" parent="." unique_id=1904843265]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 collision_layer = 16
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RED T Handle"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RED T Handle" unique_id=951959789]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("CylinderShape3D_k6x33")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="RED T Handle"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RED T Handle" unique_id=718149869]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_kawfr")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="RED T Handle"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="RED T Handle" unique_id=2004216745]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.09278e-08, 0.25, 0)
 material_override = SubResource("StandardMaterial3D_dso6s")
 mesh = SubResource("CylinderMesh_wkmx3")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="RED T Handle"]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="RED T Handle" unique_id=145786444]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.18557e-08, 0.5, 0)
 material_override = SubResource("StandardMaterial3D_dso6s")
 mesh = SubResource("CylinderMesh_qvgl2")
 skeleton = NodePath("../..")
 
-[node name="GREEN T Handle" type="StaticBody3D" parent="."]
+[node name="GREEN T Handle" type="StaticBody3D" parent="." unique_id=1397536048]
 collision_layer = 16
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GREEN T Handle"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GREEN T Handle" unique_id=131836866]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("CylinderShape3D_k6x33")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="GREEN T Handle"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="GREEN T Handle" unique_id=570374270]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_kawfr")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GREEN T Handle"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GREEN T Handle" unique_id=1773792235]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 material_override = SubResource("StandardMaterial3D_3r8h5")
 mesh = SubResource("CylinderMesh_wkmx3")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="GREEN T Handle"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="GREEN T Handle" unique_id=596431320]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 material_override = SubResource("StandardMaterial3D_3r8h5")
 mesh = SubResource("CylinderMesh_qvgl2")
 skeleton = NodePath("../..")
 
-[node name="BLUE T Handle" type="StaticBody3D" parent="."]
+[node name="BLUE T Handle" type="StaticBody3D" parent="." unique_id=842003408]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 collision_layer = 16
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BLUE T Handle"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BLUE T Handle" unique_id=1908580231]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("CylinderShape3D_k6x33")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="BLUE T Handle"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="BLUE T Handle" unique_id=1119281008]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_kawfr")
 
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="BLUE T Handle"]
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="BLUE T Handle" unique_id=817920582]
 transform = Transform3D(1.91069e-15, -4.37114e-08, 1, 8.74228e-08, -1, -4.37114e-08, 1, 8.74228e-08, 1.91069e-15, 0, 0.25, -1.09278e-08)
 material_override = SubResource("StandardMaterial3D_2mac0")
 mesh = SubResource("CylinderMesh_wkmx3")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="BLUE T Handle"]
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="BLUE T Handle" unique_id=749978306]
 transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 0, 1, -4.37114e-08, -1, 0, 1.91069e-15, 0, 0.5, -2.18557e-08)
 material_override = SubResource("StandardMaterial3D_2mac0")
 mesh = SubResource("CylinderMesh_qvgl2")
 skeleton = NodePath("../..")
 
-[node name="RED R Handle" type="StaticBody3D" parent="."]
+[node name="RED R Handle" type="StaticBody3D" parent="." unique_id=1146451514]
 collision_layer = 16
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RED R Handle"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RED R Handle" unique_id=650481410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.75)
 shape = SubResource("BoxShape3D_3wky1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RED R Handle"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RED R Handle" unique_id=808447216]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.75)
 mesh = SubResource("BoxMesh_168i6")
 
-[node name="GREEN R Handle" type="StaticBody3D" parent="."]
+[node name="GREEN R Handle" type="StaticBody3D" parent="." unique_id=1026743183]
 collision_layer = 16
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GREEN R Handle"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GREEN R Handle" unique_id=378899437]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
 shape = SubResource("BoxShape3D_3wky1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GREEN R Handle"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GREEN R Handle" unique_id=461708926]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
 mesh = SubResource("BoxMesh_w8mgu")
 
-[node name="BLUE R Handle" type="StaticBody3D" parent="."]
+[node name="BLUE R Handle" type="StaticBody3D" parent="." unique_id=136422262]
 collision_layer = 16
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BLUE R Handle"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BLUE R Handle" unique_id=1820254230]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 shape = SubResource("BoxShape3D_3wky1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BLUE R Handle"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BLUE R Handle" unique_id=390738293]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 mesh = SubResource("BoxMesh_w2qde")

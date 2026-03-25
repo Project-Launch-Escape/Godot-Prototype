@@ -125,6 +125,7 @@ public class Orbit : OrbitalElements
 
 	public Vector3d PositionFromTime(double time) => PositionFromTrueAnomaly(TrueAnomalyFromTime(time));
 	public Vector3d VelocityFromTime(double time) => VelocityFromTrueAnomaly(TrueAnomalyFromTime(time));
+	public Vector3d AccelerationFromTime(double time) => AccelerationFromTrueAnomaly(TrueAnomalyFromTime(time));
 	
 	public Vector3d PositionFromTrueAnomaly(double v)
 	{
@@ -152,6 +153,16 @@ public class Orbit : OrbitalElements
 		var x = -temp * Math.Sin(v);
 		var z = temp * (e + Math.Cos(v));
 
+		return RotateToOrbitalPlane(x, z);
+	}
+
+	public Vector3d AccelerationFromTrueAnomaly(double v)
+	{
+		double r = p / (1 + e * Math.Cos(v));
+		double temp = Primary.Mu / (r * r);
+
+		double x = temp * -Math.Cos(v);
+		double z = temp * -Math.Sin(v);
 		return RotateToOrbitalPlane(x, z);
 	}
 
