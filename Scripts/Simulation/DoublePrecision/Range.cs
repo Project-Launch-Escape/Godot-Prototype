@@ -12,6 +12,11 @@ public readonly struct Range
     public bool IsInfinite => double.IsInfinity(MinValue) || double.IsInfinity(MaxValue);
     public double Width => MaxValue - MinValue;
 
+    /// <summary>
+    /// A Range is valid if its Max Value is greater than or equal to its Min Value
+    /// </summary>
+    public bool IsValid => MinValue <= MaxValue;
+
     public Range()
     {
         MinValue = double.NegativeInfinity;

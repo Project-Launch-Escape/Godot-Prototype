@@ -230,16 +230,23 @@ public class Trajectory
 	/// Returns double.NaN if no encounter is found
 	public static double FindInterceptTime(Orbit vesselOrbit, Celestial celestial, Range timeRange)
 	{
-		/*
-			Encounter Algorithm:
-		0) Find time interval where an encounter could possibly occur
+		/*	Encounter Algorithm:
 		1) Sample points along the given time interval
-		2) Find the time with the lowest D(t)
-		3) Use this time as a starting value for Newton's method to converge towards a zero of D(t).
-			Once a point within the SOI boundary is chosen, stop the solver.This time is the 'within time'
+		2) Find local minimums among the samples. If there are none, use the absolute minimum.
+		3) For each minimum from earliest to latest, use it as a starting value for Newton's method to converge
+			towards a zero of D_2(t). Once a point within the SOI boundary is found, stop the solver. This time is the 'within time'
 		4) Choose a sample time left of the within time with positive D_2(t)
-		5) Apply Bisection method with the sample time as the left bound and the within time as the right bound to attain the rough interval of the encounter time
+		5) Apply Bisection method with the sample time as the left bound and the within time as the right bound 
+			to attain the rough interval of the encounter time
 		6) Apply Newton's method on D_2(t) to refine this estimation and get the final encounter time
+		
+			Algorithm Breakpoints:
+		1) If the interval has no width or is invalid, return (cannot contain encounter)
+		2) No breakpoints
+		3) If no within time is found, return (no encounter on interval)
+		4) If no such samples exist, return (start time is within SOI boundary)
+		5) If the bound ever does not intersect the time interval, return (encounter is outside of search interval)
+		6) If final time is outside search interval, or if |D_2(T_f)|>epsilon, return (solver failed to converge).
 		*/
 		
 		var celestialOrbit = celestial.CelestialOrbit;
@@ -249,48 +256,54 @@ public class Trajectory
 		}
 		double soiRadius = celestial.SOIRadius;
 		
-		// Step 1:
-		const int nSamples = 24;
-		var timeSamples = new double[nSamples];
-		for (int i = 0; i < nSamples; i++)
-		{
-			timeSamples[i] = timeRange.LerpBetween((double)i/nSamples);
-		}
+		// Step 1: Sample points along the given time interval
+		//const int nSamples = 24;
+		if (!timeRange.IsValid) return double.NaN;
 		
-		// Step 2:
-		double minDist = 0;
-		double minDistTime = timeRange.MinValue;
-		foreach (var timeSample in timeSamples)
+		var timeSamples = new List<double> {timeRange.MinValue};
+		double maxSample = timeRange.MinValue;
+		double timeUnit = Math.Max(vesselOrbit.Period, celestialOrbit.Period) / 24.0;
+
+		double minDistTime = double.NaN;
+		while (maxSample <= timeRange.MaxValue)
 		{
-			double newDist = DistanceAtTime(timeSample);
-			if (DistanceAtTime(timeSample) >= minDist) continue;
-			minDist = newDist;
-			minDistTime = timeSample;
-		}
-		
-		// Step 3:
-		{
-			int iter = 0;
-			while (DistanceAtTime(minDistTime) >= soiRadius)
+			var newSample = maxSample + timeUnit;
+			newSample = newSample > timeRange.MaxValue ? timeRange.MaxValue : newSample;
+			timeSamples.Add(newSample);
+			
+			// Step 2: Find local minimums among the samples. If there are none, use the absolute minimum
+			if (timeSamples.Count < 3) continue;
+			double potentialMin = timeSamples[^2];
+			if (potentialMin >= newSample || potentialMin >= timeSamples[^3]) continue;
+			
+			// Step 3: For each minimum from earliest to latest, use it as a starting value for Newton's method to converge
+			// towards a zero of D_2(t). Once a point within the SOI boundary is found, stop the solver. This time is the 'within time'
+			
+			minDistTime = potentialMin;
+			bool foundWithinTime = false;
+			for (int iter = 0; iter < 8; iter++)
 			{
-				if (iter >= 8)
-				{
-					if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Encounter failed at Step 3");
-					return double.NaN;
-				}
-				minDistTime -= 1.5 * (DistanceAtTime(minDistTime)-soiRadius) / DistDerivativeAtTime(minDistTime);
+				minDistTime -= 1.5 * (DistanceAtTime(minDistTime) - soiRadius) / DistDerivativeAtTime(minDistTime);
 				iter++;
+				if (minDistTime > newSample || minDistTime < timeSamples[^3] || !timeRange.ContainsValue(minDistTime)) break;
+				if (DistanceAtTime(minDistTime) >= soiRadius)
+				{
+					foundWithinTime = true;
+					break;
+				}
 			}
+			if (foundWithinTime) break;
 		}
+		if (double.IsNaN(minDistTime)) return double.NaN;
 		if (DistanceAtTime(minDistTime) >= soiRadius || !timeRange.ContainsValue(minDistTime))
 		{
 			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Encounter passed step 3 with an invalid time");
 			return double.NaN;
 		}
 
-		// Step 4:
+		// Step 4: Choose a sample time left of the within time with distance within the SOI
 		double leftOfEncounterTime = timeRange.MinValue;
-		for (int i = timeSamples.Length-1; i >= 0; i--)
+		for (int i = timeSamples.Count-1; i >= 0; i--)
 		{
 			double timeSample = timeSamples[i];
 			if (timeSample >= minDistTime || DistanceAtTime(timeSample) < soiRadius) continue;
@@ -304,7 +317,8 @@ public class Trajectory
 			return double.NaN;
 		}
 		
-		// Step 5:
+		// Step 5: Apply Bisection method with the sample time as the left bound and the within time as the right bound 
+		// to attain the rough interval of the encounter time
 		var leftTime = leftOfEncounterTime;
 		var rightTime = minDistTime;
 		if (DistanceAtTime(leftTime) <= soiRadius || DistanceAtTime(rightTime) >= soiRadius)
@@ -320,7 +334,7 @@ public class Trajectory
 		}
 		double encounterTime = (rightTime + leftTime) / 2;
 		
-		// Step 6:
+		// Step 6: Apply Newton's method on D_2(t) to refine this estimation and get the final encounter time
 		const double epsilon = 0.1;
 		for (int iter = 0; iter < 12; iter++)
 		{
