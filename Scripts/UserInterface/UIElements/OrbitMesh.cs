@@ -9,7 +9,9 @@ namespace GodotPrototype.Scripts.UserInterface.UIElements;
 
 public partial class OrbitMesh : MeshInstance3D
 {
-	private Orbit _orbit;
+	public Orbit Orbit => Conic is null? _orbitStore : Conic.Orbit;
+	private Orbit _orbitStore;
+	public ConicPatch Conic;
 	private Dictionary<OrbitMarkerType, OrbitMarker> _markers = [];
 
 	private const ushort OrbitVerticesCount = 512;
@@ -60,8 +62,14 @@ public partial class OrbitMesh : MeshInstance3D
 			DefaultMeshParent.AddChild(orbitMeshNode);
 		}
 		
-		orbitMeshNode._orbit = orbit;
+		orbitMeshNode._orbitStore = orbit;
 		return orbitMeshNode;
+	}
+	public static OrbitMesh CreateOrbitLine(ConicPatch patch, Range? trueAnomalyRange = null)
+	{
+		var orbitLine = CreateOrbitLine(patch.Orbit, trueAnomalyRange);
+		orbitLine.Conic = patch;
+		return orbitLine;
 	}
 
 	public void DeleteOrbitLine()
@@ -82,14 +90,19 @@ public partial class OrbitMesh : MeshInstance3D
 		{ 
 			Reparent(newOrbit.Primary, false);
 		}
-		_orbit = newOrbit;
+		_orbitStore = newOrbit;
+	}
+	public void UpdateOrbitLine(ConicPatch newPatch)
+	{
+		UpdateOrbitLine(newPatch.Orbit, newPatch.GetTrueAnomalyRange());
+		Conic = newPatch;
 	}
 
 	public void CreateMarkerOfType(OrbitMarkerType markerType)
 	{
 		if (_markers.ContainsKey(markerType)) return;
 		
-		var marker = OrbitMarker.CreateMarker(_orbit, markerType);
+		var marker = OrbitMarker.CreateMarker(this, markerType);
 		
 		AddChild(marker);
 		_markers.Add(markerType, marker);
@@ -121,13 +134,13 @@ public partial class OrbitMesh : MeshInstance3D
 	private void SetMaterialAlpha(float alpha)
 	{
 		var material = (StandardMaterial3D)Mesh.SurfaceGetMaterial(0);
-		material.AlbedoColor = _orbit.Color with{A = alpha};
+		material.AlbedoColor = Orbit.Color with{A = alpha};
 		Mesh.SurfaceSetMaterial(0, material);
 	}
 	
 	public override void _Process(double delta)
 	{
-		if (_orbit == null) return;
+		if (Orbit == null) return;
 		
 		if (!GlobalValues.UIVisible)
 		{
@@ -142,22 +155,22 @@ public partial class OrbitMesh : MeshInstance3D
 
 	private void FadeOutProcess()
 	{
-		if (_orbit.OrbitType is ConicType.Static) return;
-		var distanceToCamera = _orbit.Primary.PositionRel[CoordinateSpace.RenderSpace].Magnitude;
+		if (Orbit.OrbitType is ConicType.Static) return;
+		var distanceToCamera = Orbit.Primary.PositionRel[CoordinateSpace.RenderSpace].Magnitude;
 
 		const float fadeEnd = 15f;
 		const float fadeStart = 3f;
 		
-		if (distanceToCamera > fadeEnd * (float)_orbit.Apoapsis)
+		if (distanceToCamera > fadeEnd * (float)Orbit.Apoapsis)
 		{
 			if (!Visible) return;
 			Visible = false;
 			//SetMarkerVisibility(false);
 			return;
 		}
-		if (distanceToCamera > fadeStart * (float)_orbit.Apoapsis)
+		if (distanceToCamera > fadeStart * (float)Orbit.Apoapsis)
 		{
-			var normalizedDist = (float)(distanceToCamera / _orbit.Apoapsis);
+			var normalizedDist = (float)(distanceToCamera / Orbit.Apoapsis);
 			var alpha = Mathf.Sqrt((fadeEnd - normalizedDist) / (fadeEnd - fadeStart));
 			SetMarkerAlpha(alpha);
 			SetMaterialAlpha(alpha);
@@ -167,7 +180,7 @@ public partial class OrbitMesh : MeshInstance3D
 			//SetMarkerVisibility(true);
 			return;
 		}
-		if (distanceToCamera < (float)_orbit.Periapsis / fadeEnd)
+		if (distanceToCamera < (float)Orbit.Periapsis / fadeEnd)
 		{
 			if (!Visible) return;
 			
@@ -175,9 +188,9 @@ public partial class OrbitMesh : MeshInstance3D
 			//SetMarkerVisibility(false);
 			return;
 		}
-		if (distanceToCamera < (float)_orbit.Periapsis / fadeStart)
+		if (distanceToCamera < (float)Orbit.Periapsis / fadeStart)
 		{
-			var normalizedDist = (float)(distanceToCamera / _orbit.Periapsis);
+			var normalizedDist = (float)(distanceToCamera / Orbit.Periapsis);
 			var alpha = Mathf.Sqrt((1 - normalizedDist * fadeEnd) / (1 - fadeEnd / fadeStart));
 			SetMarkerAlpha(alpha);
 			SetMaterialAlpha(alpha);

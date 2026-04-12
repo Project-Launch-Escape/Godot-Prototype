@@ -44,29 +44,32 @@ public partial class ApsisMarker : OrbitMarker
 
 	public override void _Process(double delta)
 	{
-		Visible = GetVisibility() && ParentOrbit.OrbitLineNode.Visible;
+		_renderspacePosition = (Vector3)GetMarker3DRelPosition()[CoordinateSpace.RenderSpace];
+		Visible = GetVisibility();
 		if (!Visible) return;
 		TextProcess();
+		base._Process(delta);
 	}
 
-	private bool GetVisibility()
+	protected override bool GetVisibility()
 	{
+		/*
 		switch (MarkerType)
 		{
 			case OrbitMarkerType.Apoapsis when ParentOrbit.IsEscapeTrajectory:
 				return false;
 			case OrbitMarkerType.Periapsis when !ParentOrbit.TrueAnomalyRange.ContainsValue(0):
 				return false;
-		}
+		}*/
+		var markerTrueAnomaly = MarkerType switch
+		{
+			OrbitMarkerType.Apoapsis => Math.PI,
+			OrbitMarkerType.Periapsis => 0,
+			_ => throw new IndexOutOfRangeException()
+		};
 
-		var renderSpacePosition = (Vector3)GetMarker3DRelPosition()[CoordinateSpace.RenderSpace];
-		var behindCamera = Camera.IsPositionBehind(renderSpacePosition);
-		
-		if (behindCamera) return false;
-		//if (!Visible) return false;
-
-		Position = Camera.UnprojectPosition(renderSpacePosition);
-		return true;
+		bool onOrbit = ParentConic is null || ParentConic.GetTrueAnomalyRange().ContainsValue(markerTrueAnomaly);
+		return base.GetVisibility() && onOrbit;
 	}
 
 	private void TextProcess()

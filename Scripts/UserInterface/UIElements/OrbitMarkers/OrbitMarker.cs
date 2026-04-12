@@ -1,6 +1,8 @@
 using Godot;
 using GodotPrototype.Scripts.Other;
+using GodotPrototype.Scripts.Simulation.DoublePrecision;
 using GodotPrototype.Scripts.Simulation.Physics;
+using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 
 namespace GodotPrototype.Scripts.UserInterface.UIElements.OrbitMarkers;
 
@@ -14,29 +16,33 @@ public partial class OrbitMarker : HoverIcon
 		{ OrbitMarkerType.Periapsis, GD.Load<PackedScene>("res://Scenes/UIElements/OrbitMarker.tscn")},
 		{ OrbitMarkerType.Position, GD.Load<PackedScene>("res://Scenes/UIElements/CelestialMarker.tscn")}
 	};
-	
-	public Orbit ParentOrbit;
-	public OrbitMarkerType MarkerType;
 
-	public static OrbitMarker CreateMarker(Orbit markedOrbit, OrbitMarkerType markerType)
+	public ConicPatch ParentConic => OrbitLine.Conic;
+	public Orbit ParentOrbit => OrbitLine.Orbit;
+	public OrbitMesh OrbitLine;
+	public OrbitMarkerType MarkerType;
+	protected Vector3d _renderspacePosition;
+
+	public static OrbitMarker CreateMarker(OrbitMesh markedOrbitLine, OrbitMarkerType markerType)
 	{
 		var marker = (OrbitMarker)OrbitMarkerPrefabs[markerType].Instantiate();
-
-		marker.ParentOrbit = markedOrbit;
+		marker.OrbitLine = markedOrbitLine;
 		marker.MarkerType = markerType;
 
 		return marker;
 	}
 	
-	/*
-	protected virtual bool VisibilityProcess()
+	protected virtual bool GetVisibility()
 	{
-		var viewport = GetViewport().CanvasTransform.Origin;
-		var behind = (Position.X > viewport.X && Position.X > 0) && (Position.Y > viewport.Y && Position.Y > 0);
-		Visible = !behind && GlobalValues.UIVisible;
-		return Visible;
+		var behind = Camera.IsPositionBehind((Vector3)_renderspacePosition - Camera.GlobalPosition);
+		return !behind && GlobalValues.UIVisible && OrbitLine.Visible;
 	}
-	*/
+
+	public override void _Process(double delta)
+	{
+		if (!Visible) return;
+		Position = Camera.UnprojectPosition((Vector3)_renderspacePosition);
+	}
 
 
 	protected string GetTimeString(double time)

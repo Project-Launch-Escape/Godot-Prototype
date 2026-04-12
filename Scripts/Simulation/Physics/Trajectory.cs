@@ -21,6 +21,8 @@ public class Trajectory
 		get => ConicPatches[^1].Orbit;
 		set => UpdatePatchAtIndex(ConicPatches.Count - 1,value, new Range());
 	}
+
+	public ConicPatch CurrentPatch => ConicPatches[^1];
 	private const byte MaxDepth = 10;
 	
 
@@ -54,20 +56,17 @@ public class Trajectory
 			var orbitToUpdate = ConicPatches[index].Orbit;
 			orbitToUpdate.SetFromOrbit(newOrbit);
 			ConicPatches[index].TimeRange = newRange;
-			
-			var trueAnomalyRange = ConicPatches[index].GetTrueAnomalyRange();
 
-			orbitToUpdate.UpdateOrbitLine(trueAnomalyRange);
+			ConicPatches[index].UpdateOrbitLine();
 		}
 		else
 		{
 			var newPatch = new ConicPatch(newOrbit, newRange);
 			ConicPatches.Add(newPatch);
-			var trueAnomalyRange = newPatch.GetTrueAnomalyRange();
 			
-			newOrbit.CreateOrbitLine(trueAnomalyRange);
-			newOrbit.CreateMarkerOfType(OrbitMarkerType.Apoapsis);
-			newOrbit.CreateMarkerOfType(OrbitMarkerType.Periapsis);
+			newPatch.CreateOrbitLine();
+			newPatch.CreateMarkerOfType(OrbitMarkerType.Apoapsis);
+			newPatch.CreateMarkerOfType(OrbitMarkerType.Periapsis);
 		}
 
 	}
@@ -76,7 +75,7 @@ public class Trajectory
 	{
 		for (int i = ConicPatches.Count - 1; i >= index; i--)
 		{
-			ConicPatches[i].Orbit.DeleteOrbitLine();
+			ConicPatches[i].DeleteOrbitLine();
 			ConicPatches.RemoveAt(i);
 		}
 	}
@@ -97,14 +96,13 @@ public class Trajectory
 	{
 		if (GetOrbitAtTime(GlobalValues.Time) != CurrentOrbit)
 		{
-			ConicPatches[0].Orbit.DeleteOrbitLine();
+			ConicPatches[0].DeleteOrbitLine();
 			ConicPatches.RemoveAt(0);
 		}
 
 		if (!CurrentOrbit.IsEscapeTrajectory) return;
-
-		var trueAnomalyRange = ConicPatches[0].GetTrueAnomalyRange();
-		CurrentOrbit.UpdateOrbitLine(trueAnomalyRange);
+		
+		CurrentPatch.UpdateOrbitLine();
 	}
 
 	public Orbit GetOrbitAtTime(double time)
@@ -150,7 +148,7 @@ public class Trajectory
 				for (var j = 0; j < ConicPatches.Count; j++)
 				{
 					var patch = ConicPatches[j];
-					patch.Orbit.UpdateOrbitLine(patch.GetTrueAnomalyRange());
+					patch.UpdateOrbitLine();
 				}
 				return;
 			}
@@ -183,11 +181,11 @@ public class Trajectory
 		List<double> encounterTimes = [];
 		foreach (var celestial in celestialsToCheck)
 		{
-			var minTime = double.IsInfinity(timeRange.MinValue) ? GlobalValues.Time : timeRange.MinValue;
-			var maxTime = double.IsInfinity(timeRange.MaxValue) ? minTime + 2 * orbit.Period : timeRange.MaxValue;
+			var minTime = Math.Max(GlobalValues.Time, timeRange.MinValue);
+			var maxTime = double.IsInfinity(timeRange.MaxValue) ? minTime + 3 * orbit.Period : timeRange.MaxValue;
 			var checkRange = new Range(minTime, maxTime);
 
-			var encounterTime = FindEncounter2(orbit, celestial, checkRange);
+			var encounterTime = FindInterceptTime(orbit, celestial, checkRange);
 			if (!double.IsNaN(encounterTime)) encounterTimes.Add(encounterTime);
 		}
 		if (encounterTimes.Count <= 0) return null;
@@ -257,47 +255,62 @@ public class Trajectory
 		double soiRadius = celestial.SOIRadius;
 		
 		// Step 1: Sample points along the given time interval
-		//const int nSamples = 24;
-		if (!timeRange.IsValid) return double.NaN;
+
+		if (!timeRange.IsValid || timeRange.IsInfinite)
+		{
+			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("TimeRange does not satisfy initial conditions");
+			return double.NaN;
+		}
 		
 		var timeSamples = new List<double> {timeRange.MinValue};
-		double maxSample = timeRange.MinValue;
-		double timeUnit = Math.Max(vesselOrbit.Period, celestialOrbit.Period) / 24.0;
+		var sampleDistances = new List<double> {DistanceAtTime(timeRange.MinValue)};
+		double newSample = timeRange.MinValue;
+		double timeUnit = Math.Min(vesselOrbit.Period, celestialOrbit.Period) / 24.0;
 
-		double minDistTime = double.NaN;
-		while (maxSample <= timeRange.MaxValue)
+		double withinTime = double.NaN;
+		bool foundWithinTime = false;
+		
+		while (newSample < timeRange.MaxValue)
 		{
-			var newSample = maxSample + timeUnit;
+			newSample += timeUnit;
 			newSample = newSample > timeRange.MaxValue ? timeRange.MaxValue : newSample;
+			var newDist = DistanceAtTime(newSample);
 			timeSamples.Add(newSample);
+			sampleDistances.Add(newDist);
 			
 			// Step 2: Find local minimums among the samples. If there are none, use the absolute minimum
 			if (timeSamples.Count < 3) continue;
-			double potentialMin = timeSamples[^2];
-			if (potentialMin >= newSample || potentialMin >= timeSamples[^3]) continue;
+			double potentialMinTime = timeSamples[^2];
+			double potentialMinDist = DistanceAtTime(potentialMinTime);
+			if (newSample != timeRange.MaxValue) // Always check end of timerange
+				if (potentialMinDist >= newDist || potentialMinDist >= sampleDistances[^3]) continue;
 			
 			// Step 3: For each minimum from earliest to latest, use it as a starting value for Newton's method to converge
 			// towards a zero of D_2(t). Once a point within the SOI boundary is found, stop the solver. This time is the 'within time'
 			
-			minDistTime = potentialMin;
-			bool foundWithinTime = false;
+			withinTime = potentialMinTime;
 			for (int iter = 0; iter < 8; iter++)
 			{
-				minDistTime -= 1.5 * (DistanceAtTime(minDistTime) - soiRadius) / DistDerivativeAtTime(minDistTime);
-				iter++;
-				if (minDistTime > newSample || minDistTime < timeSamples[^3] || !timeRange.ContainsValue(minDistTime)) break;
-				if (DistanceAtTime(minDistTime) >= soiRadius)
+				if (DistanceAtTime(withinTime) < soiRadius)
 				{
 					foundWithinTime = true;
 					break;
 				}
+				withinTime -= 1.5 * (DistanceAtTime(withinTime) - soiRadius) / DistDerivativeAtTime(withinTime);
+				iter++;
+				if (withinTime > newSample || withinTime < timeSamples[^3] || !timeRange.ContainsValue(withinTime)) break;
 			}
 			if (foundWithinTime) break;
 		}
-		if (double.IsNaN(minDistTime)) return double.NaN;
-		if (DistanceAtTime(minDistTime) >= soiRadius || !timeRange.ContainsValue(minDistTime))
+
+		if (double.IsNaN(withinTime))
 		{
-			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Encounter passed step 3 with an invalid time");
+			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("No local minumums found on interval");
+			return double.NaN;
+		}
+		if (!foundWithinTime)
+		{
+			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("No within time found");
 			return double.NaN;
 		}
 
@@ -306,7 +319,7 @@ public class Trajectory
 		for (int i = timeSamples.Count-1; i >= 0; i--)
 		{
 			double timeSample = timeSamples[i];
-			if (timeSample >= minDistTime || DistanceAtTime(timeSample) < soiRadius) continue;
+			if (timeSample >= withinTime || DistanceAtTime(timeSample) < soiRadius) continue;
 			
 			leftOfEncounterTime = timeSample;
 			break;
@@ -320,11 +333,15 @@ public class Trajectory
 		// Step 5: Apply Bisection method with the sample time as the left bound and the within time as the right bound 
 		// to attain the rough interval of the encounter time
 		var leftTime = leftOfEncounterTime;
-		var rightTime = minDistTime;
+		var rightTime = withinTime;
 		if (DistanceAtTime(leftTime) <= soiRadius || DistanceAtTime(rightTime) >= soiRadius)
 		{
-			GD.Print($"Preconditions for Bisection failed \tleft({DistanceAtTime(leftTime)}) right({DistanceAtTime(rightTime)})");
+			if (Engine.GetFramesDrawn() % 48 == 0)
+				GD.Print($"Preconditions for Bisection failed \tleft({DistanceAtTime(leftTime)-soiRadius}) right({DistanceAtTime(rightTime)-soiRadius})");
+			return double.NaN;
 		}
+		if (Engine.GetFramesDrawn() % 48 == 0)
+			GD.Print($"\tleft({DistanceAtTime(leftTime)-soiRadius}) right({DistanceAtTime(rightTime)-soiRadius})");
 		for (int iter = 0; iter < 8; iter++)
 		{
 			double midPointTime = (rightTime + leftTime) / 2;
@@ -354,6 +371,7 @@ public class Trajectory
 			return double.NaN;
 		}
 		
+		if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Found Encounter at " + GlobalValues.TimeToVerboseString(encounterTime));
 		return encounterTime;
 		
 		
@@ -403,36 +421,6 @@ public class Trajectory
 		return hasEncounter ? time : double.NaN;
 
 		double DistanceSquaredAtTime(double time) => (vesselOrbit.PositionFromTime(time) - celestialOrbit.PositionFromTime(time)).MagnitudeSquared() - soiSquared;
-	}
-
-	public class ConicPatch
-	{
-		public Range TimeRange;
-		public Orbit Orbit;
-
-		public ConicPatch(Orbit orbit, Range timeRange)
-		{
-			TimeRange = timeRange;
-			Orbit = orbit;
-		}
-
-		public Range? GetTrueAnomalyRange()
-		{
-			Range? trueAnomalyRange;
-			if (double.IsInfinity(TimeRange.MaxValue))
-			{
-				trueAnomalyRange = null;
-			}
-			else
-			{
-				var vAtMin = Orbit.TrueAnomalyFromTime(Math.Max(GlobalValues.Time, TimeRange.MinValue));
-				var vAtMax = Orbit.TrueAnomalyFromTime(TimeRange.MaxValue);
-				trueAnomalyRange = vAtMax > vAtMin ? new Range(vAtMin, vAtMax) : new Range(vAtMax, vAtMin);
-				if (trueAnomalyRange.Value.Width >= Math.Tau) trueAnomalyRange = null;
-			}
-
-			return trueAnomalyRange;
-		}
 	}
 
 	public class ConicEncounter

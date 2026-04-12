@@ -23,15 +23,9 @@ public partial class CelestialMarker : OrbitMarker
 
 	public override void _Process(double delta)
 	{
-		var parentObjectPosition = ((Node3D)ParentOrbit.OrbitingObject).GlobalPosition;
-		if (Camera.IsPositionBehind(parentObjectPosition))
-		{
-			Visible = false;
-			return;
-		}
-
-		Visible = ParentOrbit.OrbitLineNode.Visible;
-		Position = Camera.UnprojectPosition(parentObjectPosition - Camera.GlobalPosition);
+		_renderspacePosition = ((Node3D)ParentOrbit.OrbitingObject).GlobalPosition;
+		Visible = GetVisibility();
+		base._Process(delta);
 	}
 	
 	
