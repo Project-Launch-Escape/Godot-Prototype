@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="FuelType" format=3 uid="uid://dlwif1ndd4to6"]
+
+[ext_resource type="Script" uid="uid://bxfpnmmlr83qu" path="res://Scripts/Vessels/FuelType.cs" id="1_mbs8i"]
+
+[resource]
+script = ExtResource("1_mbs8i")
+Name = "Fueler"
+Mass = 0.5
+Volume = 1.0
+Color = Color(0.6830808, 0.4230413, 0.9116563, 1)
+metadata/_custom_type_script = "uid://bxfpnmmlr83qu"

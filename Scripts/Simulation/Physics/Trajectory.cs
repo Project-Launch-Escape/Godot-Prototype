@@ -19,11 +19,11 @@ public class Trajectory
 	public Orbit FinalOrbit
 	{
 		get => ConicPatches[^1].Orbit;
-		set => UpdatePatchAtIndex(ConicPatches.Count - 1,value, new Range());
+		set => UpdatePatchAtIndex(ConicPatches.Count - 1, value, new Range());
 	}
 
 	public ConicPatch CurrentPatch => ConicPatches[^1];
-	private const byte MaxDepth = 10;
+	private const byte MaxDepth = 8;
 	
 
 	public Trajectory()
@@ -31,17 +31,15 @@ public class Trajectory
 		
 	}
 
-	public Trajectory(Orbit conicPatch)
+	public Trajectory(Orbit orbit)
 	{
-		CurrentOrbit = conicPatch;
+		CurrentOrbit = orbit;
 		FindEncounters();
 	}
 
 	public Trajectory(Vector3d position, Vector3d velocity, Celestial parentCelestial, Color color)
 	{
-		var orbit = new Orbit(position, velocity, parentCelestial, color);
-		CurrentOrbit = orbit;
-		
+		CurrentOrbit = new Orbit(position, velocity, parentCelestial, color);
 		FindEncounters();
 	}
 
@@ -258,7 +256,7 @@ public class Trajectory
 
 		if (!timeRange.IsValid || timeRange.IsInfinite)
 		{
-			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("TimeRange does not satisfy initial conditions");
+		//	if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("TimeRange does not satisfy initial conditions");
 			return double.NaN;
 		}
 		
@@ -305,12 +303,12 @@ public class Trajectory
 
 		if (double.IsNaN(withinTime))
 		{
-			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("No local minumums found on interval");
+		//	if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("No local minumums found on interval");
 			return double.NaN;
 		}
 		if (!foundWithinTime)
 		{
-			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("No within time found");
+		//	if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("No within time found");
 			return double.NaN;
 		}
 
@@ -326,7 +324,7 @@ public class Trajectory
 		}
 		if (DistanceAtTime(leftOfEncounterTime) < soiRadius)
 		{
-			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Encounter failed at step 4");
+			//if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Encounter failed at step 4");
 			return double.NaN;
 		}
 		
@@ -336,12 +334,12 @@ public class Trajectory
 		var rightTime = withinTime;
 		if (DistanceAtTime(leftTime) <= soiRadius || DistanceAtTime(rightTime) >= soiRadius)
 		{
-			if (Engine.GetFramesDrawn() % 48 == 0)
-				GD.Print($"Preconditions for Bisection failed \tleft({DistanceAtTime(leftTime)-soiRadius}) right({DistanceAtTime(rightTime)-soiRadius})");
+			//if (Engine.GetFramesDrawn() % 48 == 0)
+			//	GD.Print($"Preconditions for Bisection failed \tleft({DistanceAtTime(leftTime)-soiRadius}) right({DistanceAtTime(rightTime)-soiRadius})");
 			return double.NaN;
 		}
-		if (Engine.GetFramesDrawn() % 48 == 0)
-			GD.Print($"\tleft({DistanceAtTime(leftTime)-soiRadius}) right({DistanceAtTime(rightTime)-soiRadius})");
+		//if (Engine.GetFramesDrawn() % 48 == 0)
+		//	GD.Print($"\tleft({DistanceAtTime(leftTime)-soiRadius}) right({DistanceAtTime(rightTime)-soiRadius})");
 		for (int iter = 0; iter < 8; iter++)
 		{
 			double midPointTime = (rightTime + leftTime) / 2;
@@ -361,17 +359,17 @@ public class Trajectory
 		}
 		if (!timeRange.ContainsValue(encounterTime))
 		{
-			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Encounter failed to converge on interval");
+		//	if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Encounter failed to converge on interval");
 			return double.NaN;
 		}
 		
 		if (DistDerivativeAtTime(encounterTime) > 0)
 		{
-			if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Encounter converged on exit");
+		//	if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Encounter converged on exit");
 			return double.NaN;
 		}
 		
-		if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Found Encounter at " + GlobalValues.TimeToVerboseString(encounterTime));
+		//if (Engine.GetFramesDrawn() % 48 == 0) GD.Print("Found Encounter at " + GlobalValues.TimeToVerboseString(encounterTime));
 		return encounterTime;
 		
 		

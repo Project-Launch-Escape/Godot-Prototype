@@ -7,6 +7,7 @@ namespace GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "ComponentType")]
 [JsonDerivedType(typeof(FuelTankJSON), "FuelTank")]
 [JsonDerivedType(typeof(RocketEngineJSON), "Engine")]
+[JsonDerivedType(typeof(ConverterJSON), "Converter")]
 public abstract class PartComponentJSON
 {
     public int Index; // Index in the array of PartComponents
@@ -31,6 +32,7 @@ public abstract class PartComponentJSON
         {
             FuelTank tank => new FuelTankJSON(tank, index),
             RocketEngine rocket => new RocketEngineJSON(rocket, index),
+            Converter converter => new ConverterJSON(converter, index),
             not null => throw new NotImplementedException(),
             _ => throw new Exception("PartComponent is null!")
         };

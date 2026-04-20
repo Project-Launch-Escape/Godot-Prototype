@@ -12,31 +12,30 @@ public partial class FuelTank : PartComponent
     
     /// <summary>Changes the amount of a specific fuel type in the tank by a specified amount (in units)</summary>
     /// <param name="deltaFuel">Change in fuel requested, negative for drain, positive for fill</param>
-    /// <param name="fuelType">String name of the fuel type requested to change</param>
-    /// <returns>Amount of fuel sent back due to requested fuel change exceeding minimum or maximum.
-    /// Positive sendback indicates overfill, negative sendback indicates excess drain. deltaFuel - sendback = actual change in fuel</returns>
+    /// <param name="fuelType">fuel type requested to change</param>
+    /// <returns>Returns the actual change in fuel. Equal to deltaFuel if tank is not under/over filled</returns>
     
     public double ChangeFuelAmount(double deltaFuel, FuelType fuelType)
     {
         if (FuelLevels[fuelType] + deltaFuel < 0)
         {
-            var sendBack = deltaFuel + FuelLevels[fuelType];
+            var actualDelta = -FuelLevels[fuelType];
             
             FuelLevels[fuelType] = 0;
-            return sendBack;
-            // Requested fuel drain exceeds fuel available; returns amount of excess in request (negative)
+            return actualDelta;
+            // Requested fuel drain exceeds fuel available; returns amount stored in tank (negative)
         }
         if (FuelLevels[fuelType] + deltaFuel > MaxFuelLevels[fuelType])
         {
-            var sendBack = deltaFuel - (MaxFuelLevels[fuelType] - FuelLevels[fuelType]);
+            var actualDelta = MaxFuelLevels[fuelType] - FuelLevels[fuelType];
             
             FuelLevels[fuelType] = MaxFuelLevels[fuelType];
-            return sendBack;
-            // Requested fill would overfill tank, returns amount of excess in fill (positive)
+            return actualDelta;
+            // Requested fill would overfill tank, returns difference between tank level and tank max (positive)
         }
 
         FuelLevels[fuelType] += deltaFuel;
-        return 0;
+        return deltaFuel;
     }
 
     public void SetFuelAmount(double newFuel, FuelType fuelType)

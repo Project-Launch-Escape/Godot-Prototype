@@ -21,6 +21,7 @@ public abstract partial class PartComponent : Node3D
 		{
 			FuelTank => ComponentType.FuelTank,
 			RocketEngine => ComponentType.Engine,
+			Converter => ComponentType.Converter,
 			_ => throw new IndexOutOfRangeException()
 		};
 	}
@@ -30,5 +31,6 @@ public enum ComponentType
 {
 	FuelTank,
 	Engine,
+	Converter,
 	Default
 }

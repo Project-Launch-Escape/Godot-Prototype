@@ -143,6 +143,10 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		if (PositionRel.ParentPosition != GlobalValues.FOPosition.ParentPosition) GlobalValues.FOPosition.ConvertRef(PositionRel.ParentPosition);
 
 		Trajectory.Update();
+		foreach (var fuelSystem in FuelSystems)
+		{
+			fuelSystem.HandleFuelRequests();
+		}
 		
 		//var encounterTime = Trajectory.FindEncounter(Trajectory.CurrentOrbit, Celestial.CelestialDict["Luna"], new Range(GlobalValues.Time, GlobalValues.Time + Trajectory.CurrentOrbit.Period));
 		//if (!double.IsNaN(encounterTime) && Engine.GetFramesDrawn() % 48 == 0) GD.Print(GlobalValues.TimeToVerboseString(encounterTime), "\n", encounterTime,"\n", GlobalValues.Time + Trajectory.CurrentOrbit.Period / 2,"\n");
@@ -168,15 +172,15 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 			_gravityVector.UpdateVector(Vector3d.Zero, 100 * gravity, _gravityVector.Color, this);
 		}
 
-		var velprev = new Vector3d(LinearVelocity);
+		//var velprev = new Vector3d(LinearVelocity); //Disabled since fuel now drains asynchronously
 		foreach (var engine in PartAssembly.Engines)
 		{
 			engine.FireEngine(Throttle, dtPhys);
 		}
 		
-		var engineAccel = (LinearVelocity - velprev) / dtPhys;
+		//var engineAccel = (LinearVelocity - velprev) / dtPhys;
 
-		_thrustVector.UpdateVector(Vector3d.Zero, engineAccel, _thrustVector.Color, this);
+		//_thrustVector.UpdateVector(Vector3d.Zero, engineAccel, _thrustVector.Color, this);
 		Trajectory.SetFromStateVectors(PositionLocal, VelocityLocal, ParentBody);
 	}
 	

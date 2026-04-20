@@ -3,6 +3,12 @@
 [ext_resource type="Script" uid="uid://k3500mi8rulg" path="res://Scripts/Vessels/VesselPart.cs" id="1_m6c8s"]
 [ext_resource type="PackedScene" uid="uid://0hctrn76drmj" path="res://Resources/Parts/SnapPoint.tscn" id="2_g8u7g"]
 [ext_resource type="PackedScene" uid="uid://cmmjhdnfxqbqr" path="res://Resources/Parts/SurfaceAttatchPoint.tscn" id="3_6t0yj"]
+[ext_resource type="Script" uid="uid://cxhf3v502b18b" path="res://Scripts/Vessels/Converter.cs" id="4_cb2we"]
+[ext_resource type="Resource" uid="uid://dlwif1ndd4to6" path="res://Resources/FuelTypes/Fueler.tres" id="5_6fj1x"]
+[ext_resource type="Resource" uid="uid://nvg5a2xy2o0i" path="res://Resources/FuelTypes/Methane.tres" id="5_p7xe2"]
+[ext_resource type="Script" uid="uid://bskdkle22wkc2" path="res://Scripts/Vessels/FuelTank.cs" id="6_iemtp"]
+[ext_resource type="Resource" uid="uid://bsechgrsa5844" path="res://Resources/FuelTypes/Oxidizer.tres" id="7_f85ru"]
+[ext_resource type="Script" uid="uid://bxfpnmmlr83qu" path="res://Scripts/Vessels/FuelType.cs" id="9_f85ru"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_28r6v"]
 
@@ -16,7 +22,7 @@ script = ExtResource("1_m6c8s")
 Mesh = NodePath("MeshInstance3D")
 SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2"), NodePath("SnapPoint3"), NodePath("SnapPoint4"), NodePath("SnapPoint5"), NodePath("SnapPoint6")]
 SurfaceAttatchPoint = NodePath("SurfaceAttatchPoint")
-Components = []
+Components = [NodePath("Converter"), NodePath("FuelTank")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1472620825]
 mesh = SubResource("BoxMesh_28r6v")
@@ -46,3 +52,24 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 
 [node name="SurfaceAttatchPoint" parent="." unique_id=1415637658 instance=ExtResource("3_6t0yj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+
+[node name="Converter" type="Node3D" parent="." unique_id=275864395]
+script = ExtResource("4_cb2we")
+Inputs = Dictionary[Object, float]({
+ExtResource("5_6fj1x"): -1.0
+})
+Outputs = Dictionary[Object, float]({
+ExtResource("5_p7xe2"): 30.0,
+ExtResource("7_f85ru"): 10.0
+})
+metadata/_custom_type_script = "uid://cxhf3v502b18b"
+
+[node name="FuelTank" type="Node3D" parent="." unique_id=288755311]
+script = ExtResource("6_iemtp")
+FuelLevels = Dictionary[ExtResource("9_f85ru"), float]({
+ExtResource("5_6fj1x"): 100.0
+})
+MaxFuelLevels = Dictionary[ExtResource("9_f85ru"), float]({
+ExtResource("5_6fj1x"): 100.0
+})
+metadata/_custom_type_script = "uid://bskdkle22wkc2"

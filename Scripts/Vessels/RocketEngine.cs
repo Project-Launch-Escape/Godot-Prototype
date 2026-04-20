@@ -16,10 +16,21 @@ public partial class RocketEngine : PartComponent
         if (!canFire) return;
 
         var fireImpulse = MaxThrust * throttle * fireTime;
+        var fuelDeltas = new Dictionary<FuelType, double>();
         foreach (var propellant in Propellants)
         {
-            ConnectedFuelSystem.ChangeFuelAmount(-fireImpulse * propellant.Ratio / (Isp * propellant.Fuel.Mass), propellant.Fuel);
+            fuelDeltas.Add(propellant.Fuel, -fireImpulse * propellant.Ratio / (Isp * propellant.Fuel.Mass));
         }
-        ParentVessel.AddImpulse(fireImpulse * (Vector3d)GlobalBasis.Y.Normalized());
+        ConnectedFuelSystem.AddFuelRequest(fuelDeltas, OnFuelDrain);
+    }
+
+    public void OnFuelDrain(Dictionary<FuelType, double> fuelDeltas)
+    {
+        double totalImpulse = 0.0;
+        foreach (var (fuelType, fuelDrain) in fuelDeltas)
+        {
+            totalImpulse += Isp * fuelDrain * fuelType.Mass;
+        }
+        ParentVessel.AddImpulse(totalImpulse * (Vector3d)GlobalBasis.Y.Normalized());
     }
 }
