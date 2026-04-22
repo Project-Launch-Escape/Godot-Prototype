@@ -56,11 +56,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 [node name="Converter" type="Node3D" parent="." unique_id=275864395]
 script = ExtResource("4_cb2we")
 Inputs = Dictionary[Object, float]({
-ExtResource("5_6fj1x"): -1.0
+ExtResource("5_6fj1x"): -2.5
 })
 Outputs = Dictionary[Object, float]({
-ExtResource("5_p7xe2"): 30.0,
-ExtResource("7_f85ru"): 10.0
+ExtResource("5_p7xe2"): 3.0,
+ExtResource("7_f85ru"): 1.0
 })
 metadata/_custom_type_script = "uid://cxhf3v502b18b"
 

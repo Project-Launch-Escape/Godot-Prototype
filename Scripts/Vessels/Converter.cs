@@ -21,7 +21,7 @@ public partial class Converter : PartComponent
 		ConnectedFuelSystem.AddFuelRequest(fuelDeltas, OnFuelDrain);
 	}
 
-	public void OnFuelDrain(Dictionary<FuelType, double> fuelDeltas)
+	public void OnFuelDrain(Dictionary<FuelType, double> fuelDeltas) // TODO: Fix this clusterfuck
 	{
 		var totalDrain = 0d;
 		foreach (var (_, fuelDrain) in fuelDeltas)
@@ -34,12 +34,12 @@ public partial class Converter : PartComponent
 			totalInput += fuelDrain;
 		}
 		var amount = totalDrain / totalInput;
-		//GD.Print(amount);
+		
 		var fuelFillDeltas = new Dictionary<FuelType, double>();
 		foreach (var (fuelType, fuelDelta) in Outputs)
 		{
 			fuelFillDeltas.Add(fuelType, fuelDelta * amount);
 		}
-		//ConnectedFuelSystem.AddFuelRequest(fuelFillDeltas, null);
+		ConnectedFuelSystem.AddFuelRequest(fuelFillDeltas, null);
 	}
 }

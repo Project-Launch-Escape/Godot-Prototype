@@ -31,6 +31,6 @@ public partial class RocketEngine : PartComponent
         {
             totalImpulse += Isp * fuelDrain * fuelType.Mass;
         }
-        ParentVessel.AddImpulse(totalImpulse * (Vector3d)GlobalBasis.Y.Normalized());
+        ParentVessel.AddImpulse(-totalImpulse * (Vector3d)GlobalBasis.Y.Normalized());
     }
 }

@@ -8,60 +8,7 @@ public class FuelSystem
 {
 	public List<FuelTank> ConnectedTanks = [];
 	private List<FuelRequest> _fuelRequests = [];
-	
-	/// Represents a request to a FuelSystem to either drain or fill fuel. Requests are handled once per frame.
-	/// A positive fuel delta represents a fill request, and the opposite represents a drain request. Zero requests should not be made.
-	/// All FuelRequests are assumed to only contain either fill or drain requests
-	private class FuelRequest
-	{
-		public Dictionary<FuelType, double> FuelDeltas;
-		public Dictionary<FuelType, double> Fulfillment;
-		public Action<Dictionary<FuelType, double>> Callback;
-		public bool IsDrainRequest; 
 
-		public FuelRequest(Dictionary<FuelType, double> fuelDeltas, Action<Dictionary<FuelType, double>> callback)
-		{
-			FuelDeltas = fuelDeltas;
-			Callback = callback;
-			Fulfillment = new Dictionary<FuelType, double>(); // TODO: Add 'FulfillmentType' enum so that zero requests can be handled
-			foreach (var delta in FuelDeltas)
-			{
-				Fulfillment.Add(delta.Key, 0d);
-				IsDrainRequest = delta.Value < 0;
-			}
-		}
-
-		public void SendCallBack()
-		{
-			Callback?.Invoke(Fulfillment);
-		}
-
-		public bool IsFuelTypeFulfilled(FuelType fuelType)
-		{
-			var fuelDelta = FuelDeltas[fuelType];
-			return fuelDelta switch
-			{
-				< 0 => Fulfillment[fuelType] <= fuelDelta,
-				> 0 => Fulfillment[fuelType] >= fuelDelta,
-				_ => true
-			};
-		}
-		/// Returns the actual change in fulfillment. Only change fulfillment in the direction of FuelDelta
-		public double FulfillBy(FuelType fuelType, double deltaFulfillment)
-		{
-			if ((IsDrainRequest && Fulfillment[fuelType] + deltaFulfillment > FuelDeltas[fuelType]) ||
-				!IsDrainRequest && Fulfillment[fuelType] + deltaFulfillment < FuelDeltas[fuelType])
-			{
-				var actualDelta = FuelDeltas[fuelType] - Fulfillment[fuelType];
-			
-				Fulfillment[fuelType] = FuelDeltas[fuelType];
-				return actualDelta;
-			}
-
-			Fulfillment[fuelType] += deltaFulfillment;
-			return deltaFulfillment;
-		}
-	}
 	/// <summary>Requests a change in fuel (drain or fill), and calls back with the actual drain in fuel</summary>
 	/// <param name="fuelDeltas">The requested changes in fuel. represented by a dictionary with FuelType keys and double values.
 	/// A negative value corresponds to a drain request, and a positive value corresponds to a fill request.</param>
@@ -71,8 +18,20 @@ public class FuelSystem
 		_fuelRequests.Add(new FuelRequest(fuelDeltas, callback));
 	}
 
+	public void PrintRequests()
+	{
+		string str = "";
+		foreach (var fuelRequest in _fuelRequests)
+		{
+			str += fuelRequest + "\n";
+		}
+
+		GD.Print(str);
+	}
+
 	public void HandleFuelRequests() //TODO: Make this shithole even more complicated by only making requests drain in exact ratios
 	{
+		if (Engine.GetFramesDrawn() % 100 == 0) PrintRequests();
 		// Drain requests first attempt to drain from fill requests, then from tanks
 		// Then any remaining fill requests attempt to fill into tanks
 		var requestDict = new Dictionary<FuelType, List<FuelRequest>>();
@@ -98,10 +57,16 @@ public class FuelSystem
 			var drainRequests = new List<FuelRequest>();
 			foreach (var request in requests)
 			{
-				if (request.IsDrainRequest) drainRequests.Add(request);
-				else fillRequests.Add(request);
+				switch (request.RequestType)
+				{
+					case FuelRequestType.Drain:
+						drainRequests.Add(request);
+						break;
+					case FuelRequestType.Fill:
+						fillRequests.Add(request);
+						break;
+				}
 			}
-			if (Engine.GetFramesDrawn() % 24 == 0)GD.PrintT($"fill requests: {fillRequests.Count}, drain requests:{drainRequests.Count}");
 
 			foreach (var drainRequest in drainRequests)
 			{
@@ -128,7 +93,7 @@ public class FuelSystem
 
 			foreach (var fillRequest in fillRequests)
 			{
-				fillRequest.FulfillBy(fuelType, ChangeFuelAmount(fuelType, fillRequest.Fulfillment[fuelType] - fillRequest.FuelDeltas[fuelType]));
+				fillRequest.FulfillBy(fuelType, ChangeFuelAmount(fuelType, fillRequest.FuelDeltas[fuelType] - fillRequest.Fulfillment[fuelType]));
 			}
 		}
 		
