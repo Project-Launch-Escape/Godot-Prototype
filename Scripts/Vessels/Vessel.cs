@@ -86,7 +86,10 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		{
 			foreach (var partChild in part.GetChildren())
 			{
-				if (partChild is CollisionShape3D) partChild.Reparent(this);
+				if (partChild is CollisionShape3D collider)
+				{
+					AddChild(collider.Duplicate());
+				}
 			}
 		}
 		

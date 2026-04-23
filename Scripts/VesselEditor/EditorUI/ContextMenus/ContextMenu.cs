@@ -30,6 +30,7 @@ public partial class ContextMenu : Draggable
 		var componentMenu = ComponentMenuScenes[component?.ComponentType ?? ComponentType.Default].Instantiate<MenuComponent>();
 		componentMenu.ParentPart = ParentPart;
 		componentMenu.ParentComponent = component;
+		componentMenu.Folded = true;
 		
 		_componentMenus.Add(componentMenu);
 		_componentMenuContainer.AddChild(componentMenu);

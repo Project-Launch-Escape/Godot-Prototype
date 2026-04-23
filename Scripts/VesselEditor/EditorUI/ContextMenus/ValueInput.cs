@@ -9,27 +9,43 @@ public partial class ValueInput : Control
 	[Export] private Label _valueText;
 	[Export] private Label _maxValueText;
 
-	private double _maxValue;
+	[Export] private double _startingValue;
+	[Export] private double _maxValue;
+	[Export] private string _labelText;
+	[Export] private string _units;
+	[Export] private double _step;
 
 	public event ValueChangedWithReference ValueChanged;
 
-	public static ValueInput CreateValueInput(double value, double maxValue, string labelText)
+	public static ValueInput CreateValueInput(double value, double maxValue, string labelText, string units, double step)
 	{
 		var valueInput = ContextMenuController.ControllerNode.ValueInputScene.Instantiate<ValueInput>();
-		valueInput.Initialize(value, maxValue, labelText);
+		valueInput.Initialize(value, maxValue, labelText, units, step);
 		return valueInput;
 	}
 
-	public void Initialize(double value, double maxValue, string labelText)
+	public void Initialize(double value, double maxValue, string labelText, string units, double step)
 	{
+		_startingValue = value;
 		_maxValue = maxValue;
-		_valueText.Text = labelText;
-		
-		SliderInput.MaxValue = maxValue;
-		SliderInput.Value = value;
+		_labelText = labelText;
+		_units = units;
+		_step = step;
+	}
 
-		_textInput.MaxValue = maxValue;
-		_textInput.Value = value;
+	public override void _Ready()
+	{
+		_valueText.Text = _labelText;
+		_maxValueText.Text = $"{_maxValue}{_units}";
+		
+		SliderInput.MaxValue = _maxValue;
+		SliderInput.Value = _startingValue;
+
+		_textInput.MaxValue = _maxValue;
+		_textInput.Value = _startingValue;
+		
+		SliderInput.Step = _step;
+		_textInput.Step = _step;
 		
 		SliderInput.ValueChanged += HandleSliderInput;
 		_textInput.ValueChanged += HandleTextInput;

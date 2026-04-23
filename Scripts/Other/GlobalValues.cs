@@ -24,7 +24,10 @@ public partial class GlobalValues : Node
 
     public static Camera3D RenderSpaceCamera;
     public static Camera3D LocalSpaceCamera;
-    
+
+    [Export] private SceneType _currentScene;
+    public static SceneType CurrentScene;
+
     [Export] private Camera3D _renderSpaceCamera;
     [Export] private Camera3D _localSpaceCamera;
 
@@ -32,8 +35,18 @@ public partial class GlobalValues : Node
 
     public override void _Ready()
     {
-        RenderSpaceCamera = _renderSpaceCamera;
-        LocalSpaceCamera = _localSpaceCamera;
+        CurrentScene = _currentScene;
+        switch (_currentScene)
+        {
+            case SceneType.FlightScene:
+                RenderSpaceCamera = _renderSpaceCamera;
+                LocalSpaceCamera = _localSpaceCamera;
+                break;
+            case SceneType.VesselEditor:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
     
     public override void _Process(double delta)
@@ -80,7 +93,7 @@ public partial class GlobalValues : Node
         var highestPrefix = SIPrefixes[0];
         foreach (var prefix in SIPrefixes)
         {
-            if (value > prefix.multiplier && prefix.multiplier > highestPrefix.multiplier) highestPrefix = prefix;
+            if (value >= prefix.multiplier && prefix.multiplier > highestPrefix.multiplier) highestPrefix = prefix;
         }
         return highestPrefix;
     }

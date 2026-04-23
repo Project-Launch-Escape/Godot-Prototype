@@ -24,7 +24,7 @@ public partial class MenuFuelTank : MenuComponent
 			var currentValue = ParentTank.FuelLevels[fuelType];
 			var maxValue = ParentTank.MaxFuelLevels[fuelType];
 			
-			var valueInput = ValueInput.CreateValueInput(currentValue, maxValue, fuelType.Name + ":");
+			var valueInput = ValueInput.CreateValueInput(currentValue, maxValue, fuelType.Name + ":", "U", 0.1);
 			valueInput.ValueChanged += OnValueChanged;
 
 			valueInput.SliderInput.Modulate = fuelType.Color;

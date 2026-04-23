@@ -12,7 +12,9 @@ public partial class Converter : PartComponent
 
 	public override void _Process(double delta)
 	{
-		if (GlobalValues.RenderSpaceCamera == null) return;
+		if (GlobalValues.CurrentScene is SceneType.VesselEditor) return;
+		if (Rate <= 0) return;
+		
 		var fuelDeltas = new Dictionary<FuelType, double>();
 		foreach (var (fuelType, fuelDelta) in Inputs)
 		{

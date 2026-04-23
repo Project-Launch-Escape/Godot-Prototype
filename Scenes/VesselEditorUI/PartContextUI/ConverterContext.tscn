@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://dxjou085soq4b"]
+
+[ext_resource type="Script" uid="uid://35ep5h4cm335" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/MenuConverter.cs" id="1_vpsm8"]
+[ext_resource type="PackedScene" uid="uid://ba0yb6a4ei3ua" path="res://Scenes/VesselEditorUI/PartContextUI/MenuComponents/ValueInput.tscn" id="2_i6u4y"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o20pn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77y6v"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.22456, 0.28, 0.21839999, 0.69411767)
+border_width_left = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.14767182, 0.14767182, 0.1476717, 1)
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="DefaultContext" type="FoldableContainer" unique_id=2147201333 node_paths=PackedStringArray("_inputs", "_outputs", "_rateInput")]
+clip_contents = true
+offset_right = 325.0
+offset_bottom = 31.0
+mouse_filter = 1
+theme_override_styles/focus = SubResource("StyleBoxEmpty_o20pn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_77y6v")
+title = "Converter"
+script = ExtResource("1_vpsm8")
+_inputs = NodePath("VBoxContainer/Inputs")
+_outputs = NodePath("VBoxContainer/Outputs")
+_rateInput = NodePath("VBoxContainer/ValueInput")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1148146122]
+layout_mode = 2
+
+[node name="Inputs" type="Label" parent="VBoxContainer" unique_id=1592619948]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Inputs:"
+
+[node name="Outputs" type="Label" parent="VBoxContainer" unique_id=2027858083]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  Outputs:"
+
+[node name="ValueInput" parent="VBoxContainer" unique_id=1971941252 instance=ExtResource("2_i6u4y")]
+layout_mode = 2
+_startingValue = 100.0
+_maxValue = 100.0
+_labelText = "Rate"
+_units = "%"
+_step = 0.5

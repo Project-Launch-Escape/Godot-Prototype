@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ba3yuukuk7yel" path="res://Scripts/VesselEditor/Editor.cs" id="1_a5mxq"]
 [ext_resource type="Script" uid="uid://b2ucfws7t3bhu" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
 [ext_resource type="Shader" uid="uid://3qgyf5ffkiod" path="res://Resources/Outline.gdshader" id="2_o2me5"]
+[ext_resource type="Script" uid="uid://dmaih72r5wu61" path="res://Scripts/Other/GlobalValues.cs" id="3_4v23d"]
 [ext_resource type="Script" uid="uid://mvrdcf02w5px" path="res://Scripts/VesselEditor/PlaceTool.cs" id="6_2h56u"]
 [ext_resource type="Script" uid="uid://bdi1g4eb5anis" path="res://Scripts/VesselEditor/RerootTool.cs" id="6_hiywy"]
 [ext_resource type="Theme" uid="uid://b0s7ysif5h015" path="res://Resources/DefaultTheme.tres" id="6_sprtt"]
@@ -26,6 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://cnkewuikd751w" path="res://Resources/UITextures/VesselEditor/EditorBasePlate.png" id="21_jts1t"]
 [ext_resource type="Script" uid="uid://dj7fasubd5ro2" path="res://Scripts/VesselEditor/EditorUI/LaunchMenu.cs" id="22_e6dcg"]
 [ext_resource type="Script" uid="uid://cyy1ta1vnyqhc" path="res://Scripts/VesselEditor/EditorUI/SaveLoadUI.cs" id="22_sprtt"]
+[ext_resource type="PackedScene" uid="uid://dxjou085soq4b" path="res://Scenes/VesselEditorUI/PartContextUI/ConverterContext.tscn" id="23_livhk"]
 [ext_resource type="Script" uid="uid://ddk5fqdp5jm5s" path="res://Scripts/UserInterface/Draggable.cs" id="23_vmihi"]
 [ext_resource type="Script" uid="uid://tdqm2rseea2r" path="res://Scripts/UserInterface/XButton.cs" id="24_asrsh"]
 [ext_resource type="Script" uid="uid://cqpxgfj5c61sb" path="res://Scripts/VesselEditor/EditorUI/MouseAlertHandler.cs" id="26_eu1sv"]
@@ -191,6 +193,13 @@ expand_margin_left = 2.0
 script = ExtResource("1_a5mxq")
 _outlineShader = SubResource("ShaderMaterial_4v23d")
 
+[node name="Global" type="Node" parent="." unique_id=1051158155 node_paths=PackedStringArray("_renderSpaceCamera", "_localSpaceCamera")]
+process_mode = 3
+script = ExtResource("3_4v23d")
+_currentScene = 1
+_renderSpaceCamera = NodePath("")
+_localSpaceCamera = NodePath("")
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1569562206]
 environment = SubResource("Environment_175yu")
 camera_attributes = SubResource("CameraAttributesPractical_y6rsm")
@@ -328,7 +337,8 @@ script = ExtResource("10_5ps10")
 ComponentMenus = Dictionary[int, PackedScene]({
 0: ExtResource("11_du1xg"),
 1: ExtResource("12_6e330"),
-2: ExtResource("13_6e330")
+2: ExtResource("23_livhk"),
+3: ExtResource("13_6e330")
 })
 ContextMenuScene = ExtResource("12_giy6m")
 ValueInputScene = ExtResource("15_s2kt1")
