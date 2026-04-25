@@ -1,5 +1,6 @@
 
 using System.Text.Json.Serialization;
+using Godot;
 using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.VesselEditor.FileInterfacing;
@@ -31,24 +32,24 @@ public class FuelTankJSON : PartComponentJSON
         {
             var type = FuelType.FromName(level.FuelType);
             tank.FuelLevels[type] = level.Level;
+            GD.Print(level.Level);
             tank.MaxFuelLevels[type] = level.Max;
         }
 
         return tank;
     }
-}
-
-public class FuelLevel
-{
-    public string FuelType;
-    public double Level;
-    public double Max;
-    
-    [JsonConstructor]
-    public FuelLevel(string fuelType, double level, double max)
+    public class FuelLevel
     {
-        FuelType = fuelType;
-        Level = level;
-        Max = max;
+        public string FuelType;
+        public double Level;
+        public double Max;
+    
+        [JsonConstructor]
+        public FuelLevel(string fuelType, double level, double max)
+        {
+            FuelType = fuelType;
+            Level = level;
+            Max = max;
+        }
     }
 }

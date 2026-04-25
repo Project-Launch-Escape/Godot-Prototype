@@ -31,7 +31,6 @@ public class FuelSystem
 
 	public void HandleFuelRequests() //TODO: Make this shithole even more complicated by only making requests drain in exact ratios
 	{
-		if (Engine.GetFramesDrawn() % 100 == 0) PrintRequests();
 		// Drain requests first attempt to drain from fill requests, then from tanks
 		// Then any remaining fill requests attempt to fill into tanks
 		var requestDict = new Dictionary<FuelType, List<FuelRequest>>();
@@ -72,23 +71,26 @@ public class FuelSystem
 			{
 				// Request fulfillments from drain requests evenly, removing fulfilled requests.
 				// When requests are fulfilled, keep doing passes until either all fill requests are fulfilled or drain request is fulfilled
-				while (!drainRequest.IsFuelTypeFulfilled(fuelType) && fillRequests.Count > 0)
+				var fillRequests2 = fillRequests.ToList();
+				while (!drainRequest.IsFuelTypeFulfilled(fuelType) && fillRequests2.Count > 0)
 				{
 					double drainAmount = (drainRequest.Fulfillment[fuelType] - drainRequest.FuelDeltas[fuelType]) / drainRequests.Count;
-					for (var i = 0; i < fillRequests.Count; i++)
+					for (var i = 0; i < fillRequests2.Count; i++)
 					{
-						var fillRequest = fillRequests[i];
+						var fillRequest = fillRequests2[i];
 						var actualDrain = fillRequest.FulfillBy(fuelType, drainAmount);
 						drainRequest.FulfillBy(fuelType, -actualDrain);
 						if (actualDrain != drainAmount)
 						{
-							fillRequests.RemoveAt(i);
+							fillRequests2.RemoveAt(i);
 							break;
 						}
 					}
 				}
 				if (drainRequest.IsFuelTypeFulfilled(fuelType)) continue;
-				drainRequest.FulfillBy(fuelType, ChangeFuelAmount(fuelType, drainRequest.FuelDeltas[fuelType] - drainRequest.Fulfillment[fuelType]));
+				var df = ChangeFuelAmount(fuelType, drainRequest.FuelDeltas[fuelType] - drainRequest.Fulfillment[fuelType]);
+				drainRequest.FulfillBy(fuelType, df);
+				//GD.Print($"Fulfilling {fuelType.Name} by {df:F5}U (New = {drainRequest.Fulfillment[fuelType]:F4})");
 			}
 
 			foreach (var fillRequest in fillRequests)
@@ -96,7 +98,7 @@ public class FuelSystem
 				fillRequest.FulfillBy(fuelType, ChangeFuelAmount(fuelType, fillRequest.FuelDeltas[fuelType] - fillRequest.Fulfillment[fuelType]));
 			}
 		}
-		
+		//if (Engine.GetFramesDrawn() % 100 == 0) PrintRequests();
 		for (var i = _fuelRequests.Count - 1; i >= 0; i--)
 		{
 			_fuelRequests[i].SendCallBack();

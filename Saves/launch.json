@@ -11,9 +11,9 @@
 		"ParentSnapPointIndex": -2,
 		"SnapPointIndex": -2,
 		"Position": {
-		  "X": -0.5082989,
-		  "Y": 2.55304,
-		  "Z": -3.7834005
+		  "X": -1.7881229,
+		  "Y": 1.4053763,
+		  "Z": -3.1207967
 		},
 		"Rotation": {
 		  "X": -0,
@@ -52,6 +52,7 @@
 		"Components": [
 		  {
 			"ComponentType": "Converter",
+			"Rate": 1,
 			"Index": 0,
 			"BaseMass": 0
 		  },
@@ -72,55 +73,13 @@
 	  {
 		"IsSurfaceAttached": false,
 		"PartIndex": 2,
-		"PartDefID": "TANK_12g3",
+		"PartDefID": "ENGINE_132h",
 		"ParentIndex": 1,
 		"ParentSnapPointIndex": 3,
 		"SnapPointIndex": 0,
 		"Position": {
 		  "X": 1.1920929E-07,
-		  "Y": -1.5,
-		  "Z": 0
-		},
-		"Rotation": {
-		  "X": -0,
-		  "Y": 0,
-		  "Z": 1.7484558E-07
-		},
-		"UnsnappedRotation": {
-		  "X": -0,
-		  "Y": 0,
-		  "Z": 0
-		},
-		"Components": [
-		  {
-			"ComponentType": "FuelTank",
-			"FuelLevels": [
-			  {
-				"FuelType": "Methane",
-				"Level": 300,
-				"Max": 300
-			  },
-			  {
-				"FuelType": "Oxidizer",
-				"Level": 100,
-				"Max": 100
-			  }
-			],
-			"Index": 0,
-			"BaseMass": 0
-		  }
-		]
-	  },
-	  {
-		"IsSurfaceAttached": false,
-		"PartIndex": 3,
-		"PartDefID": "ENGINE_132h",
-		"ParentIndex": 2,
-		"ParentSnapPointIndex": 1,
-		"SnapPointIndex": 0,
-		"Position": {
-		  "X": 1.1920929E-07,
-		  "Y": -1.5,
+		  "Y": -1,
 		  "Z": 0
 		},
 		"Rotation": {

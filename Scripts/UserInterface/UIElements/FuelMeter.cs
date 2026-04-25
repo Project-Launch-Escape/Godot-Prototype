@@ -15,11 +15,11 @@ public partial class FuelMeter : TextureProgressBar
 	public override void _Process(double delta)
 	{
 		Value = SystemToTrack.GetLevelOfFuelType(FuelTypeToTrack);
+		MaxValue = SystemToTrack.GetMaxOfFuelType(FuelTypeToTrack);
 	}
 
 	public static FuelMeter CreateFuelMeter(FuelSystem systemToTrack, FuelType fuelTypeToTrack)
 	{
-		GD.Print(fuelTypeToTrack.Name);
 		var fuelMeter = (FuelMeter)FuelMeterScene.Instantiate().FindChild("Bar");
 		fuelMeter.SystemToTrack = systemToTrack;
 		fuelMeter.FuelTypeToTrack = fuelTypeToTrack;

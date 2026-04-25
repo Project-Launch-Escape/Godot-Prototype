@@ -1,4 +1,5 @@
 using Godot;
+using GodotPrototype.Scripts.UserInterface;
 using GodotPrototype.Scripts.VesselEditor.EditorUI;
 using GodotPrototype.Scripts.Vessels;
 
@@ -107,7 +108,7 @@ public partial class TranslateTool : Node3D, IToolable
 		if (mouseInput.Pressed) return;
 		if (shiftModifier)
 		{
-			var selectedPart = Editor.GetMouseHoveredPart();
+			var selectedPart = PartHover.GetMouseHoveredPart();
 			selectedPart.UnsnappedBasis = Basis.Identity;
 			selectedPart.Basis = Basis.Identity;
 			return;

@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" uid="uid://crhs8keftn727" path="res://Scripts/UserInterface/FlightUIController.cs" id="1_mrerc"]
 [ext_resource type="Script" uid="uid://cvok1dj0ebw4u" path="res://Scripts/PLEDebug/DebugUIController.cs" id="1_wae5i"]
+[ext_resource type="Script" uid="uid://c8oshc1a3mc63" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/ContextMenuController.cs" id="2_b4xuh"]
 [ext_resource type="PackedScene" uid="uid://bkrfit3g50xg7" path="res://Prefabs/DebugUISection.tscn" id="2_v065c"]
+[ext_resource type="PackedScene" uid="uid://b4el8s1os3ibp" path="res://Scenes/VesselEditorUI/PartContextUI/FuelTankContext.tscn" id="3_d7ba0"]
+[ext_resource type="PackedScene" uid="uid://c0c02n4buej3s" path="res://Scenes/VesselEditorUI/PartContextUI/EngineContext.tscn" id="4_3vel4"]
 [ext_resource type="Script" uid="uid://btphvogvrngh" path="res://Scripts/UserInterface/UIElements/TimewarpSlider.cs" id="4_8pcu1"]
 [ext_resource type="Texture2D" uid="uid://b58dlsam66qx2" path="res://Resources/UITextures/FlightScene/PlayIcon.png" id="5_nm0om"]
+[ext_resource type="PackedScene" uid="uid://dxjou085soq4b" path="res://Scenes/VesselEditorUI/PartContextUI/ConverterContext.tscn" id="5_whd4q"]
+[ext_resource type="PackedScene" uid="uid://cumveuqyrmds2" path="res://Scenes/VesselEditorUI/PartContextUI/DefaultContext.tscn" id="6_m6d5o"]
 [ext_resource type="Texture2D" uid="uid://dcyy5x6krabtt" path="res://Resources/UITextures/FlightScene/PauseIcon.png" id="6_mhhnu"]
+[ext_resource type="PackedScene" uid="uid://crnsjo4ueukmv" path="res://Scenes/VesselEditorUI/PartContextUI/ContextMenuContainer.tscn" id="7_2j32i"]
 [ext_resource type="Script" uid="uid://c2kjjjaaag1p8" path="res://Scripts/UserInterface/UIElements/PauseButton.cs" id="7_mhhnu"]
 [ext_resource type="Script" uid="uid://d3u667s66u083" path="res://Scripts/UserInterface/UIElements/NavRectangle.cs" id="8_mbdiu"]
+[ext_resource type="PackedScene" uid="uid://ba0yb6a4ei3ua" path="res://Scenes/VesselEditorUI/PartContextUI/MenuComponents/ValueInput.tscn" id="8_w2ykx"]
 [ext_resource type="Texture2D" uid="uid://clnr21py3bpk7" path="res://Resources/UITextures/FlightScene/NavRectangle.png" id="9_22ulr"]
 [ext_resource type="Texture2D" uid="uid://c1ckh70pdlwl8" path="res://Resources/UITextures/FlightScene/NavRectangleCurrent.png" id="9_mbdiu"]
 [ext_resource type="Texture2D" uid="uid://brunu8ex73nng" path="res://Resources/UITextures/FlightScene/NavRectangleCameraPoint.png" id="10_5vu0m"]
@@ -210,12 +217,23 @@ border_width_bottom = 2
 corner_detail = 10
 anti_aliasing = false
 
-[node name="UI" type="Node" node_paths=PackedStringArray("_fuelMeterContainer")]
+[node name="UI" type="Node" unique_id=1637632682 node_paths=PackedStringArray("_fuelMeterContainer")]
 process_priority = 100
 script = ExtResource("1_mrerc")
 _fuelMeterContainer = NodePath("FuelMeters/VBoxContainer")
 
-[node name="Debug Interface" type="Panel" parent="." node_paths=PackedStringArray("_sectionContainerSetter")]
+[node name="ContextMenuController" type="Node" parent="." unique_id=270375930]
+script = ExtResource("2_b4xuh")
+ComponentMenus = Dictionary[int, PackedScene]({
+0: ExtResource("3_d7ba0"),
+1: ExtResource("4_3vel4"),
+2: ExtResource("5_whd4q"),
+3: ExtResource("6_m6d5o")
+})
+ContextMenuScene = ExtResource("7_2j32i")
+ValueInputScene = ExtResource("8_w2ykx")
+
+[node name="Debug Interface" type="Panel" parent="." unique_id=1638079715 node_paths=PackedStringArray("_sectionContainerSetter")]
 offset_left = 15.0
 offset_top = 11.0
 offset_right = 315.0
@@ -226,23 +244,23 @@ _sectionContainerSetter = NodePath("VBoxContainer")
 _sectionPrefabSetter = ExtResource("2_v065c")
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Debug Interface"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Debug Interface" unique_id=714965352]
 layout_mode = 0
 offset_left = -1.0
 offset_top = -1.0
 offset_right = 299.0
 offset_bottom = 169.0
 
-[node name="Title" type="Label" parent="Debug Interface/VBoxContainer"]
+[node name="Title" type="Label" parent="Debug Interface/VBoxContainer" unique_id=350809346]
 layout_mode = 2
 text = "                          Debug UI"
 vertical_alignment = 1
 
-[node name="Separator" type="Label" parent="Debug Interface/VBoxContainer"]
+[node name="Separator" type="Label" parent="Debug Interface/VBoxContainer" unique_id=199095328]
 layout_mode = 2
 text = "----------------------------------------------------------"
 
-[node name="Controls" type="Panel" parent="."]
+[node name="Controls" type="Panel" parent="." unique_id=1589178019]
 visible = false
 anchors_preset = -1
 anchor_bottom = 0.075
@@ -251,53 +269,53 @@ offset_right = 605.0
 offset_bottom = 191.0
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Controls"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls" unique_id=707936995]
 layout_mode = 0
 offset_right = 300.0
 offset_bottom = 248.0
 
-[node name="Title" type="Label" parent="Controls/VBoxContainer"]
+[node name="Title" type="Label" parent="Controls/VBoxContainer" unique_id=364934326]
 layout_mode = 2
 text = "Controls"
 horizontal_alignment = 1
 
-[node name="Separator" type="Label" parent="Controls/VBoxContainer"]
+[node name="Separator" type="Label" parent="Controls/VBoxContainer" unique_id=603474460]
 layout_mode = 2
 text = "----------------------------------------------------------"
 
-[node name="Pause" type="Label" parent="Controls/VBoxContainer"]
+[node name="Pause" type="Label" parent="Controls/VBoxContainer" unique_id=1409312843]
 layout_mode = 2
 text = "Pause/Unpause: Spacebar"
 
-[node name="Scale Action" type="Label" parent="Controls/VBoxContainer"]
+[node name="Scale Action" type="Label" parent="Controls/VBoxContainer" unique_id=2096780042]
 layout_mode = 2
 text = "Scale Action up/down: 'Shift'/'Alt'"
 
-[node name="Timewarp" type="Label" parent="Controls/VBoxContainer"]
+[node name="Timewarp" type="Label" parent="Controls/VBoxContainer" unique_id=1575670400]
 layout_mode = 2
 text = "Timewarp down/up: ','/'.'"
 
-[node name="UI Toggle" type="Label" parent="Controls/VBoxContainer"]
+[node name="UI Toggle" type="Label" parent="Controls/VBoxContainer" unique_id=1177325854]
 layout_mode = 2
 text = "Toggle Celestial UI: 'M'"
 
-[node name="Freecam mode" type="Label" parent="Controls/VBoxContainer"]
+[node name="Freecam mode" type="Label" parent="Controls/VBoxContainer" unique_id=1227739636]
 layout_mode = 2
 text = "Orbit Cam Toggle: 'F'"
 
-[node name="Vessel Focus" type="Label" parent="Controls/VBoxContainer"]
+[node name="Vessel Focus" type="Label" parent="Controls/VBoxContainer" unique_id=115012292]
 layout_mode = 2
 text = "Focus Vessel: 'V'"
 
-[node name="Point Vessel" type="Label" parent="Controls/VBoxContainer"]
+[node name="Point Vessel" type="Label" parent="Controls/VBoxContainer" unique_id=1958390300]
 layout_mode = 2
 text = "Point Vessel: 'W' / 'S'"
 
-[node name="Throttle" type="Label" parent="Controls/VBoxContainer"]
+[node name="Throttle" type="Label" parent="Controls/VBoxContainer" unique_id=50022462]
 layout_mode = 2
 text = "Forwards/Reverse Thrust: 'Z'/'X'"
 
-[node name="FuelMeters" type="Panel" parent="."]
+[node name="FuelMeters" type="Panel" parent="." unique_id=854560025]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -308,7 +326,7 @@ grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_mrerc")
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="FuelMeters"]
+[node name="VBoxContainer" type="VBoxContainer" parent="FuelMeters" unique_id=32855573]
 layout_mode = 0
 offset_left = 5.0
 offset_top = 22.0
@@ -317,7 +335,7 @@ offset_bottom = 133.33334
 scale = Vector2(1.5, 1.5)
 theme_override_constants/separation = 45
 
-[node name="TimewarpPanel" type="Panel" parent="."]
+[node name="TimewarpPanel" type="Panel" parent="." unique_id=400932446]
 anchors_preset = -1
 anchor_left = 0.5
 anchor_top = -0.001
@@ -329,7 +347,7 @@ offset_right = 282.0
 offset_bottom = 71.08
 theme_override_styles/panel = SubResource("StyleBoxFlat_8pcu1")
 
-[node name="TimewarpSlider" type="HSlider" parent="TimewarpPanel" node_paths=PackedStringArray("_timeWarpLabelString", "_timeWarpLabelInteger", "_currentTimeLabel")]
+[node name="TimewarpSlider" type="HSlider" parent="TimewarpPanel" unique_id=549921733 node_paths=PackedStringArray("_timeWarpLabelString", "_timeWarpLabelInteger", "_currentTimeLabel")]
 layout_mode = 1
 offset_left = 12.0
 offset_top = 5.0
@@ -353,7 +371,7 @@ _timeWarpLabelString = NodePath("../TimewarpLabelString")
 _timeWarpLabelInteger = NodePath("../TimewarpLabelInt")
 _currentTimeLabel = NodePath("../CurrentTimeLabel")
 
-[node name="TimewarpLabelString" type="Label" parent="TimewarpPanel"]
+[node name="TimewarpLabelString" type="Label" parent="TimewarpPanel" unique_id=1584629547]
 layout_mode = 0
 offset_left = 32.0
 offset_top = 43.0
@@ -362,7 +380,7 @@ offset_bottom = 66.0
 text = "1s/s"
 label_settings = SubResource("LabelSettings_8pcu1")
 
-[node name="TimewarpLabelInt" type="Label" parent="TimewarpPanel"]
+[node name="TimewarpLabelInt" type="Label" parent="TimewarpPanel" unique_id=143330266]
 layout_mode = 0
 offset_left = 32.0
 offset_top = 20.0
@@ -371,7 +389,7 @@ offset_bottom = 43.0
 text = "1x"
 label_settings = SubResource("LabelSettings_wkok0")
 
-[node name="CurrentTimeLabel" type="Label" parent="TimewarpPanel"]
+[node name="CurrentTimeLabel" type="Label" parent="TimewarpPanel" unique_id=1882076658]
 layout_mode = 0
 offset_left = 394.0
 offset_top = 21.0
@@ -382,7 +400,7 @@ text = "Year 0, Day 000
 label_settings = SubResource("LabelSettings_wkok0")
 horizontal_alignment = 1
 
-[node name="PauseButton" type="Panel" parent="TimewarpPanel"]
+[node name="PauseButton" type="Panel" parent="TimewarpPanel" unique_id=502098765]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -394,7 +412,7 @@ offset_bottom = 67.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_megd2")
 
-[node name="TextureButton" type="TextureButton" parent="TimewarpPanel/PauseButton"]
+[node name="TextureButton" type="TextureButton" parent="TimewarpPanel/PauseButton" unique_id=225167789]
 texture_filter = 1
 layout_mode = 0
 offset_left = 6.0
@@ -407,7 +425,7 @@ script = ExtResource("7_mhhnu")
 _playIcon = ExtResource("5_nm0om")
 _pauseIcon = ExtResource("6_mhhnu")
 
-[node name="NavRectangle" type="Control" parent="." node_paths=PackedStringArray("_cameraAngleIcon", "_vesselAngleIcon", "_progradeAngleIcon", "_retrogradeAngleIcon", "_normalAngleIcon", "_antinormalAngleIcon")]
+[node name="NavRectangle" type="Control" parent="." unique_id=331028246 node_paths=PackedStringArray("_cameraAngleIcon", "_vesselAngleIcon", "_progradeAngleIcon", "_retrogradeAngleIcon", "_normalAngleIcon", "_antinormalAngleIcon")]
 layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
@@ -428,13 +446,13 @@ _retrogradeAngleIcon = NodePath("RetrogradeAngleMarker")
 _normalAngleIcon = NodePath("NormalAngleMarker")
 _antinormalAngleIcon = NodePath("AntiNormalAngleMarker")
 
-[node name="Panel" type="Panel" parent="NavRectangle"]
+[node name="Panel" type="Panel" parent="NavRectangle" unique_id=216438751]
 layout_mode = 0
 offset_right = 375.0
 offset_bottom = 187.5
 theme_override_styles/panel = SubResource("StyleBoxTexture_t4of4")
 
-[node name="Label" type="Label" parent="NavRectangle/Panel"]
+[node name="Label" type="Label" parent="NavRectangle/Panel" unique_id=927081857]
 layout_mode = 0
 offset_left = 3.99998
 offset_top = 132.0
@@ -444,7 +462,7 @@ text = "-45"
 label_settings = SubResource("LabelSettings_22ulr")
 horizontal_alignment = 2
 
-[node name="Label2" type="Label" parent="NavRectangle/Panel"]
+[node name="Label2" type="Label" parent="NavRectangle/Panel" unique_id=1439294668]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 39.0
@@ -454,7 +472,7 @@ text = "45"
 label_settings = SubResource("LabelSettings_22ulr")
 horizontal_alignment = 2
 
-[node name="Label3" type="Label" parent="NavRectangle/Panel"]
+[node name="Label3" type="Label" parent="NavRectangle/Panel" unique_id=1668330994]
 layout_mode = 0
 offset_left = 4.40002
 offset_top = -0.399963
@@ -463,7 +481,7 @@ offset_bottom = 13.6
 text = "90"
 label_settings = SubResource("LabelSettings_22ulr")
 
-[node name="Label4" type="Label" parent="NavRectangle/Panel"]
+[node name="Label4" type="Label" parent="NavRectangle/Panel" unique_id=164350458]
 layout_mode = 0
 offset_left = 5.8
 offset_top = 169.8
@@ -472,7 +490,7 @@ offset_bottom = 186.8
 text = "90"
 label_settings = SubResource("LabelSettings_22ulr")
 
-[node name="Label5" type="Label" parent="NavRectangle/Panel"]
+[node name="Label5" type="Label" parent="NavRectangle/Panel" unique_id=1562558058]
 layout_mode = 0
 offset_left = 87.2
 offset_top = 77.0
@@ -481,7 +499,7 @@ offset_bottom = 94.0
 text = "90"
 label_settings = SubResource("LabelSettings_22ulr")
 
-[node name="Label6" type="Label" parent="NavRectangle/Panel"]
+[node name="Label6" type="Label" parent="NavRectangle/Panel" unique_id=387963072]
 layout_mode = 0
 offset_left = 177.0
 offset_top = 77.0
@@ -490,7 +508,7 @@ offset_bottom = 94.0
 text = "180"
 label_settings = SubResource("LabelSettings_22ulr")
 
-[node name="Label7" type="Label" parent="NavRectangle/Panel"]
+[node name="Label7" type="Label" parent="NavRectangle/Panel" unique_id=1472469238]
 layout_mode = 0
 offset_left = 271.4
 offset_top = 76.2
@@ -499,7 +517,7 @@ offset_bottom = 93.2
 text = "270"
 label_settings = SubResource("LabelSettings_22ulr")
 
-[node name="Label8" type="Label" parent="NavRectangle/Panel"]
+[node name="Label8" type="Label" parent="NavRectangle/Panel" unique_id=488768018]
 layout_mode = 0
 offset_left = 5.19997
 offset_top = 77.9999
@@ -508,7 +526,7 @@ offset_bottom = 94.9999
 text = "0"
 label_settings = SubResource("LabelSettings_22ulr")
 
-[node name="Label9" type="Label" parent="NavRectangle/Panel"]
+[node name="Label9" type="Label" parent="NavRectangle/Panel" unique_id=254261296]
 layout_mode = 0
 offset_left = 350.0
 offset_top = 76.0
@@ -517,7 +535,7 @@ offset_bottom = 93.0
 text = "360"
 label_settings = SubResource("LabelSettings_22ulr")
 
-[node name="CameraAngleMarker" type="TextureRect" parent="NavRectangle"]
+[node name="CameraAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=1570470652]
 layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
@@ -525,7 +543,7 @@ texture = ExtResource("10_5vu0m")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="VesselAngleMarker" type="TextureRect" parent="NavRectangle"]
+[node name="VesselAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=1225362118]
 layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
@@ -533,7 +551,7 @@ texture = ExtResource("9_mbdiu")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ProgradeAngleMarker" type="TextureRect" parent="NavRectangle"]
+[node name="ProgradeAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=801086926]
 layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
@@ -541,7 +559,7 @@ texture = ExtResource("10_l8jfw")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="RetrogradeAngleMarker" type="TextureRect" parent="NavRectangle"]
+[node name="RetrogradeAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=1998542614]
 layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
@@ -549,7 +567,7 @@ texture = ExtResource("11_pr41h")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NormalAngleMarker" type="TextureRect" parent="NavRectangle"]
+[node name="NormalAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=1746001900]
 layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
@@ -557,7 +575,7 @@ texture = ExtResource("12_pr41h")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AntiNormalAngleMarker" type="TextureRect" parent="NavRectangle"]
+[node name="AntiNormalAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=1475058337]
 layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
@@ -565,7 +583,7 @@ texture = ExtResource("13_527sr")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Altimeter_Spedometer" type="Control" parent="." node_paths=PackedStringArray("_altitudeText", "_velocityText", "_verticalSpeedText", "_trackingSwitchButton", "_referenceIcon")]
+[node name="Altimeter_Spedometer" type="Control" parent="." unique_id=1350399827 node_paths=PackedStringArray("_altitudeText", "_velocityText", "_verticalSpeedText", "_trackingSwitchButton", "_referenceIcon")]
 layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
@@ -585,7 +603,7 @@ _verticalSpeedText = NodePath("Spedometer/Label3")
 _trackingSwitchButton = NodePath("TrackingObject/TextureButton")
 _referenceIcon = NodePath("ReferenceObject/TextureButton")
 
-[node name="Altimeter" type="Panel" parent="Altimeter_Spedometer"]
+[node name="Altimeter" type="Panel" parent="Altimeter_Spedometer" unique_id=1190893177]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -599,7 +617,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_22ulr")
 
-[node name="Label" type="Label" parent="Altimeter_Spedometer/Altimeter"]
+[node name="Label" type="Label" parent="Altimeter_Spedometer/Altimeter" unique_id=563812999]
 layout_mode = 0
 offset_left = 38.0
 offset_top = -1.0
@@ -608,7 +626,7 @@ offset_bottom = 22.0
 text = "Alt: 100km"
 label_settings = SubResource("LabelSettings_t4of4")
 
-[node name="Spedometer" type="Panel" parent="Altimeter_Spedometer"]
+[node name="Spedometer" type="Panel" parent="Altimeter_Spedometer" unique_id=915284473]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -622,7 +640,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_t4of4")
 
-[node name="Label2" type="Label" parent="Altimeter_Spedometer/Spedometer"]
+[node name="Label2" type="Label" parent="Altimeter_Spedometer/Spedometer" unique_id=2059412060]
 layout_mode = 0
 offset_left = 44.0
 offset_top = -1.0
@@ -631,7 +649,7 @@ offset_bottom = 22.0
 text = "Vel: 3000m/s"
 label_settings = SubResource("LabelSettings_t4of4")
 
-[node name="Label3" type="Label" parent="Altimeter_Spedometer/Spedometer"]
+[node name="Label3" type="Label" parent="Altimeter_Spedometer/Spedometer" unique_id=842616698]
 layout_mode = 0
 offset_left = 44.0
 offset_top = 16.0
@@ -640,14 +658,14 @@ offset_bottom = 39.0
 text = "VSpeed: 10m/s"
 label_settings = SubResource("LabelSettings_t4of4")
 
-[node name="TrackingObject" type="Panel" parent="Altimeter_Spedometer"]
+[node name="TrackingObject" type="Panel" parent="Altimeter_Spedometer" unique_id=893291170]
 layout_mode = 0
 offset_left = 149.0
 offset_right = 189.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wv5l7")
 
-[node name="TextureButton" type="TextureButton" parent="Altimeter_Spedometer/TrackingObject"]
+[node name="TextureButton" type="TextureButton" parent="Altimeter_Spedometer/TrackingObject" unique_id=1824807921]
 texture_filter = 1
 layout_mode = 0
 offset_left = 4.0
@@ -659,14 +677,14 @@ texture_normal = ExtResource("17_xe4cc")
 texture_pressed = ExtResource("18_6jclk")
 stretch_mode = 5
 
-[node name="ReferenceObject" type="Panel" parent="Altimeter_Spedometer"]
+[node name="ReferenceObject" type="Panel" parent="Altimeter_Spedometer" unique_id=2110192341]
 layout_mode = 0
 offset_left = 188.0
 offset_right = 228.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_foo4s")
 
-[node name="TextureButton" type="TextureRect" parent="Altimeter_Spedometer/ReferenceObject"]
+[node name="TextureButton" type="TextureRect" parent="Altimeter_Spedometer/ReferenceObject" unique_id=160555128]
 texture_filter = 1
 layout_mode = 0
 offset_left = 4.0
@@ -676,7 +694,7 @@ offset_bottom = 36.0
 texture = ExtResource("19_xe4cc")
 stretch_mode = 5
 
-[node name="Throttle Gauge" type="Panel" parent="."]
+[node name="Throttle Gauge" type="Panel" parent="." unique_id=1467509618]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -689,7 +707,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_15p0u")
 
-[node name="TimewarpSlider" type="VSlider" parent="Throttle Gauge" node_paths=PackedStringArray("_throttleLevelText")]
+[node name="TimewarpSlider" type="VSlider" parent="Throttle Gauge" unique_id=1450082022 node_paths=PackedStringArray("_throttleLevelText")]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -717,7 +735,7 @@ ticks_position = 3
 script = ExtResource("18_15p0u")
 _throttleLevelText = NodePath("Label9")
 
-[node name="Label9" type="Label" parent="Throttle Gauge/TimewarpSlider"]
+[node name="Label9" type="Label" parent="Throttle Gauge/TimewarpSlider" unique_id=670561169]
 layout_mode = 0
 offset_left = -8.0
 offset_top = 73.0
@@ -727,7 +745,7 @@ text = "50%"
 label_settings = SubResource("LabelSettings_15p0u")
 horizontal_alignment = 1
 
-[node name="Label10" type="Label" parent="Throttle Gauge"]
+[node name="Label10" type="Label" parent="Throttle Gauge" unique_id=649018494]
 layout_mode = 0
 offset_left = 5.0
 offset_top = 4.0
@@ -737,7 +755,7 @@ text = "THRTL"
 label_settings = SubResource("LabelSettings_6jclk")
 horizontal_alignment = 1
 
-[node name="Placeholder Slot" type="Panel" parent="."]
+[node name="Placeholder Slot" type="Panel" parent="." unique_id=1578187612]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0

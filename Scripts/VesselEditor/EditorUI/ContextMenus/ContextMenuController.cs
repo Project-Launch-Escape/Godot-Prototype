@@ -1,4 +1,6 @@
 using Godot;
+using GodotPrototype.Scripts.Other;
+using GodotPrototype.Scripts.UserInterface;
 using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.VesselEditor.EditorUI.ContextMenus;
@@ -22,7 +24,12 @@ public partial class ContextMenuController : Node, IToolable
 
 	private void CreateContextMenu(VesselPart part)
 	{
-		var camera = GetViewport().GetCamera3D();
+		var camera = GlobalValues.CurrentScene switch
+		{
+			SceneType.FlightScene => GlobalValues.LocalSpaceCamera,
+			SceneType.VesselEditor => Editor.Camera,
+			_ => throw new NotSupportedException("Context Menus are not supported in this scene!")
+		};
 		var screenPos = camera.UnprojectPosition(part.GlobalPosition);
 
 		var newContextMenu = ContextMenuScene.Instantiate<ContextMenu>();
@@ -35,7 +42,7 @@ public partial class ContextMenuController : Node, IToolable
 	{
 		if (mouseInput.Pressed) return;
 		
-		var hoveredPart = Editor.GetMouseHoveredPart();
+		var hoveredPart = PartHover.GetMouseHoveredPart(); // TODO: Add logic for FlightScene compatibility
 		if (hoveredPart == null) return;
 		CreateContextMenu(hoveredPart);
 	}
@@ -48,5 +55,10 @@ public partial class ContextMenuController : Node, IToolable
 	public void OnToolDisable()
 	{
 		
+	}
+	public override void _UnhandledInput(InputEvent inputEvent) // Overrided behavior for use in FlightScene
+	{
+		if (GlobalValues.CurrentScene is not SceneType.FlightScene) return;
+		if (inputEvent is InputEventMouseButton { ButtonIndex: MouseButton.Right } mouseButton) HandleTool(mouseButton, false, false);
 	}
 }

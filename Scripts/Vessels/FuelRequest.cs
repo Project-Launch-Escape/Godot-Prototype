@@ -1,3 +1,5 @@
+using Godot;
+
 namespace GodotPrototype.Scripts.Vessels;
 
 /// Represents a request to a FuelSystem to either drain or fill fuel. Requests are handled once per frame.
@@ -31,7 +33,7 @@ public class FuelRequest
             if (requestType == FuelRequestType.Unassigned)
                 requestType = newType;
             else if (newType != requestType)
-                throw new Exception($"Request contains multiple types! This is not supported and your execution date is 8/10/2026 at {Math.Abs((int)fuelDelta*10000%12):F2}pm");
+                throw new Exception($"Request contains multiple types! This is not supported and your execution date is 8/10/2026 at {Math.Abs((int)fuelDelta*1000340%12)}:00 pm");
         }
 
         return requestType;
@@ -52,13 +54,22 @@ public class FuelRequest
             _ => true
         };
     }
+    public bool IsFulfilled()
+    {
+        foreach (var (fuelType, _) in FuelDeltas)
+        {
+            if (!IsFuelTypeFulfilled(fuelType)) return false;
+        }
+        return true;
+    }
+    
     /// Returns the actual change in fulfillment. Only change fulfillment in the direction of FuelDelta
     public double FulfillBy(FuelType fuelType, double deltaFulfillment)
     {
         bool wouldOverFulfill = RequestType switch
         {
-            FuelRequestType.Drain => Fulfillment[fuelType] + deltaFulfillment > FuelDeltas[fuelType],
-            FuelRequestType.Fill => Fulfillment[fuelType] + deltaFulfillment < FuelDeltas[fuelType],
+            FuelRequestType.Drain => Fulfillment[fuelType] + deltaFulfillment < FuelDeltas[fuelType],
+            FuelRequestType.Fill => Fulfillment[fuelType] + deltaFulfillment > FuelDeltas[fuelType],
             FuelRequestType.Zero => false,
             _ => throw new Exception("Request has not been initialized properly!")
         };
@@ -89,7 +100,7 @@ public class FuelRequest
             requestValueString += $"{fuelDelta * fuelType.Mass:F5}kg of {fuelType.Name}, ";
         }
         
-        return $"{requestTypeName} Request for {requestValueString}";
+        return $"{(IsFulfilled() ? "F" : "Unf")}ulfilled {requestTypeName} Request for {requestValueString}";
     }
 }
 

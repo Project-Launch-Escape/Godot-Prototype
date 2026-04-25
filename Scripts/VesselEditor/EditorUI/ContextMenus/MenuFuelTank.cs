@@ -1,4 +1,5 @@
 using Godot;
+using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.VesselEditor.EditorUI.ContextMenus;
@@ -31,6 +32,7 @@ public partial class MenuFuelTank : MenuComponent
 			
 			_fuelLevelInputs.Add(fuelType, valueInput);
 			ComponentMenuContainer.AddChild(valueInput);
+			if (GlobalValues.CurrentScene is SceneType.FlightScene) valueInput.SetEditable(false);
 		}
 	}
 	private void OnValueChanged(object valueInput, double value)
@@ -48,6 +50,7 @@ public partial class MenuFuelTank : MenuComponent
 	public override void _Process(double delta)
 	{
 		if (Folded) return;
+		if (GlobalValues.CurrentScene is SceneType.FlightScene) FlightSceneProcess();
 		
 		var volumeSum = 0d;
 		var maxSum = ParentTank.MaxFuelLevels.Sum(level => level.Value * level.Key.Volume);
@@ -58,8 +61,16 @@ public partial class MenuFuelTank : MenuComponent
 			massSum += level.Value * level.Key.Mass;
 		}
 		
-		_fuelLevels.Text = $"  Total Fuel: {volumeSum}L";
-		_fuelMax.Text = $"  Total Fuel Max: {maxSum}L";
-		_fuelMass.Text = $"  Fuel Mass: {massSum}kg";
+		_fuelLevels.Text = $"  Total Fuel: {volumeSum:F3}L";
+		_fuelMax.Text = $"  Total Fuel Max: {maxSum:F3}L";
+		_fuelMass.Text = $"  Fuel Mass: {massSum:F3}kg";
+	}
+
+	private void FlightSceneProcess()
+	{
+		foreach (var (fuelType, valueInput) in _fuelLevelInputs)
+		{
+			valueInput.SetValueNoSignal(ParentTank.FuelLevels[fuelType]);
+		}
 	}
 }

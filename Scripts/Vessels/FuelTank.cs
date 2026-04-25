@@ -45,5 +45,5 @@ public partial class FuelTank : PartComponent
 
     protected override double GetMass() => BaseMass + FuelLevels.Sum(fuelLevel => fuelLevel.Value * fuelLevel.Key.Mass);
 
-    public bool HasFuelType(FuelType fuelType) => FuelLevels.ContainsKey(fuelType) && FuelLevels[fuelType] > 0;
+    public bool HasFuelType(FuelType fuelType) => FuelLevels.ContainsKey(fuelType);
 }

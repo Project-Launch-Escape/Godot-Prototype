@@ -7,7 +7,9 @@
 [ext_resource type="Script" uid="uid://oip12nppa2ed" path="res://Scripts/Other/CelestialInitializer.cs" id="5_gipt1"]
 [ext_resource type="PackedScene" uid="uid://dqf5a2rfarxtd" path="res://Prefabs/Celestial Prefabs/Celestial.tscn" id="6_pgw7i"]
 [ext_resource type="PackedScene" uid="uid://djknjwgwmfp2x" path="res://Prefabs/Celestial Prefabs/Surface.tscn" id="7_v7xhk"]
+[ext_resource type="Script" uid="uid://dwbrqv53x0qol" path="res://Scripts/UserInterface/PartHover.cs" id="8_p4lnl"]
 [ext_resource type="PackedScene" uid="uid://ocodmq28vw5m" path="res://Prefabs/Celestial Prefabs/Rings.tscn" id="8_wukv0"]
+[ext_resource type="Shader" uid="uid://3qgyf5ffkiod" path="res://Resources/Outline.gdshader" id="9_6gwdq"]
 [ext_resource type="PackedScene" uid="uid://dxd4rsywbsrei" path="res://Prefabs/Celestial Prefabs/LightEmitter.tscn" id="9_hgvmy"]
 [ext_resource type="PackedScene" uid="uid://en1t4lwqhbx6" path="res://Prefabs/Celestial Prefabs/SurfaceGlow.tscn" id="10_ebcm8"]
 [ext_resource type="PackedScene" uid="uid://4m28yia5jkb1" path="res://Prefabs/node_tracker.tscn" id="11_4v654"]
@@ -17,6 +19,13 @@
 [ext_resource type="Script" uid="uid://bqkvcyw0qftag" path="res://Scripts/Simulation/LocalSurface.cs" id="14_y0yaw"]
 [ext_resource type="Script" uid="uid://cx2pmje0i6e6n" path="res://Scripts/Other/LocalCamera.cs" id="15_qolck"]
 [ext_resource type="Script" uid="uid://c0t5h0y2wo8ya" path="res://Scripts/Vessels/Vessel.cs" id="15_yl3ua"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rsfko"]
+render_priority = 0
+shader = ExtResource("9_6gwdq")
+shader_parameter/samples = 4
+shader_parameter/sensitivity = 0.1
+shader_parameter/edge_fade = 0.005
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_85c52"]
 panorama = ExtResource("3_ry528")
@@ -74,6 +83,10 @@ script = ExtResource("2_qolck")
 _renderSpaceCamera = NodePath("../Camera")
 _localSpaceCamera = NodePath("../../VesselSpaceView/LocalCamera")
 
+[node name="HoverController" type="Node" parent="ViewportContainer/RenderSpaceView" unique_id=337981753]
+script = ExtResource("8_p4lnl")
+_outlineShader = SubResource("ShaderMaterial_rsfko")
+
 [node name="Camera" type="Camera3D" parent="ViewportContainer/RenderSpaceView" unique_id=1676503933]
 environment = SubResource("Environment_om47e")
 current = true
@@ -129,4 +142,12 @@ current = true
 far = 400000.0
 script = ExtResource("15_qolck")
 
-[node name="FlightUI" parent="ViewportContainer/VesselSpaceView" unique_id=740060954 instance=ExtResource("12_7rq2r")]
+[node name="UIView" type="SubViewport" parent="ViewportContainer" unique_id=805039755]
+process_priority = 100
+transparent_bg = true
+handle_input_locally = false
+physics_object_picking = true
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="FlightUI" parent="ViewportContainer/UIView" unique_id=740060954 instance=ExtResource("12_7rq2r")]

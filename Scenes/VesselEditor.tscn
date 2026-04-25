@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://b2ucfws7t3bhu" path="res://Scripts/VesselEditor/VesselEditorCamera.cs" id="2_npby0"]
 [ext_resource type="Shader" uid="uid://3qgyf5ffkiod" path="res://Resources/Outline.gdshader" id="2_o2me5"]
 [ext_resource type="Script" uid="uid://dmaih72r5wu61" path="res://Scripts/Other/GlobalValues.cs" id="3_4v23d"]
+[ext_resource type="Script" uid="uid://dwbrqv53x0qol" path="res://Scripts/UserInterface/PartHover.cs" id="3_ep6uy"]
 [ext_resource type="Script" uid="uid://mvrdcf02w5px" path="res://Scripts/VesselEditor/PlaceTool.cs" id="6_2h56u"]
 [ext_resource type="Script" uid="uid://bdi1g4eb5anis" path="res://Scripts/VesselEditor/RerootTool.cs" id="6_hiywy"]
 [ext_resource type="Theme" uid="uid://b0s7ysif5h015" path="res://Resources/DefaultTheme.tres" id="6_sprtt"]
@@ -33,12 +34,12 @@
 [ext_resource type="Script" uid="uid://cqpxgfj5c61sb" path="res://Scripts/VesselEditor/EditorUI/MouseAlertHandler.cs" id="26_eu1sv"]
 [ext_resource type="PackedScene" uid="uid://cagnvn136i58w" path="res://Scenes/UIElements/MouseAlert.tscn" id="27_xpblq"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4v23d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_05ykk"]
 render_priority = 0
 shader = ExtResource("2_o2me5")
 shader_parameter/samples = 4
 shader_parameter/sensitivity = 0.1
-shader_parameter/edge_fade = 0.015
+shader_parameter/edge_fade = 0.005
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vqfw5"]
 sky_top_color = Color(0.3758172, 0.33451146, 0.9318945, 1)
@@ -191,14 +192,16 @@ expand_margin_left = 2.0
 
 [node name="VesselEditor" type="Node3D" unique_id=271238879]
 script = ExtResource("1_a5mxq")
-_outlineShader = SubResource("ShaderMaterial_4v23d")
 
-[node name="Global" type="Node" parent="." unique_id=1051158155 node_paths=PackedStringArray("_renderSpaceCamera", "_localSpaceCamera")]
+[node name="Global" type="Node" parent="." unique_id=1051158155 node_paths=PackedStringArray("_localSpaceCamera")]
 process_mode = 3
 script = ExtResource("3_4v23d")
 _currentScene = 1
-_renderSpaceCamera = NodePath("")
-_localSpaceCamera = NodePath("")
+_localSpaceCamera = NodePath("../Camera")
+
+[node name="HoverController" type="Node" parent="." unique_id=140897741]
+script = ExtResource("3_ep6uy")
+_outlineShader = SubResource("ShaderMaterial_05ykk")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1569562206]
 environment = SubResource("Environment_175yu")
@@ -429,7 +432,7 @@ item_0/id = 0
 item_1/text = "Open Launch Configuration"
 item_1/id = 1
 
-[node name="LaunchSettings" type="Control" parent="UI/ActionBar" unique_id=806813462 node_paths=PackedStringArray("MouseCollider")]
+[node name="LaunchSettings" type="Control" parent="UI/ActionBar" unique_id=806813462 node_paths=PackedStringArray("_mouseCollider")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 567.0
@@ -438,7 +441,7 @@ offset_right = 772.0
 offset_bottom = 339.0
 mouse_filter = 2
 script = ExtResource("23_vmihi")
-MouseCollider = NodePath("Panel/Header/MouseCollider")
+_mouseCollider = NodePath("Panel/Header/MouseCollider")
 metadata/_custom_type_script = "uid://ddk5fqdp5jm5s"
 
 [node name="Panel" type="Panel" parent="UI/ActionBar/LaunchSettings" unique_id=2122585129]

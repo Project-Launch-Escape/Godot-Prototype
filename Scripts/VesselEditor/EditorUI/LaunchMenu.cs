@@ -1,4 +1,5 @@
 using Godot;
+using GodotPrototype.Scripts.UserInterface;
 using GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 
 namespace GodotPrototype.Scripts.VesselEditor.EditorUI;
@@ -46,7 +47,7 @@ public partial class LaunchMenu : Node
 
 	private void SelectVehicle()
 	{
-		var part = Editor.GetMouseHoveredPart();
+		var part = PartHover.GetMouseHoveredPart();
 		if (part == null) return;
 
 		var launchFile = new LaunchFile(part.ParentTree)

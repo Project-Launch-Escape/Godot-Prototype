@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Godot;
 using Godot.Collections;
+using GodotPrototype.Scripts.UserInterface;
 using GodotPrototype.Scripts.VesselEditor.EditorUI;
 using GodotPrototype.Scripts.VesselEditor.FileInterfacing;
 using GodotPrototype.Scripts.Vessels;
@@ -50,7 +51,7 @@ public partial class PlaceTool : Node3D, IToolable
 			return;
 		}
 		
-		var rayResults = Editor.GetMouseHoveredRayResults();
+		var rayResults = PartHover.GetMouseHoveredRayResults();
 		if (rayResults.Count == 0 || TranslateTool.GizmoActive) return;
 		
 		var selectedPart = (VesselPart)rayResults["collider"];
@@ -160,7 +161,7 @@ public partial class PlaceTool : Node3D, IToolable
 	{
 		Array<Rid> descendentRids = [_currentPlacingPart.GetRid()];
 		foreach (var descendant in _currentPlacingPart.GetAllDescendantParts()) { descendentRids.Add(descendant.GetRid()); }
-		var rayResult = Editor.GetMouseHoveredRayResults(_placingDist * 1.25f, descendentRids );
+		var rayResult = PartHover.GetMouseHoveredRayResults(_placingDist * 1.25f, descendentRids );
 		
 		var newTransform = Transform3D.Identity;
 		Vector3 newPos;

@@ -1,4 +1,5 @@
 using Godot;
+using GodotPrototype.Scripts.UserInterface;
 
 namespace GodotPrototype.Scripts.VesselEditor;
 
@@ -19,7 +20,7 @@ public partial class RerootTool : Node3D, IToolable
     {
         if (mouseInput.Pressed) return;
         
-        var selectedPart = Editor.GetMouseHoveredPart();
+        var selectedPart = PartHover.GetMouseHoveredPart();
         var selectedTree = selectedPart.ParentTree;
         
         if (shiftModifier)

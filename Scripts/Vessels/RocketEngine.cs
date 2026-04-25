@@ -12,10 +12,9 @@ public partial class RocketEngine : PartComponent
 
     public void FireEngine(double throttle, double fireTime)
     {
-        bool canFire = Propellants.All(propellant => ConnectedFuelSystem.HasFuelType(propellant.Fuel));
-        if (!canFire) return;
-
         var fireImpulse = MaxThrust * throttle * fireTime;
+        if (fireImpulse == 0) return;
+        
         var fuelDeltas = new Dictionary<FuelType, double>();
         foreach (var propellant in Propellants)
         {

@@ -51,6 +51,18 @@ public partial class ValueInput : Control
 		_textInput.ValueChanged += HandleTextInput;
 	}
 
+	public void SetEditable(bool editable)
+	{
+		SliderInput.Editable = editable;
+		_textInput.Editable = editable;
+	}
+
+	public void SetValueNoSignal(double newValue)
+	{
+		SliderInput.SetValueNoSignal(newValue);
+		_textInput.SetValueNoSignal(newValue);
+	}
+
 	private void HandleTextInput(double newValue)
 	{
 		SliderInput.SetValueNoSignal(newValue);
