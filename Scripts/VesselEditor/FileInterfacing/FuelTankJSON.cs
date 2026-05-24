@@ -32,7 +32,6 @@ public class FuelTankJSON : PartComponentJSON
         {
             var type = FuelType.FromName(level.FuelType);
             tank.FuelLevels[type] = level.Level;
-            GD.Print(level.Level);
             tank.MaxFuelLevels[type] = level.Max;
         }
 

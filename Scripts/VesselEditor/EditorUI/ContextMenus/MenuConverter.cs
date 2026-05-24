@@ -14,7 +14,7 @@ public partial class MenuConverter : MenuComponent
 
 	public override void _Ready()
 	{
-		_rateInput.SetValueNoSignal(ParentConverter.Rate);
+		_rateInput.SetValueNoSignal(ParentConverter.Rate * 100);
 		_rateInput.ValueChanged += OnRateChanged;
 	}
 	public override void _Process(double delta)

@@ -575,12 +575,13 @@ texture = ExtResource("12_pr41h")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AntiNormalAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=1475058337]
+[node name="AntiNormalAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=609101632]
 layout_mode = 1
-offset_right = 24.0
-offset_bottom = 24.0
-texture = ExtResource("13_527sr")
-expand_mode = 1
+offset_left = 67.0
+offset_top = 10.0
+offset_right = 91.0
+offset_bottom = 34.0
+texture_normal = ExtResource("13_527sr")
 stretch_mode = 5
 
 [node name="Altimeter_Spedometer" type="Control" parent="." unique_id=1350399827 node_paths=PackedStringArray("_altitudeText", "_velocityText", "_verticalSpeedText", "_trackingSwitchButton", "_referenceIcon")]

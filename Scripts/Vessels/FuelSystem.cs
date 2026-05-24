@@ -112,7 +112,7 @@ public class FuelSystem
 		var usableTanks = new List<FuelTank>(); // Tanks in system that contain the desired fuel type
 		foreach (var tank in ConnectedTanks)
 		{
-			if (tank.HasFuelType(fuelType)) usableTanks.Add(tank);
+			if (tank.HasFuelType(fuelType) && tank.FuelLevels[fuelType] > 0) usableTanks.Add(tank);
 		}
 
 		if (usableTanks.Count == 0) return 0;

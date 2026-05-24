@@ -7,12 +7,51 @@ namespace GodotPrototype.Scripts.UserInterface.UIElements;
 
 public partial class NavRectangle : Control
 {
-    [Export] private Control _cameraAngleIcon;
-    [Export] private Control _vesselAngleIcon;
-    [Export] private Control _progradeAngleIcon;
-    [Export] private Control _retrogradeAngleIcon;
-    [Export] private Control _normalAngleIcon;
-    [Export] private Control _antinormalAngleIcon;
+    [Export] private TextureButton _cameraAngleIcon;
+    [Export] private TextureButton _vesselAngleIcon;
+    [Export] private TextureButton _progradeAngleIcon;
+    [Export] private TextureButton _retrogradeAngleIcon;
+    [Export] private TextureButton _normalAngleIcon;
+    [Export] private TextureButton _antinormalAngleIcon;
+    [Export] private TextureButton _radialInAngleIcon;
+    [Export] private TextureButton _radialOutAngleIcon;
+
+    public SASType SASMode = SASType.Disabled;
+
+    public enum SASType
+    {
+        Disabled,
+        Camera,
+        Assist,
+        Prograde,
+        Retrograde,
+        Normal,
+        Antinormal,
+        RadialOut,
+        RadialIn
+    }
+
+    public override void _Ready()
+    {
+        _cameraAngleIcon.Pressed += () => OnSASButtonPressed(_cameraAngleIcon, SASType.Camera);
+        _vesselAngleIcon.Pressed += () => OnSASButtonPressed(_vesselAngleIcon, SASType.Assist);
+        _progradeAngleIcon.Pressed += () => OnSASButtonPressed(_progradeAngleIcon, SASType.Prograde);
+        _retrogradeAngleIcon.Pressed += () => OnSASButtonPressed(_retrogradeAngleIcon, SASType.Retrograde);
+        _normalAngleIcon.Pressed += () => OnSASButtonPressed(_normalAngleIcon, SASType.Normal);
+        _antinormalAngleIcon.Pressed += () => OnSASButtonPressed(_antinormalAngleIcon, SASType.Antinormal);
+        if (_radialOutAngleIcon != null) _radialOutAngleIcon.Pressed += () => OnSASButtonPressed(_radialOutAngleIcon, SASType.RadialOut);
+        if (_radialInAngleIcon != null) _radialInAngleIcon.Pressed += () => OnSASButtonPressed(_radialInAngleIcon, SASType.RadialIn);
+    }
+
+    private void OnSASButtonPressed(TextureButton sasButton, SASType sasType)
+    {
+        SetSASMode(sasType == SASMode ? SASType.Disabled : sasType);
+    }
+
+    public void SetSASMode(SASType sasType)
+    {
+        
+    }
 
     public override void _Process(double delta)
     {

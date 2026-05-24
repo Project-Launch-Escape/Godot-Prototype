@@ -200,14 +200,52 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		LinearVelocity = (Vector3)newVelRel.LocalVelocity;
 
 		Position = (Vector3)(PositionLocal - GlobalValues.FOPosition.LocalPosition);
+		AngularVelocity = Vector3.Zero;
 	}
 
 	private void UpdateRotation()
 	{
-		AngularVelocity = Vector3.Zero;
-		if (Input.IsActionPressed(PLEInput.Forward)) Basis = GlobalValues.RenderSpaceCamera.GlobalBasis.Rotated(GlobalValues.RenderSpaceCamera.GlobalBasis.X, -Mathf.Pi/2);
-		if (Input.IsActionPressed(PLEInput.Backward)) Basis = GlobalValues.RenderSpaceCamera.GlobalBasis.Rotated(GlobalValues.RenderSpaceCamera.GlobalBasis.X, Mathf.Pi/2);
+		//AngularVelocity = Vector3.Zero;
+		//if (Input.IsActionPressed(PLEInput.Forward)) Basis = GlobalValues.RenderSpaceCamera.GlobalBasis.Rotated(GlobalValues.RenderSpaceCamera.GlobalBasis.X, -Mathf.Pi/2);
+		//if (Input.IsActionPressed(PLEInput.Backward)) Basis = GlobalValues.RenderSpaceCamera.GlobalBasis.Rotated(GlobalValues.RenderSpaceCamera.GlobalBasis.X, Mathf.Pi/2);
+		var torqueAxis = Vector3.Zero;
+		float torqueMagnitude = 25f;
+		bool manualControl = false;
+		
+		if (Input.IsActionPressed(PLEInput.Forward)) {torqueAxis += Basis.Z; manualControl = true;}
+		if (Input.IsActionPressed(PLEInput.Backward)) {torqueAxis -= Basis.Z; manualControl = true;}
+		if (Input.IsActionPressed(PLEInput.Right)) {torqueAxis += Basis.X; manualControl = true;}
+		if (Input.IsActionPressed(PLEInput.Left)) {torqueAxis -= Basis.X; manualControl = true;}
+		if (Input.IsActionPressed(PLEInput.Up)) {torqueAxis += Basis.Y; manualControl = true;}
+		if (Input.IsActionPressed(PLEInput.Down)) {torqueAxis -= Basis.Y; manualControl = true;}
+
+		if (manualControl)
+		{
+			ApplyTorque(torqueAxis.Normalized() * torqueMagnitude);
+		}
+		else
+		{
+			ApplyTorque(GetSASTorque());
+		}
 	}
+
+	public Vector3d GetSASTarget()
+	{
+		return VelocityLocal.Normalized();
+	}
+	public Vector3 GetSASTorque()
+	{
+		float maxTorque = 25f;
+		var sasTarget = (Vector3)GetSASTarget();
+		var angleToTarget = sasTarget.AngleTo(Basis.Y);
+		
+		return sasTarget.Cross(-Basis.Y) * maxTorque;
+	}
+	
+	public Vector3d GetProgradeVector() => VelocityLocal.Normalized();
+	public Vector3d GetRetrogradeVector() => -VelocityLocal.Normalized();
+	public Vector3d GetNormalVector() => Trajectory.CurrentOrbit.NormalVector;
+	public Vector3d GetAntinormalVector() => -Trajectory.CurrentOrbit.NormalVector;
 
 	public void AddForce(Vector3d force)
 	{

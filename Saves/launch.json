@@ -1,5 +1,5 @@
 {
-  "StartingCelestial": "Earth",
+  "StartingCelestial": "Venus",
   "StartOnSurface": false,
   "PartTree": {
 	"Parts": [
@@ -11,9 +11,9 @@
 		"ParentSnapPointIndex": -2,
 		"SnapPointIndex": -2,
 		"Position": {
-		  "X": -1.7881229,
-		  "Y": 1.4053763,
-		  "Z": -3.1207967
+		  "X": -0.69882333,
+		  "Y": 1.8052722,
+		  "Z": -0.254292
 		},
 		"Rotation": {
 		  "X": -0,
@@ -35,7 +35,7 @@
 		"ParentSnapPointIndex": 1,
 		"SnapPointIndex": 2,
 		"Position": {
-		  "X": 1.1920929E-07,
+		  "X": 5.9604645E-08,
 		  "Y": -1,
 		  "Z": 0
 		},
@@ -52,7 +52,7 @@
 		"Components": [
 		  {
 			"ComponentType": "Converter",
-			"Rate": 1,
+			"Rate": 0,
 			"Index": 0,
 			"BaseMass": 0
 		  },
@@ -78,7 +78,7 @@
 		"ParentSnapPointIndex": 3,
 		"SnapPointIndex": 0,
 		"Position": {
-		  "X": 1.1920929E-07,
+		  "X": 5.9604645E-08,
 		  "Y": -1,
 		  "Z": 0
 		},
