@@ -231,7 +231,7 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 
 	public Vector3d GetSASTarget()
 	{
-		return VelocityLocal.Normalized();
+		return NavRectangle.GetDirectionFromSASType(NavRectangle.SASMode);
 	}
 	public Vector3 GetSASTorque()
 	{
@@ -241,11 +241,6 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		
 		return sasTarget.Cross(-Basis.Y) * maxTorque;
 	}
-	
-	public Vector3d GetProgradeVector() => VelocityLocal.Normalized();
-	public Vector3d GetRetrogradeVector() => -VelocityLocal.Normalized();
-	public Vector3d GetNormalVector() => Trajectory.CurrentOrbit.NormalVector;
-	public Vector3d GetAntinormalVector() => -Trajectory.CurrentOrbit.NormalVector;
 
 	public void AddForce(Vector3d force)
 	{

@@ -425,7 +425,7 @@ script = ExtResource("7_mhhnu")
 _playIcon = ExtResource("5_nm0om")
 _pauseIcon = ExtResource("6_mhhnu")
 
-[node name="NavRectangle" type="Control" parent="." unique_id=331028246 node_paths=PackedStringArray("_cameraAngleIcon", "_vesselAngleIcon", "_progradeAngleIcon", "_retrogradeAngleIcon", "_normalAngleIcon", "_antinormalAngleIcon")]
+[node name="NavRectangle" type="Control" parent="." unique_id=331028246 node_paths=PackedStringArray("_sasButtons")]
 layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
@@ -439,12 +439,14 @@ offset_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("8_mbdiu")
-_cameraAngleIcon = NodePath("CameraAngleMarker")
-_vesselAngleIcon = NodePath("VesselAngleMarker")
-_progradeAngleIcon = NodePath("ProgradeAngleMarker")
-_retrogradeAngleIcon = NodePath("RetrogradeAngleMarker")
-_normalAngleIcon = NodePath("NormalAngleMarker")
-_antinormalAngleIcon = NodePath("AntiNormalAngleMarker")
+_sasButtons = {
+1: NodePath("CameraAngleMarker"),
+2: NodePath("VesselAngleMarker"),
+3: NodePath("ProgradeAngleMarker"),
+4: NodePath("RetrogradeAngleMarker"),
+5: NodePath("NormalAngleMarker"),
+6: NodePath("AntiNormalAngleMarker")
+}
 
 [node name="Panel" type="Panel" parent="NavRectangle" unique_id=216438751]
 layout_mode = 0
@@ -535,53 +537,51 @@ offset_bottom = 93.0
 text = "360"
 label_settings = SubResource("LabelSettings_22ulr")
 
-[node name="CameraAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=1570470652]
+[node name="CameraAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=1235683151]
+layout_mode = 0
+offset_right = 24.0
+offset_bottom = 24.0
+texture_normal = ExtResource("10_5vu0m")
+ignore_texture_size = true
+
+[node name="VesselAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=2081693285]
 layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
-texture = ExtResource("10_5vu0m")
-expand_mode = 1
+texture_normal = ExtResource("9_mbdiu")
+ignore_texture_size = true
 stretch_mode = 5
 
-[node name="VesselAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=1225362118]
+[node name="ProgradeAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=72937977]
 layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
-texture = ExtResource("9_mbdiu")
-expand_mode = 1
+texture_normal = ExtResource("10_l8jfw")
+ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ProgradeAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=801086926]
+[node name="RetrogradeAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=494267658]
 layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
-texture = ExtResource("10_l8jfw")
-expand_mode = 1
+texture_normal = ExtResource("11_pr41h")
+ignore_texture_size = true
 stretch_mode = 5
 
-[node name="RetrogradeAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=1998542614]
+[node name="NormalAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=1339115689]
 layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
-texture = ExtResource("11_pr41h")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="NormalAngleMarker" type="TextureRect" parent="NavRectangle" unique_id=1746001900]
-layout_mode = 1
-offset_right = 24.0
-offset_bottom = 24.0
-texture = ExtResource("12_pr41h")
-expand_mode = 1
+texture_normal = ExtResource("12_pr41h")
+ignore_texture_size = true
 stretch_mode = 5
 
 [node name="AntiNormalAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=609101632]
 layout_mode = 1
-offset_left = 67.0
-offset_top = 10.0
-offset_right = 91.0
-offset_bottom = 34.0
+offset_right = 24.0
+offset_bottom = 24.0
 texture_normal = ExtResource("13_527sr")
+ignore_texture_size = true
 stretch_mode = 5
 
 [node name="Altimeter_Spedometer" type="Control" parent="." unique_id=1350399827 node_paths=PackedStringArray("_altitudeText", "_velocityText", "_verticalSpeedText", "_trackingSwitchButton", "_referenceIcon")]
@@ -748,9 +748,9 @@ horizontal_alignment = 1
 
 [node name="Label10" type="Label" parent="Throttle Gauge" unique_id=649018494]
 layout_mode = 0
-offset_left = 5.0
+offset_left = 4.0
 offset_top = 4.0
-offset_right = 37.0
+offset_right = 36.0
 offset_bottom = 21.0
 text = "THRTL"
 label_settings = SubResource("LabelSettings_6jclk")

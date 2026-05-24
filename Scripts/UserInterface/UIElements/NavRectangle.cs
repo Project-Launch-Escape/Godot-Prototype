@@ -7,69 +7,86 @@ namespace GodotPrototype.Scripts.UserInterface.UIElements;
 
 public partial class NavRectangle : Control
 {
-    [Export] private TextureButton _cameraAngleIcon;
-    [Export] private TextureButton _vesselAngleIcon;
-    [Export] private TextureButton _progradeAngleIcon;
-    [Export] private TextureButton _retrogradeAngleIcon;
-    [Export] private TextureButton _normalAngleIcon;
-    [Export] private TextureButton _antinormalAngleIcon;
-    [Export] private TextureButton _radialInAngleIcon;
-    [Export] private TextureButton _radialOutAngleIcon;
+	[Export] private Godot.Collections.Dictionary<SASType, TextureButton> _sasButtons = [];
+	[Export] private Vector2 ButtonSizeUnselected = new (24,24);
+	[Export] private Vector2 ButtonSizeSelected = new (36,36);
 
-    public SASType SASMode = SASType.Disabled;
+	public static SASType SASMode = SASType.Disabled;
 
-    public enum SASType
-    {
-        Disabled,
-        Camera,
-        Assist,
-        Prograde,
-        Retrograde,
-        Normal,
-        Antinormal,
-        RadialOut,
-        RadialIn
-    }
+	public enum SASType
+	{
+		Disabled,
+		Camera,
+		Assist,
+		Prograde,
+		Retrograde,
+		Normal,
+		Antinormal,
+		RadialOut,
+		RadialIn
+	}
 
-    public override void _Ready()
-    {
-        _cameraAngleIcon.Pressed += () => OnSASButtonPressed(_cameraAngleIcon, SASType.Camera);
-        _vesselAngleIcon.Pressed += () => OnSASButtonPressed(_vesselAngleIcon, SASType.Assist);
-        _progradeAngleIcon.Pressed += () => OnSASButtonPressed(_progradeAngleIcon, SASType.Prograde);
-        _retrogradeAngleIcon.Pressed += () => OnSASButtonPressed(_retrogradeAngleIcon, SASType.Retrograde);
-        _normalAngleIcon.Pressed += () => OnSASButtonPressed(_normalAngleIcon, SASType.Normal);
-        _antinormalAngleIcon.Pressed += () => OnSASButtonPressed(_antinormalAngleIcon, SASType.Antinormal);
-        if (_radialOutAngleIcon != null) _radialOutAngleIcon.Pressed += () => OnSASButtonPressed(_radialOutAngleIcon, SASType.RadialOut);
-        if (_radialInAngleIcon != null) _radialInAngleIcon.Pressed += () => OnSASButtonPressed(_radialInAngleIcon, SASType.RadialIn);
-    }
+	public override void _Ready()
+	{
+		foreach (var (sasType, sasIcon) in _sasButtons)
+		{
+			if (sasIcon is null)
+			{
+				GD.Print(sasType);
+				continue;
+			}
+			sasIcon.Pressed += () => OnSASButtonPressed(sasIcon, sasType);
+		}
+	}
 
-    private void OnSASButtonPressed(TextureButton sasButton, SASType sasType)
-    {
-        SetSASMode(sasType == SASMode ? SASType.Disabled : sasType);
-    }
+	private void OnSASButtonPressed(TextureButton sasButton, SASType sasType)
+	{
+		SetSASMode(sasType == SASMode ? SASType.Disabled : sasType);
+	}
 
-    public void SetSASMode(SASType sasType)
-    {
-        
-    }
+	public void SetSASMode(SASType sasType)
+	{
+		foreach (var (_, sasButton) in _sasButtons)
+		{
+			sasButton.Size = ButtonSizeUnselected;
+		}
 
-    public override void _Process(double delta)
-    {
-        UpdateIconFromDirection(_cameraAngleIcon, FlightCamera.PointingDirection);
-        UpdateIconFromDirection(_vesselAngleIcon, Vessel.ActiveVessel.Basis.Y);
-        UpdateIconFromDirection(_progradeAngleIcon, Vessel.ActiveVessel.VelocityLocal);
-        UpdateIconFromDirection(_retrogradeAngleIcon, -Vessel.ActiveVessel.VelocityLocal);
-        UpdateIconFromDirection(_normalAngleIcon, Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector);
-        UpdateIconFromDirection(_antinormalAngleIcon, -Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector);
-    }
+		if (_sasButtons.TryGetValue(sasType, out var button)) button.Size = ButtonSizeSelected;
+		SASMode = sasType;
+	}
 
-    private void UpdateIconFromDirection(Control icon, Vector3d direction)
-    {
-        var sphericalCoords = SphericalCoordinates.FromCartesian((Vector3)direction * FlightCamera.CameraReferenceBasis);
-        if (icon is null) return;
-        var newAngles = new Vector2((float)sphericalCoords.Theta + Mathf.Pi, (float)sphericalCoords.Phi);
-        var newPos = newAngles * Size.X / Mathf.Tau;
-        newPos -= icon.Size / 2;
-        icon.Position = newPos;
-    }
+	public override void _Process(double delta)
+	{
+		foreach (var (sasType, sasButton) in _sasButtons)
+		{
+			UpdateIconFromDirection(sasButton, GetDirectionFromSASType(sasType));
+		}
+	}
+
+	public static Vector3d GetDirectionFromSASType(SASType sasType)
+	{
+		return sasType switch
+		{
+			SASType.Disabled => Vector3d.Zero,
+			SASType.Camera => FlightCamera.PointingDirection,
+			SASType.Assist => Vessel.ActiveVessel.Basis.Y.Normalized(), //TODO: Implement last rotation thing
+			SASType.Prograde => Vessel.ActiveVessel.VelocityLocal.Normalized(),
+			SASType.Retrograde => -Vessel.ActiveVessel.VelocityLocal.Normalized(),
+			SASType.Normal => Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector,
+			SASType.Antinormal => -Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector,
+			SASType.RadialOut => Vessel.ActiveVessel.VelocityLocal.Cross(Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector).Normalized(),
+			SASType.RadialIn => -Vessel.ActiveVessel.VelocityLocal.Cross(Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector).Normalized(),
+			_ => throw new ArgumentOutOfRangeException()
+		};
+	}
+
+	private void UpdateIconFromDirection(Control icon, Vector3d direction)
+	{
+		var sphericalCoords = SphericalCoordinates.FromCartesian((Vector3)direction * FlightCamera.CameraReferenceBasis);
+		if (icon is null) return;
+		var newAngles = new Vector2((float)sphericalCoords.Theta + Mathf.Pi, (float)sphericalCoords.Phi);
+		var newPos = newAngles * Size.X / Mathf.Tau;
+		newPos -= icon.Size / 2;
+		icon.Position = newPos;
+	}
 }
