@@ -115,9 +115,9 @@ public class Orbit : OrbitalElements
 		OrbitLineNode?.UpdateOrbitLine(this, trueAnomalyRange);	
 	}
 
-	public void CreateMarkerOfType(OrbitMarkerType markerType)
+	public OrbitMarker CreateMarkerOfType(OrbitMarkerType markerType)
 	{
-		OrbitLineNode?.CreateMarkerOfType(markerType);
+		return OrbitLineNode?.CreateMarkerOfType(markerType);
 	}
 
 	public Vector3d PositionCurrent() => PositionFromTime(GlobalValues.Time);

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0ihvhaibr3s1"
-path="res://.godot/imported/NavRectangleAntiNormal.png-e7a9cac0511fe29f3e3599bacf4b1cfd.ctex"
+uid="uid://n8npfe3u66v5"
+path="res://.godot/imported/PlusIcon.png-844f41bde723485e06ab73710757b693.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/FlightScene/NavRectangleAntiNormal.png"
-dest_files=["res://.godot/imported/NavRectangleAntiNormal.png-e7a9cac0511fe29f3e3599bacf4b1cfd.ctex"]
+source_file="res://Resources/UITextures/FlightScene/PlusIcon.png"
+dest_files=["res://.godot/imported/PlusIcon.png-844f41bde723485e06ab73710757b693.ctex"]
 
 [params]
 

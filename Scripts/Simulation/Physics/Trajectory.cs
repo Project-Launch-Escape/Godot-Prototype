@@ -10,6 +10,7 @@ namespace GodotPrototype.Scripts.Simulation.Physics;
 public class Trajectory
 {
 	public List<ConicPatch> ConicPatches = [];
+	public bool IsManeuver = false;
 
 	public Orbit CurrentOrbit
 	{
@@ -37,9 +38,9 @@ public class Trajectory
 		FindEncounters();
 	}
 
-	public Trajectory(Vector3d position, Vector3d velocity, Celestial parentCelestial, Color color)
+	public Trajectory(Vector3d position, Vector3d velocity, Celestial parentCelestial, Color color, double? epoch = null)
 	{
-		CurrentOrbit = new Orbit(position, velocity, parentCelestial, color);
+		CurrentOrbit = new Orbit(position, velocity, parentCelestial, color, epoch);
 		FindEncounters();
 	}
 
@@ -55,14 +56,14 @@ public class Trajectory
 			orbitToUpdate.SetFromOrbit(newOrbit);
 			ConicPatches[index].TimeRange = newRange;
 
-			ConicPatches[index].UpdateOrbitLine();
+			ConicPatches[index].UpdateOrbitLine(IsManeuver);
 		}
 		else
 		{
 			var newPatch = new ConicPatch(newOrbit, newRange);
 			ConicPatches.Add(newPatch);
 			
-			newPatch.CreateOrbitLine();
+			newPatch.CreateOrbitLine(IsManeuver);
 			newPatch.CreateMarkerOfType(OrbitMarkerType.Apoapsis);
 			newPatch.CreateMarkerOfType(OrbitMarkerType.Periapsis);
 		}
@@ -78,9 +79,9 @@ public class Trajectory
 		}
 	}
 
-	public void SetFromStateVectors(Vector3d position, Vector3d velocity, Celestial parentCelestial)
+	public void SetFromStateVectors(Vector3d position, Vector3d velocity, Celestial parentCelestial, Color? color = null, double? epoch = null)
 	{
-		CurrentOrbit = new Orbit(position, velocity, parentCelestial, CurrentOrbit.Color);
+		CurrentOrbit = new Orbit(position, velocity, parentCelestial, color ?? CurrentOrbit.Color, epoch);
 		FindEncounters();
 	}
 
@@ -100,7 +101,16 @@ public class Trajectory
 
 		if (!CurrentOrbit.IsEscapeTrajectory) return;
 		
-		CurrentPatch.UpdateOrbitLine();
+		CurrentPatch.UpdateOrbitLine(IsManeuver);
+	}
+
+	public void Discard()
+	{
+		foreach (var conicPatch in ConicPatches)
+		{
+			conicPatch.DeleteOrbitLine();
+		}
+		ConicPatches.Clear();
 	}
 
 	public Orbit GetOrbitAtTime(double time)
@@ -146,7 +156,7 @@ public class Trajectory
 				for (var j = 0; j < ConicPatches.Count; j++)
 				{
 					var patch = ConicPatches[j];
-					patch.UpdateOrbitLine();
+					patch.UpdateOrbitLine(IsManeuver);
 				}
 				return;
 			}

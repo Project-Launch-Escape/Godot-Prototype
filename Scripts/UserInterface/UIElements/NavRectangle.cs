@@ -74,8 +74,8 @@ public partial class NavRectangle : Control
 			SASType.Retrograde => -Vessel.ActiveVessel.VelocityLocal.Normalized(),
 			SASType.Normal => Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector,
 			SASType.Antinormal => -Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector,
-			SASType.RadialOut => Vessel.ActiveVessel.VelocityLocal.Cross(Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector).Normalized(),
-			SASType.RadialIn => -Vessel.ActiveVessel.VelocityLocal.Cross(Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector).Normalized(),
+			SASType.RadialOut => -Vessel.ActiveVessel.VelocityLocal.Cross(Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector).Normalized(),
+			SASType.RadialIn => Vessel.ActiveVessel.VelocityLocal.Cross(Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector).Normalized(),
 			_ => throw new ArgumentOutOfRangeException()
 		};
 	}

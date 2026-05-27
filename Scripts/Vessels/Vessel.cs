@@ -24,6 +24,8 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 
 	public Celestial ParentBody;
 	public Trajectory Trajectory;
+	
+	public List<Maneuver> Maneuvers = [];
 
 	public Vector3d PositionLocal
 	{
@@ -68,6 +70,10 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		LinearVelocity = (Vector3)VelocityLocal;
 		ContactMonitor = true;
 		MaxContactsReported = 10;
+
+		var newManeuver = new Maneuver(Trajectory.ConicPatches[0], 0.754, new Vector3d(100, 50, 50));
+		Maneuvers.Add(newManeuver);
+		newManeuver.CalculateTrajectory();
 	}
 
 	private void InitializeFromLaunchFile()

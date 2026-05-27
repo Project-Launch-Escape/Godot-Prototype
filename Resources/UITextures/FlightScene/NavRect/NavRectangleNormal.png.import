@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b1kpjs8qamllw"
-path="res://.godot/imported/NavRectangleRetrograde.png-e1d1602b151ff31ba9296b2f46ab8b96.ctex"
+uid="uid://cqwaskny7ti2j"
+path="res://.godot/imported/NavRectangleNormal.png-9508d83023fb8f255689b1506f1ef45e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/FlightScene/NavRectangleRetrograde.png"
-dest_files=["res://.godot/imported/NavRectangleRetrograde.png-e1d1602b151ff31ba9296b2f46ab8b96.ctex"]
+source_file="res://Resources/UITextures/FlightScene/NavRect/NavRectangleNormal.png"
+dest_files=["res://.godot/imported/NavRectangleNormal.png-9508d83023fb8f255689b1506f1ef45e.ctex"]
 
 [params]
 

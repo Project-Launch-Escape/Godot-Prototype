@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqwaskny7ti2j"
-path="res://.godot/imported/NavRectangleNormal.png-1263e62a13da205af50b97ffe4b40ecd.ctex"
+uid="uid://c1ckh70pdlwl8"
+path="res://.godot/imported/NavRectangleCurrent.png-990a3232a9cde4be41295fe0c6708300.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/FlightScene/NavRectangleNormal.png"
-dest_files=["res://.godot/imported/NavRectangleNormal.png-1263e62a13da205af50b97ffe4b40ecd.ctex"]
+source_file="res://Resources/UITextures/FlightScene/NavRect/NavRectangleCurrent.png"
+dest_files=["res://.godot/imported/NavRectangleCurrent.png-990a3232a9cde4be41295fe0c6708300.ctex"]
 
 [params]
 

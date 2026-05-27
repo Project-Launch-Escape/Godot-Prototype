@@ -12,7 +12,15 @@ public partial class FlightUIController : Node
 	public static HoverIcon HoveredIcon;
 	public static List<HoverIcon> LockedIcons = [];
 	private const float HoverDistance = 25f;
-	
+	public static FlightUIController ControllerNode;
+
+	[Export] public PackedScene ManeuverEditorScene;
+
+	public override void _EnterTree()
+	{
+		ControllerNode = this;
+	}
+
 	public override void _Ready()
 	{
 		InitializeFuelMeters();
@@ -79,6 +87,7 @@ public partial class FlightUIController : Node
 
 	public override void _Input(InputEvent inputEvent)
 	{
+		if (inputEvent is InputEventMouseButton mouseEvent) HoveredIcon?.OnClick(mouseEvent);
 		switch (inputEvent)
 		{
 			case InputEventMouseButton {ButtonIndex: MouseButton.Right, Pressed: false}:

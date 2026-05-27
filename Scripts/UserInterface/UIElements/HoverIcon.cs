@@ -17,6 +17,11 @@ public partial class HoverIcon : Control
     {
     }
 
+    public virtual void OnClick(InputEventMouseButton mouseEvent)
+    {
+        
+    }
+
     protected void AddToIconList()
     {
         HoverIcons.Add(this);

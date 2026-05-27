@@ -14,7 +14,8 @@ public partial class OrbitMarker : HoverIcon
 	{
 		{ OrbitMarkerType.Apoapsis, GD.Load<PackedScene>("res://Scenes/UIElements/OrbitMarker.tscn")},
 		{ OrbitMarkerType.Periapsis, GD.Load<PackedScene>("res://Scenes/UIElements/OrbitMarker.tscn")},
-		{ OrbitMarkerType.Position, GD.Load<PackedScene>("res://Scenes/UIElements/CelestialMarker.tscn")}
+		{ OrbitMarkerType.Position, GD.Load<PackedScene>("res://Scenes/UIElements/CelestialMarker.tscn")},
+		{ OrbitMarkerType.Maneuver, GD.Load<PackedScene>("res://Scenes/UIElements/ManeuverMarker.tscn")}
 	};
 
 	public ConicPatch ParentConic => OrbitLine.Conic;
@@ -80,5 +81,6 @@ public enum OrbitMarkerType
 {
 	Periapsis,
 	Apoapsis,
-	Position
+	Position,
+	Maneuver
 }

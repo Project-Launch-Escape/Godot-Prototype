@@ -1,0 +1,881 @@
+[gd_scene format=3 uid="uid://ccrcfyoc6pv3w"]
+
+[ext_resource type="Script" uid="uid://dwi5mkny0v04b" path="res://Scripts/UserInterface/UIElements/ManeuverEditor.cs" id="1_2gldy"]
+[ext_resource type="Script" uid="uid://tdqm2rseea2r" path="res://Scripts/UserInterface/XButton.cs" id="2_2gldy"]
+[ext_resource type="Texture2D" uid="uid://bsjietnkjvvrp" path="res://Resources/UITextures/VesselEditor/XIcon.png" id="2_vtmqt"]
+[ext_resource type="Texture2D" uid="uid://ttowc5ll1v7k" path="res://Resources/UITextures/FlightScene/NavRect/NavRectanglePrograde.png" id="4_smf8y"]
+[ext_resource type="Texture2D" uid="uid://n8npfe3u66v5" path="res://Resources/UITextures/FlightScene/PlusIcon.png" id="5_bss88"]
+[ext_resource type="Texture2D" uid="uid://dd04pp7wih11v" path="res://Resources/UITextures/FlightScene/MinusIcon.png" id="6_224sa"]
+[ext_resource type="Texture2D" uid="uid://cejjo5q2ykkyp" path="res://Resources/UITextures/FlightScene/NavRect/RadialOut.png" id="7_q2lbk"]
+[ext_resource type="Texture2D" uid="uid://cqwaskny7ti2j" path="res://Resources/UITextures/FlightScene/NavRect/NavRectangleNormal.png" id="8_6fht2"]
+[ext_resource type="Texture2D" uid="uid://3ttgmnnurah1" path="res://Resources/UITextures/FlightScene/CelestialIcon.png" id="9_6fht2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i2txm"]
+size = Vector2(340, 40)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vtmqt"]
+bg_color = Color(0.64, 0.24799998, 0.16, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8, 0.55973333, 0.37600002, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+
+[sub_resource type="LabelSettings" id="LabelSettings_x3c42"]
+font_size = 24
+font_color = Color(0.84313726, 0.70980394, 0.45882353, 1)
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_smf8y"]
+bg_color = Color(0.6561, 0.715095, 0.81, 0.78431374)
+border_width_left = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8, 0.55973333, 0.37600002, 1)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6fht2"]
+bg_color = Color(0.43199998, 0.4104, 0.54, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_detail = 1
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_xi0wp"]
+color = Color(0.8, 0.8, 0.8, 1)
+thickness = 3
+vertical = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7vl74"]
+bg_color = Color(0.5945995, 0.536928, 0.91274166, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="LabelSettings" id="LabelSettings_utpc1"]
+line_spacing = -5.0
+font_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bss88"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.165, 0.3, 0.21225004, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xi0wp"]
+bg_color = Color(0.17658928, 0.16810179, 0.25270453, 1)
+border_width_right = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_7vl74"]
+font_size = 18
+font_color = Color(0.48149997, 0.9, 0.34199998, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q2lbk"]
+bg_color = Color(0.67, 0.25393, 0.20770001, 1)
+border_width_left = 2
+border_width_right = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_224sa"]
+bg_color = Color(0.75, 0.56025, 0.2325, 1)
+border_width_left = 2
+border_width_right = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utpc1"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.13612178, 0.28584054, 0.36551416, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_8sq8o"]
+font_size = 18
+font_color = Color(0.33245793, 0.8708701, 0.91832733, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dnqrx"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.28954482, 0.2220537, 0.42220804, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_tkgr0"]
+font_size = 18
+font_color = Color(0.77697265, 0.76854306, 0.884012, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8sq8o"]
+bg_color = Color(0.53, 0.45394495, 0.3127, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 1
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_dnqrx"]
+color = Color(0.8, 0.8, 0.8, 1)
+thickness = 3
+vertical = true
+
+[node name="ContextMenu" type="Control" unique_id=423842149 node_paths=PackedStringArray("_mouseCollider")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 340.0
+offset_bottom = 298.0
+mouse_filter = 2
+script = ExtResource("1_2gldy")
+_mouseCollider = NodePath("Drag Collider")
+metadata/_custom_type_script = "uid://ddk5fqdp5jm5s"
+
+[node name="Drag Collider" type="Area2D" parent="." unique_id=2089178055]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Drag Collider" unique_id=1696069209]
+position = Vector2(170, 20)
+shape = SubResource("RectangleShape2D_i2txm")
+debug_color = Color(0, 0.5950001, 0.7, 0)
+
+[node name="Header" type="Panel" parent="." unique_id=659918499]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 41.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vtmqt")
+
+[node name="Header Text" type="Label" parent="Header" unique_id=388414223]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.46300003
+anchor_right = 0.46300003
+offset_left = -96.513016
+offset_top = 3.0
+offset_right = 96.486984
+offset_bottom = 37.0
+text = "Maneuver Editor"
+label_settings = SubResource("LabelSettings_x3c42")
+
+[node name="X Button" type="Button" parent="Header" unique_id=578749183 node_paths=PackedStringArray("_toHide")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_top = 5.0
+offset_right = -8.0
+offset_bottom = 37.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("2_vtmqt")
+script = ExtResource("2_2gldy")
+_toHide = NodePath("../..")
+metadata/_custom_type_script = "uid://tdqm2rseea2r"
+
+[node name="Body" type="Panel" parent="." unique_id=1445774217]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.998
+offset_top = 41.0
+offset_bottom = -1.0980225
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_smf8y")
+
+[node name="BodyContainer" type="VBoxContainer" parent="Body" unique_id=512528101]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.006
+anchor_right = 0.994
+anchor_bottom = 1.0
+offset_left = 2.96
+offset_top = 1.0
+offset_right = -2.9599915
+offset_bottom = -3.3059998
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+
+[node name="GeneralInfo" type="Panel" parent="Body/BodyContainer" unique_id=1866175317]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6fht2")
+
+[node name="TimeUntilBurn" type="Label" parent="Body/BodyContainer/GeneralInfo" unique_id=879118051]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 5.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_vertical = 2
+text = "T-10yr 40d 10h 10m 24s"
+text_overrun_behavior = 2
+
+[node name="Separator" type="Panel" parent="Body/BodyContainer/GeneralInfo" unique_id=1802075855]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = 2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxLine_xi0wp")
+
+[node name="Label" type="Label" parent="Body/BodyContainer/GeneralInfo" unique_id=1351407251]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 5.0
+offset_right = -46.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "10000.001 m/s"
+
+[node name="TrueAnomalySlider" type="Panel" parent="Body/BodyContainer" unique_id=875634404]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7vl74")
+
+[node name="Slider" type="HSlider" parent="Body/BodyContainer/TrueAnomalySlider" unique_id=677507763]
+modulate = Color(0.754019, 0.7229655, 1, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 127.0
+offset_top = 13.0
+offset_right = -17.0
+offset_bottom = -11.0
+min_value = -1.5699999999999998
+max_value = 1.5699999999999998
+step = 0.0
+tick_count = 9
+ticks_position = 3
+
+[node name="Label" type="Label" parent="Body/BodyContainer/TrueAnomalySlider" unique_id=317281918]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 0.95000005
+offset_left = 3.0
+offset_top = -3.0
+offset_right = 115.0
+theme_override_constants/line_spacing = -5
+text = "True Anomaly:
+-90 degrees"
+label_settings = SubResource("LabelSettings_utpc1")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ProgradeEditor" type="Panel" parent="Body/BodyContainer" unique_id=566154701]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bss88")
+
+[node name="IconPanel" type="Panel" parent="Body/BodyContainer/ProgradeEditor" unique_id=2056470804]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 2.1859999
+offset_top = 2.0
+offset_right = 42.186
+offset_bottom = -2.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xi0wp")
+
+[node name="AxisIcon" type="TextureRect" parent="Body/BodyContainer/ProgradeEditor/IconPanel" unique_id=734530073]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -3.8139992
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_smf8y")
+stretch_mode = 5
+
+[node name="Delta-V Text" type="Label" parent="Body/BodyContainer/ProgradeEditor" unique_id=1077799850]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.48700002
+anchor_bottom = 0.48700002
+offset_left = 43.09
+offset_top = -13.480001
+offset_right = 161.09
+offset_bottom = 12.519999
+text = "-1000.02 m/s"
+label_settings = SubResource("LabelSettings_7vl74")
+horizontal_alignment = 2
+
+[node name="CoarseButtons" type="Panel" parent="Body/BodyContainer/ProgradeEditor" unique_id=456474363]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.73300004
+anchor_bottom = 0.95000005
+offset_left = -2.0
+offset_top = 2.0
+offset_right = 5.1099854
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q2lbk")
+
+[node name="Step Label" type="Label" parent="Body/BodyContainer/ProgradeEditor/CoarseButtons" unique_id=630300093]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_right = 1.0
+offset_left = -0.025000095
+offset_top = -4.0
+offset_right = -2.0
+offset_bottom = 21.0
+grow_horizontal = 2
+text = "1000 m/s"
+horizontal_alignment = 1
+
+[node name="UpButton" type="Button" parent="Body/BodyContainer/ProgradeEditor/CoarseButtons" unique_id=337933865]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.41700003
+anchor_right = 0.5
+anchor_bottom = 0.97200006
+offset_left = 5.0
+offset_top = 0.98799896
+offset_right = -2.5
+offset_bottom = 0.00799942
+icon = ExtResource("5_bss88")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="DownButton" type="Button" parent="Body/BodyContainer/ProgradeEditor/CoarseButtons" unique_id=419021914]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.41700003
+anchor_right = 1.0
+anchor_bottom = 0.97200006
+offset_left = 2.5
+offset_top = 0.98799896
+offset_right = -5.0
+offset_bottom = 0.00799942
+icon = ExtResource("6_224sa")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="FineButtons" type="Panel" parent="Body/BodyContainer/ProgradeEditor" unique_id=33386618]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.73
+anchor_right = 1.0
+anchor_bottom = 0.95000005
+offset_left = 4.099991
+offset_top = 2.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_224sa")
+
+[node name="Step Label" type="Label" parent="Body/BodyContainer/ProgradeEditor/FineButtons" unique_id=227447739]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_right = 1.0
+offset_left = -0.025000095
+offset_top = -4.0
+offset_right = -2.0
+offset_bottom = 21.0
+grow_horizontal = 2
+text = "0.01 m/s"
+horizontal_alignment = 1
+
+[node name="UpButton" type="Button" parent="Body/BodyContainer/ProgradeEditor/FineButtons" unique_id=2655415]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.41700003
+anchor_right = 0.5
+anchor_bottom = 0.97200006
+offset_left = 5.0
+offset_top = 0.98799896
+offset_right = -2.5
+offset_bottom = 0.00799942
+icon = ExtResource("5_bss88")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="DownButton" type="Button" parent="Body/BodyContainer/ProgradeEditor/FineButtons" unique_id=2039694528]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.41700003
+anchor_right = 1.0
+anchor_bottom = 0.97200006
+offset_left = 2.5
+offset_top = 0.98799896
+offset_right = -5.0
+offset_bottom = 0.00799942
+icon = ExtResource("6_224sa")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="RadialEditor" type="Panel" parent="Body/BodyContainer" unique_id=820319341]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_utpc1")
+
+[node name="IconPanel" type="Panel" parent="Body/BodyContainer/RadialEditor" unique_id=1198217349]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 2.1859999
+offset_top = 2.0
+offset_right = 42.186
+offset_bottom = -2.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xi0wp")
+
+[node name="AxisIcon" type="TextureRect" parent="Body/BodyContainer/RadialEditor/IconPanel" unique_id=320094605]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -3.8139992
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_q2lbk")
+stretch_mode = 5
+
+[node name="Delta-V Text" type="Label" parent="Body/BodyContainer/RadialEditor" unique_id=49994233]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.48700002
+anchor_bottom = 0.48700002
+offset_left = 43.09
+offset_top = -13.480001
+offset_right = 161.09
+offset_bottom = 12.519999
+text = "10.02 m/s"
+label_settings = SubResource("LabelSettings_8sq8o")
+horizontal_alignment = 2
+
+[node name="CoarseButtons" type="Panel" parent="Body/BodyContainer/RadialEditor" unique_id=277863263]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.73300004
+anchor_bottom = 0.95000005
+offset_left = -2.0
+offset_top = 2.0
+offset_right = 5.1099854
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q2lbk")
+
+[node name="Step Label" type="Label" parent="Body/BodyContainer/RadialEditor/CoarseButtons" unique_id=528478524]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_right = 1.0
+offset_left = -0.025000095
+offset_top = -4.0
+offset_right = -2.0
+offset_bottom = 21.0
+grow_horizontal = 2
+text = "1000 m/s"
+horizontal_alignment = 1
+
+[node name="UpButton" type="Button" parent="Body/BodyContainer/RadialEditor/CoarseButtons" unique_id=1473411865]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.41700003
+anchor_right = 0.5
+anchor_bottom = 0.97200006
+offset_left = 5.0
+offset_top = 0.98799896
+offset_right = -2.5
+offset_bottom = 0.00799942
+icon = ExtResource("5_bss88")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="DownButton" type="Button" parent="Body/BodyContainer/RadialEditor/CoarseButtons" unique_id=1362714303]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.41700003
+anchor_right = 1.0
+anchor_bottom = 0.97200006
+offset_left = 2.5
+offset_top = 0.98799896
+offset_right = -5.0
+offset_bottom = 0.00799942
+icon = ExtResource("6_224sa")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="FineButtons" type="Panel" parent="Body/BodyContainer/RadialEditor" unique_id=901885988]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.73
+anchor_right = 1.0
+anchor_bottom = 0.95000005
+offset_left = 4.099991
+offset_top = 2.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_224sa")
+
+[node name="Step Label" type="Label" parent="Body/BodyContainer/RadialEditor/FineButtons" unique_id=263033807]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_right = 1.0
+offset_left = -0.025000095
+offset_top = -4.0
+offset_right = -2.0
+offset_bottom = 21.0
+grow_horizontal = 2
+text = "0.01 m/s"
+horizontal_alignment = 1
+
+[node name="UpButton" type="Button" parent="Body/BodyContainer/RadialEditor/FineButtons" unique_id=165266929]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.41700003
+anchor_right = 0.5
+anchor_bottom = 0.97200006
+offset_left = 5.0
+offset_top = 0.98799896
+offset_right = -2.5
+offset_bottom = 0.00799942
+icon = ExtResource("5_bss88")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="DownButton" type="Button" parent="Body/BodyContainer/RadialEditor/FineButtons" unique_id=650799257]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.41700003
+anchor_right = 1.0
+anchor_bottom = 0.97200006
+offset_left = 2.5
+offset_top = 0.98799896
+offset_right = -5.0
+offset_bottom = 0.00799942
+icon = ExtResource("6_224sa")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="NormalEditor" type="Panel" parent="Body/BodyContainer" unique_id=1895272363]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dnqrx")
+
+[node name="IconPanel" type="Panel" parent="Body/BodyContainer/NormalEditor" unique_id=170330953]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 2.1859999
+offset_top = 2.0
+offset_right = 42.186
+offset_bottom = -2.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xi0wp")
+
+[node name="AxisIcon" type="TextureRect" parent="Body/BodyContainer/NormalEditor/IconPanel" unique_id=2072117168]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -3.8139992
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_6fht2")
+stretch_mode = 5
+
+[node name="Delta-V Text" type="Label" parent="Body/BodyContainer/NormalEditor" unique_id=2123113297]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.48700002
+anchor_bottom = 0.48700002
+offset_left = 43.09
+offset_top = -13.480001
+offset_right = 161.09
+offset_bottom = 12.519999
+text = "10000.02 m/s"
+label_settings = SubResource("LabelSettings_tkgr0")
+horizontal_alignment = 2
+
+[node name="CoarseButtons" type="Panel" parent="Body/BodyContainer/NormalEditor" unique_id=700692188]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.73300004
+anchor_bottom = 0.95000005
+offset_left = -2.0
+offset_top = 2.0
+offset_right = 5.1099854
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q2lbk")
+
+[node name="Step Label" type="Label" parent="Body/BodyContainer/NormalEditor/CoarseButtons" unique_id=283564065]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_right = 1.0
+offset_left = -0.025000095
+offset_top = -4.0
+offset_right = -2.0
+offset_bottom = 21.0
+grow_horizontal = 2
+text = "1000 m/s"
+horizontal_alignment = 1
+
+[node name="UpButton" type="Button" parent="Body/BodyContainer/NormalEditor/CoarseButtons" unique_id=211575458]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.41700003
+anchor_right = 0.5
+anchor_bottom = 0.97200006
+offset_left = 5.0
+offset_top = 0.98799896
+offset_right = -2.5
+offset_bottom = 0.00799942
+icon = ExtResource("5_bss88")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="DownButton" type="Button" parent="Body/BodyContainer/NormalEditor/CoarseButtons" unique_id=30923580]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.41700003
+anchor_right = 1.0
+anchor_bottom = 0.97200006
+offset_left = 2.5
+offset_top = 0.98799896
+offset_right = -5.0
+offset_bottom = 0.00799942
+icon = ExtResource("6_224sa")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="FineButtons" type="Panel" parent="Body/BodyContainer/NormalEditor" unique_id=312789761]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.73
+anchor_right = 1.0
+anchor_bottom = 0.95000005
+offset_left = 4.099991
+offset_top = 2.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_224sa")
+
+[node name="Step Label" type="Label" parent="Body/BodyContainer/NormalEditor/FineButtons" unique_id=510303399]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_right = 1.0
+offset_left = -0.025000095
+offset_top = -4.0
+offset_right = -2.0
+offset_bottom = 21.0
+grow_horizontal = 2
+text = "0.01 m/s"
+horizontal_alignment = 1
+
+[node name="UpButton" type="Button" parent="Body/BodyContainer/NormalEditor/FineButtons" unique_id=1914946198]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.41700003
+anchor_right = 0.5
+anchor_bottom = 0.97200006
+offset_left = 5.0
+offset_top = 0.98799896
+offset_right = -2.5
+offset_bottom = 0.00799942
+icon = ExtResource("5_bss88")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="DownButton" type="Button" parent="Body/BodyContainer/NormalEditor/FineButtons" unique_id=1706277424]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.41700003
+anchor_right = 1.0
+anchor_bottom = 0.97200006
+offset_left = 2.5
+offset_top = 0.98799896
+offset_right = -5.0
+offset_bottom = 0.00799942
+icon = ExtResource("6_224sa")
+text_overrun_behavior = 1
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="OrbitSelector" type="Panel" parent="Body/BodyContainer" unique_id=1260379219]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8sq8o")
+
+[node name="Orbit Center" type="Label" parent="Body/BodyContainer/OrbitSelector" unique_id=1308142769]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.024
+anchor_right = 0.53300005
+offset_left = 0.07999992
+offset_top = -2.0
+offset_right = 0.10998535
+offset_bottom = 21.0
+text = "Orbit Center:"
+horizontal_alignment = 1
+
+[node name="CelestialName" type="Label" parent="Body/BodyContainer/OrbitSelector" unique_id=366301263]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.95000005
+anchor_right = 0.54300004
+anchor_bottom = 0.95000005
+offset_left = 31.0
+offset_top = -23.0
+offset_right = -17.190018
+grow_vertical = 0
+text = "Alpha Centauri A"
+
+[node name="TextureRect" type="TextureRect" parent="Body/BodyContainer/OrbitSelector" unique_id=2033029239]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = -23.0
+offset_right = 28.0
+offset_bottom = -2.0
+grow_vertical = 0
+texture = ExtResource("9_6fht2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Separator" type="Panel" parent="Body/BodyContainer/OrbitSelector" unique_id=562619037]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.53800005
+anchor_right = 0.53800005
+anchor_bottom = 1.0
+offset_left = -1.5400085
+offset_top = 3.0
+offset_right = 1.4599915
+offset_bottom = -1.0
+theme_override_styles/panel = SubResource("StyleBoxLine_dnqrx")
+
+[node name="Prev Button" type="Button" parent="Body/BodyContainer/OrbitSelector" unique_id=637092647]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.53800005
+anchor_top = 0.5
+anchor_right = 0.53800005
+anchor_bottom = 0.5
+offset_left = 26.459991
+offset_top = -15.0
+offset_right = 69.45999
+offset_bottom = 16.0
+text = "Prev"
+
+[node name="Next Button" type="Button" parent="Body/BodyContainer/OrbitSelector" unique_id=1647857163]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.48700002
+anchor_right = 1.0
+anchor_bottom = 0.48700002
+offset_left = -65.0
+offset_top = -15.480001
+offset_right = -22.0
+offset_bottom = 15.519999
+text = "Next"

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1ckh70pdlwl8"
-path="res://.godot/imported/NavRectangleCurrent.png-268baf42183761e74f336a2df49631e8.ctex"
+uid="uid://c6mohm2277102"
+path="res://.godot/imported/RadialIn.png-f567583bfbfde96d15819ea5fbda29bb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/FlightScene/NavRectangleCurrent.png"
-dest_files=["res://.godot/imported/NavRectangleCurrent.png-268baf42183761e74f336a2df49631e8.ctex"]
+source_file="res://Resources/UITextures/FlightScene/NavRect/RadialIn.png"
+dest_files=["res://.godot/imported/RadialIn.png-f567583bfbfde96d15819ea5fbda29bb.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brunu8ex73nng"
-path="res://.godot/imported/NavRectangleCameraPoint.png-51bba704a561874fc80c9c38e2324d6f.ctex"
+uid="uid://dd04pp7wih11v"
+path="res://.godot/imported/MinusIcon.png-a52d0b2b31223bfce518fd34279104ef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/FlightScene/NavRectangleCameraPoint.png"
-dest_files=["res://.godot/imported/NavRectangleCameraPoint.png-51bba704a561874fc80c9c38e2324d6f.ctex"]
+source_file="res://Resources/UITextures/FlightScene/MinusIcon.png"
+dest_files=["res://.godot/imported/MinusIcon.png-a52d0b2b31223bfce518fd34279104ef.ctex"]
 
 [params]
 

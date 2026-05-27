@@ -19,7 +19,7 @@ public partial class OrbitMesh : MeshInstance3D
 	private static readonly PackedScene OrbitMeshPrefab = GD.Load<PackedScene>("res://Prefabs/orbit_mesh.tscn");
 	public static Node DefaultMeshParent;
 	
-	private static ImmediateMesh GenerateMesh(Orbit orbit, Range? trueAnomalyRange = null)
+	private static ImmediateMesh GenerateMesh(Orbit orbit, Range? trueAnomalyRange = null, bool isManeuver = false)
 	{
 		var orbitMesh = new ImmediateMesh();
 		var orbitMaterial = new StandardMaterial3D();
@@ -28,7 +28,7 @@ public partial class OrbitMesh : MeshInstance3D
 		orbitMaterial.AlbedoColor = orbit.Color;
 		orbitMaterial.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
 				
-		orbitMesh.SurfaceBegin(Mesh.PrimitiveType.LineStrip, orbitMaterial);
+		orbitMesh.SurfaceBegin(isManeuver ? Mesh.PrimitiveType.Lines: Mesh.PrimitiveType.LineStrip, orbitMaterial);
 		orbitMesh.SurfaceSetColor(orbit.Color);
 
 		trueAnomalyRange ??= orbit.TrueAnomalyRange;
@@ -47,13 +47,13 @@ public partial class OrbitMesh : MeshInstance3D
 		return orbitMesh;
 	}
 	
-	public static OrbitMesh CreateOrbitLine(Orbit orbit, Range? trueAnomalyRange = null)
+	public static OrbitMesh CreateOrbitLine(Orbit orbit, Range? trueAnomalyRange = null, bool isManeuver = false)
 	{
 		var orbitMeshNode = (OrbitMesh)OrbitMeshPrefab.Instantiate();
 
 		if (orbit.Primary != null)
 		{
-			var orbitMesh = GenerateMesh(orbit, trueAnomalyRange);
+			var orbitMesh = GenerateMesh(orbit, trueAnomalyRange, isManeuver);
 			orbitMeshNode.Mesh = orbitMesh;
 			orbit.Primary.AddChild(orbitMeshNode);
 		}
@@ -65,9 +65,9 @@ public partial class OrbitMesh : MeshInstance3D
 		orbitMeshNode._orbitStore = orbit;
 		return orbitMeshNode;
 	}
-	public static OrbitMesh CreateOrbitLine(ConicPatch patch, Range? trueAnomalyRange = null)
+	public static OrbitMesh CreateOrbitLine(ConicPatch patch, Range? trueAnomalyRange = null, bool isManeuver = false)
 	{
-		var orbitLine = CreateOrbitLine(patch.Orbit, trueAnomalyRange);
+		var orbitLine = CreateOrbitLine(patch.Orbit, trueAnomalyRange, isManeuver);
 		orbitLine.Conic = patch;
 		return orbitLine;
 	}
@@ -82,9 +82,9 @@ public partial class OrbitMesh : MeshInstance3D
 		QueueFree();
 	}
 
-	public void UpdateOrbitLine(Orbit newOrbit, Range? trueAnomalyRange = null)
+	public void UpdateOrbitLine(Orbit newOrbit, Range? trueAnomalyRange = null, bool isManeuver = false)
 	{
-		Mesh = GenerateMesh(newOrbit, trueAnomalyRange);
+		Mesh = GenerateMesh(newOrbit, trueAnomalyRange, isManeuver);
 		
 		if (newOrbit.Primary != GetParent() && newOrbit.Primary != null)
 		{ 
@@ -92,20 +92,21 @@ public partial class OrbitMesh : MeshInstance3D
 		}
 		_orbitStore = newOrbit;
 	}
-	public void UpdateOrbitLine(ConicPatch newPatch)
+	public void UpdateOrbitLine(ConicPatch newPatch, bool isManeuver = false)
 	{
-		UpdateOrbitLine(newPatch.Orbit, newPatch.GetTrueAnomalyRange());
+		UpdateOrbitLine(newPatch.Orbit, newPatch.GetTrueAnomalyRange(), isManeuver);
 		Conic = newPatch;
 	}
 
-	public void CreateMarkerOfType(OrbitMarkerType markerType)
+	public OrbitMarker CreateMarkerOfType(OrbitMarkerType markerType)
 	{
-		if (_markers.ContainsKey(markerType)) return;
+		if (_markers.ContainsKey(markerType)) return null;
 		
 		var marker = OrbitMarker.CreateMarker(this, markerType);
 		
 		AddChild(marker);
 		_markers.Add(markerType, marker);
+		return marker;
 	}
 
 	public void DeleteMarker(OrbitMarkerType markerType)

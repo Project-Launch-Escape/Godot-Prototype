@@ -47,7 +47,6 @@ _mouseCollider = NodePath("Drag Collider")
 metadata/_custom_type_script = "uid://ddk5fqdp5jm5s"
 
 [node name="Drag Collider" type="Area2D" parent="." unique_id=2089178055]
-priority = 10000
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Drag Collider" unique_id=1696069209]
 position = Vector2(175, 24)

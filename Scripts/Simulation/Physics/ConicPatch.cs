@@ -35,22 +35,22 @@ public class ConicPatch
 		return trueAnomalyRange;
 	}
 	
-	public void CreateOrbitLine()
+	public void CreateOrbitLine(bool isManeuver = false)
 	{
 		if (OrbitLineNode != null) return;
-		OrbitLineNode = OrbitMesh.CreateOrbitLine(this, GetTrueAnomalyRange());
+		OrbitLineNode = OrbitMesh.CreateOrbitLine(this, GetTrueAnomalyRange(), isManeuver);
 	}
 	public void DeleteOrbitLine()
 	{
 		OrbitLineNode?.DeleteOrbitLine();
 	}
-	public void UpdateOrbitLine()
+	public void UpdateOrbitLine(bool isManeuver = false)
 	{
-		OrbitLineNode?.UpdateOrbitLine(this);
+		OrbitLineNode?.UpdateOrbitLine(this, isManeuver);
 	}
 
-	public void CreateMarkerOfType(OrbitMarkerType markerType)
+	public OrbitMarker CreateMarkerOfType(OrbitMarkerType markerType)
 	{
-		OrbitLineNode?.CreateMarkerOfType(markerType);
+		return OrbitLineNode?.CreateMarkerOfType(markerType);
 	}
 }

@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://ddkl0tr6acljk"]
+
+[ext_resource type="Script" uid="uid://byoyuus0hr2tx" path="res://Scripts/UserInterface/UIElements/OrbitMarkers/ManeuverMarker.cs" id="1_ipg6u"]
+[ext_resource type="Texture2D" uid="uid://buy8h18u2ilx8" path="res://Resources/UITextures/FlightScene/ManeuverIcon.png" id="1_pjdam"]
+
+[node name="ManeuverMarker" type="Control" unique_id=646716463]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ipg6u")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=424694154]
+layout_mode = 0
+offset_left = -15.0
+offset_top = -15.0
+offset_right = 15.0
+offset_bottom = 15.0
+texture = ExtResource("1_pjdam")

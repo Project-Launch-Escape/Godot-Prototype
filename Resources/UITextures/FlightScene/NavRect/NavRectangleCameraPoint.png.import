@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ttowc5ll1v7k"
-path="res://.godot/imported/NavRectanglePrograde.png-2d83fa63f14a934ba6f86aa2de236196.ctex"
+uid="uid://brunu8ex73nng"
+path="res://.godot/imported/NavRectangleCameraPoint.png-7dd049b073990ee3db84b94757b2c542.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/UITextures/FlightScene/NavRectanglePrograde.png"
-dest_files=["res://.godot/imported/NavRectanglePrograde.png-2d83fa63f14a934ba6f86aa2de236196.ctex"]
+source_file="res://Resources/UITextures/FlightScene/NavRect/NavRectangleCameraPoint.png"
+dest_files=["res://.godot/imported/NavRectangleCameraPoint.png-7dd049b073990ee3db84b94757b2c542.ctex"]
 
 [params]
 
