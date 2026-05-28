@@ -166,6 +166,14 @@ public class Orbit : OrbitalElements
 		return RotateToOrbitalPlane(x, z);
 	}
 
+	public Basis OrbitalBasisFromTrueAnomaly(double v)
+	{
+		var zVector = (Vector3)VelocityFromTrueAnomaly(v).Normalized();
+		var yVector = (Vector3)NormalVector;
+		var xVector = yVector.Cross(zVector);
+		return new Basis(xVector, yVector, zVector);
+	}
+
 	private Vector3d RotateToOrbitalPlane(double x, double z)
 	{
 		var sinW = Math.Sin(w);

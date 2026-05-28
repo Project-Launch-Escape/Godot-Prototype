@@ -1,5 +1,6 @@
 using Godot;
 using GodotPrototype.Scripts.Simulation;
+using GodotPrototype.Scripts.Simulation.DoublePrecision;
 using GodotPrototype.Scripts.Simulation.Physics;
 using GodotPrototype.Scripts.Simulation.ReferenceFrames;
 
@@ -10,19 +11,17 @@ public partial class ManeuverMarker : OrbitMarker
 	[Export] private ManeuverEditor _maneuverEditor;
 	public Maneuver ParentManeuver;
 
-	public override void _Ready()
+	public void Initialize(Maneuver parentManeuver)
 	{
+		ParentManeuver = parentManeuver;
 		AddToIconList();
-
-		if (ParentOrbit.OrbitingObject is Celestial celestial)
-		{
-			Modulate = celestial.IconColor;
-		}
+		CreateManeuverEditor();
 	}
 
+	public Vector3d GetRenderSpacePosition() => new RelativePosition(ParentManeuver.GetBurnStartPosition(), ParentManeuver.ParentOrbit.Primary)[CoordinateSpace.RenderSpace];
 	public override void _Process(double delta)
 	{
-		_renderspacePosition = new RelativePosition(ParentManeuver.GetBurnStartPosition(), ParentManeuver.ParentOrbit.Primary)[CoordinateSpace.RenderSpace];
+		_renderspacePosition = GetRenderSpacePosition();
 		Visible = GetVisibility();
 		base._Process(delta);
 	}
@@ -37,7 +36,7 @@ public partial class ManeuverMarker : OrbitMarker
 	private void CreateManeuverEditor()
 	{
 		_maneuverEditor = ManeuverEditor.CreateEditor(ParentManeuver);
-		_maneuverEditor.Position = Position + new Vector2(30, -30);
+		_maneuverEditor.Position = Camera.UnprojectPosition((Vector3)GetRenderSpacePosition()) + new Vector2(30, -30);
 	}
 
 	public override void OnHoverEnter()

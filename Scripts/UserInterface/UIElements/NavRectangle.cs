@@ -23,18 +23,15 @@ public partial class NavRectangle : Control
 		Normal,
 		Antinormal,
 		RadialOut,
-		RadialIn
+		RadialIn,
+		Maneuver
 	}
 
 	public override void _Ready()
 	{
 		foreach (var (sasType, sasIcon) in _sasButtons)
 		{
-			if (sasIcon is null)
-			{
-				GD.Print(sasType);
-				continue;
-			}
+			if (sasIcon is null) continue;
 			sasIcon.Pressed += () => OnSASButtonPressed(sasIcon, sasType);
 		}
 	}
@@ -59,6 +56,11 @@ public partial class NavRectangle : Control
 	{
 		foreach (var (sasType, sasButton) in _sasButtons)
 		{
+			if (sasType is SASType.Maneuver && Vessel.ActiveVessel.Maneuvers.Count <= 0)
+			{
+				sasButton.Visible = false;
+				continue;
+			}
 			UpdateIconFromDirection(sasButton, GetDirectionFromSASType(sasType));
 		}
 	}
@@ -76,6 +78,7 @@ public partial class NavRectangle : Control
 			SASType.Antinormal => -Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector,
 			SASType.RadialOut => -Vessel.ActiveVessel.VelocityLocal.Cross(Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector).Normalized(),
 			SASType.RadialIn => Vessel.ActiveVessel.VelocityLocal.Cross(Vessel.ActiveVessel.Trajectory.CurrentOrbit.NormalVector).Normalized(),
+			SASType.Maneuver => Vessel.ActiveVessel.Maneuvers[0].DeltaVAligned.Normalized(),
 			_ => throw new ArgumentOutOfRangeException()
 		};
 	}
@@ -88,5 +91,6 @@ public partial class NavRectangle : Control
 		var newPos = newAngles * Size.X / Mathf.Tau;
 		newPos -= icon.Size / 2;
 		icon.Position = newPos;
+		icon.Visible = true;
 	}
 }

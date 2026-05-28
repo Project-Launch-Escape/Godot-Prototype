@@ -35,6 +35,37 @@ public class Vector3d
 	public static readonly Vector3d I = new (0, 0, 1);
 	public static readonly Vector3d J = new (1, 0, 0);
 	
+	public double this[int index]
+	{
+		get
+		{
+			return index switch
+			{
+				0 => X,
+				1 => Y,
+				2 => Z,
+				_ => throw new ArgumentOutOfRangeException(nameof(index))
+			};
+		}
+		set
+		{
+			switch (index)
+			{
+				case 0:
+					X = value;
+					break;
+				case 1:
+					Y = value;
+					break;
+				case 2:
+					Z = value;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof (index));
+			}
+		}
+	}
+	
 
 	public Vector3d(double x, double y, double z)
 	{

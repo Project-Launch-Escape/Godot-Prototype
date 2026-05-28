@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://cejjo5q2ykkyp" path="res://Resources/UITextures/FlightScene/NavRect/RadialOut.png" id="7_q2lbk"]
 [ext_resource type="Texture2D" uid="uid://cqwaskny7ti2j" path="res://Resources/UITextures/FlightScene/NavRect/NavRectangleNormal.png" id="8_6fht2"]
 [ext_resource type="Texture2D" uid="uid://3ttgmnnurah1" path="res://Resources/UITextures/FlightScene/CelestialIcon.png" id="9_6fht2"]
+[ext_resource type="Texture2D" uid="uid://buy8h18u2ilx8" path="res://Resources/UITextures/FlightScene/ManeuverIcon.png" id="10_xi0wp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i2txm"]
 size = Vector2(340, 40)
@@ -157,19 +158,34 @@ color = Color(0.8, 0.8, 0.8, 1)
 thickness = 3
 vertical = true
 
-[node name="ContextMenu" type="Control" unique_id=423842149 node_paths=PackedStringArray("_mouseCollider")]
+[node name="ContextMenu" type="Control" unique_id=423842149 node_paths=PackedStringArray("_timeUnilBurnLabel", "_totalDeltaVLabel", "_trueAnomalyLabel", "_trueAnomalySlider", "_prevOrbitButton", "_nextOrbitButton", "_currentCelestialLabel", "_currentCelestialTexture", "_deltaVLabels", "_coarseAdjustLabels", "_coarseAdjustPosButtons", "_coarseAdjustNegButtons", "_fineAdjustLabels", "_fineAdjustPosButtons", "_fineAdjustNegButtons", "_mouseCollider")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 340.0
-offset_bottom = 298.0
+offset_bottom = 291.0
 mouse_filter = 2
 script = ExtResource("1_2gldy")
-_mouseCollider = NodePath("Drag Collider")
+_timeUnilBurnLabel = NodePath("Body/BodyContainer/GeneralInfo/TimeUntilBurn")
+_totalDeltaVLabel = NodePath("Body/BodyContainer/GeneralInfo/TotalDeltaVLabel")
+_trueAnomalyLabel = NodePath("Body/BodyContainer/TrueAnomalySlider/DegreeText")
+_trueAnomalySlider = NodePath("Body/BodyContainer/TrueAnomalySlider/Slider")
+_prevOrbitButton = NodePath("Body/BodyContainer/OrbitSelector/Prev Button")
+_nextOrbitButton = NodePath("Body/BodyContainer/OrbitSelector/Next Button")
+_currentCelestialLabel = NodePath("Body/BodyContainer/OrbitSelector/CelestialName")
+_currentCelestialTexture = NodePath("Body/BodyContainer/OrbitSelector/Celestial Icon")
+_deltaVLabels = [NodePath("Body/BodyContainer/RadialEditor/Delta-V Text"), NodePath("Body/BodyContainer/NormalEditor/Delta-V Text"), NodePath("Body/BodyContainer/ProgradeEditor/Delta-V Text")]
+_coarseAdjustLabels = [NodePath("Body/BodyContainer/RadialEditor/CoarseButtons/Step Label"), NodePath("Body/BodyContainer/NormalEditor/CoarseButtons/Step Label"), NodePath("Body/BodyContainer/ProgradeEditor/CoarseButtons/Step Label")]
+_coarseAdjustPosButtons = [NodePath("Body/BodyContainer/RadialEditor/CoarseButtons/UpButton"), NodePath("Body/BodyContainer/NormalEditor/CoarseButtons/UpButton"), NodePath("Body/BodyContainer/ProgradeEditor/CoarseButtons/UpButton")]
+_coarseAdjustNegButtons = [NodePath("Body/BodyContainer/RadialEditor/CoarseButtons/DownButton"), NodePath("Body/BodyContainer/NormalEditor/CoarseButtons/DownButton"), NodePath("Body/BodyContainer/ProgradeEditor/CoarseButtons/DownButton")]
+_fineAdjustLabels = [NodePath("Body/BodyContainer/RadialEditor/FineButtons/Step Label"), NodePath("Body/BodyContainer/NormalEditor/FineButtons/Step Label"), NodePath("Body/BodyContainer/ProgradeEditor/FineButtons/Step Label")]
+_fineAdjustPosButtons = [NodePath("Body/BodyContainer/RadialEditor/FineButtons/UpButton"), NodePath("Body/BodyContainer/NormalEditor/FineButtons/UpButton"), NodePath("Body/BodyContainer/ProgradeEditor/FineButtons/UpButton")]
+_fineAdjustNegButtons = [NodePath("Body/BodyContainer/RadialEditor/FineButtons/DownButton"), NodePath("Body/BodyContainer/NormalEditor/FineButtons/DownButton"), NodePath("Body/BodyContainer/ProgradeEditor/FineButtons/DownButton")]
+_mouseCollider = NodePath("Drag Area")
 metadata/_custom_type_script = "uid://ddk5fqdp5jm5s"
 
-[node name="Drag Collider" type="Area2D" parent="." unique_id=2089178055]
+[node name="Drag Area" type="Area2D" parent="." unique_id=2089178055]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Drag Collider" unique_id=1696069209]
+[node name="DragCollider" type="CollisionShape2D" parent="Drag Area" unique_id=1696069209]
 position = Vector2(170, 20)
 shape = SubResource("RectangleShape2D_i2txm")
 debug_color = Color(0, 0.5950001, 0.7, 0)
@@ -186,11 +202,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_vtmqt")
 [node name="Header Text" type="Label" parent="Header" unique_id=388414223]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.46300003
-anchor_right = 0.46300003
-offset_left = -96.513016
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -109.093
 offset_top = 3.0
-offset_right = 96.486984
+offset_right = 83.907
 offset_bottom = 37.0
 text = "Maneuver Editor"
 label_settings = SubResource("LabelSettings_x3c42")
@@ -210,6 +226,19 @@ icon = ExtResource("2_vtmqt")
 script = ExtResource("2_2gldy")
 _toHide = NodePath("../..")
 metadata/_custom_type_script = "uid://tdqm2rseea2r"
+
+[node name="TextureRect" type="TextureRect" parent="Header" unique_id=1924358875]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -151.0
+offset_top = 5.0
+offset_right = -118.0
+offset_bottom = 36.0
+mouse_filter = 2
+texture = ExtResource("10_xi0wp")
+stretch_mode = 5
 
 [node name="Body" type="Panel" parent="." unique_id=1445774217]
 layout_mode = 1
@@ -267,7 +296,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxLine_xi0wp")
 
-[node name="Label" type="Label" parent="Body/BodyContainer/GeneralInfo" unique_id=1351407251]
+[node name="TotalDeltaVLabel" type="Label" parent="Body/BodyContainer/GeneralInfo" unique_id=1351407251]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -299,10 +328,11 @@ offset_bottom = -11.0
 min_value = -1.5699999999999998
 max_value = 1.5699999999999998
 step = 0.0
+value = 0.43000000000000016
 tick_count = 9
 ticks_position = 3
 
-[node name="Label" type="Label" parent="Body/BodyContainer/TrueAnomalySlider" unique_id=317281918]
+[node name="DegreeText" type="Label" parent="Body/BodyContainer/TrueAnomalySlider" unique_id=317281918]
 layout_mode = 1
 anchors_preset = -1
 anchor_bottom = 0.95000005
@@ -828,7 +858,7 @@ offset_right = -17.190018
 grow_vertical = 0
 text = "Alpha Centauri A"
 
-[node name="TextureRect" type="TextureRect" parent="Body/BodyContainer/OrbitSelector" unique_id=2033029239]
+[node name="Celestial Icon" type="TextureRect" parent="Body/BodyContainer/OrbitSelector" unique_id=2033029239]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

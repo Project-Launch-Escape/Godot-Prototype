@@ -70,10 +70,6 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		LinearVelocity = (Vector3)VelocityLocal;
 		ContactMonitor = true;
 		MaxContactsReported = 10;
-
-		var newManeuver = new Maneuver(Trajectory.ConicPatches[0], 0.754, new Vector3d(100, 50, 50));
-		Maneuvers.Add(newManeuver);
-		newManeuver.CalculateTrajectory();
 	}
 
 	private void InitializeFromLaunchFile()
@@ -117,6 +113,14 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		PositionRel.ParentPosition = parentBody.PositionRel;
 		VelocityRel.ReferenceVelocity = parentBody.VelocityRel;
 		ParentBody = parentBody;
+	}
+
+	public void AddManeuver()
+	{
+		var trajectory = Maneuvers.Count == 0 ? Trajectory : Maneuvers[^1].ParentTrajectory;
+		var newManeuver = new Maneuver(trajectory, 0, 0,Vector3d.Zero);
+		Maneuvers.Add(newManeuver);
+		newManeuver.CalculateTrajectory();
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state)

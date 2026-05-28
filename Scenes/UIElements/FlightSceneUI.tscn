@@ -30,6 +30,9 @@
 [ext_resource type="Texture2D" uid="uid://3ttgmnnurah1" path="res://Resources/UITextures/FlightScene/CelestialIcon.png" id="19_xe4cc"]
 [ext_resource type="Texture2D" uid="uid://c6mohm2277102" path="res://Resources/UITextures/FlightScene/NavRect/RadialIn.png" id="22_whd4q"]
 [ext_resource type="Texture2D" uid="uid://cejjo5q2ykkyp" path="res://Resources/UITextures/FlightScene/NavRect/RadialOut.png" id="23_m6d5o"]
+[ext_resource type="Texture2D" uid="uid://c5j0j2oaxmwv2" path="res://Resources/UITextures/FlightScene/NavRect/Maneuver.png" id="26_w2ykx"]
+[ext_resource type="Texture2D" uid="uid://buy8h18u2ilx8" path="res://Resources/UITextures/FlightScene/ManeuverIcon.png" id="31_m6d5o"]
+[ext_resource type="Script" uid="uid://dxsc2dk2q28ta" path="res://Scripts/UserInterface/UIElements/AddManeuverButton.cs" id="33_uwedk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mrerc"]
 bg_color = Color(0.803922, 0.835294, 0.964706, 0.705882)
@@ -219,6 +222,57 @@ border_width_right = 2
 border_width_bottom = 2
 corner_detail = 10
 anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j32i"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.88, 0.24757333, 0.20240001, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.83, 0.67022496, 0.3735, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w2ykx"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.57, 0.16036, 0.13110001, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.83, 0.67022496, 0.3735, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwedk"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.75, 0.211, 0.17250001, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.83, 0.67022496, 0.3735, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 1
 
 [node name="UI" type="Node" unique_id=1637632682 node_paths=PackedStringArray("_fuelMeterContainer")]
 process_priority = 100
@@ -451,7 +505,8 @@ _sasButtons = {
 5: NodePath("NormalAngleMarker"),
 6: NodePath("AntiNormalAngleMarker"),
 7: NodePath("RadialOutAngleMarker"),
-8: NodePath("RadialInAngleMarker")
+8: NodePath("RadialInAngleMarker"),
+9: NodePath("ManeuverAngleMarker")
 }
 
 [node name="Panel" type="Panel" parent="NavRectangle" unique_id=216438751]
@@ -603,6 +658,14 @@ layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
 texture_normal = ExtResource("13_527sr")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ManeuverAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=700741209]
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 24.0
+texture_normal = ExtResource("26_w2ykx")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -790,3 +853,15 @@ offset_right = 224.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_0lvd3")
+
+[node name="AddManeuverButton" type="Button" parent="Placeholder Slot" unique_id=1549803394]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 3.0
+offset_right = 33.0
+offset_bottom = 35.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_2j32i")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_w2ykx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uwedk")
+icon = ExtResource("31_m6d5o")
+script = ExtResource("33_uwedk")

@@ -87,6 +87,34 @@ public partial class GlobalValues : Node
             return leadingZeroes + originalString;
         }
     }
+
+    public static string TimeToTMinusString(double time)
+    {
+        time -= Time;
+	
+        var timeString = "T-";
+	
+        var years = (long)(time / Year);
+        time -= years * Year;
+        if (years >= 1) timeString += $"{years}yr ";
+	
+        var days = (long)(time / Day);
+        time -= days * Day;
+        if (days >= 1) timeString += $"{days}d ";
+	
+        var hours = (long)(time / Hour);
+        time -= hours * Hour;
+        if (hours >= 1) timeString += $"{hours}hr ";
+	
+        var minutes = (long)(time / Minute);
+        time -= minutes * Minute;
+        if (minutes >= 1) timeString += $"{minutes}m ";
+	
+        var seconds = (long)time;
+        timeString += $"{seconds}s";
+	
+        return timeString;
+    }
     public static (string prefixName, double prefixMultiplier) ScalarToHighestSIPrefix(double value)
     {
         value = Math.Abs(value);
