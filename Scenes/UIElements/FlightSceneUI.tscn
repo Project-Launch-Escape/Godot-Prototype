@@ -599,7 +599,7 @@ text = "360"
 label_settings = SubResource("LabelSettings_22ulr")
 
 [node name="CameraAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=1235683151]
-layout_mode = 0
+layout_mode = 1
 offset_right = 24.0
 offset_bottom = 24.0
 texture_normal = ExtResource("10_5vu0m")
@@ -661,8 +661,9 @@ texture_normal = ExtResource("13_527sr")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ManeuverAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=700741209]
-layout_mode = 1
+[node name="ManeuverAngleMarker" type="TextureButton" parent="NavRectangle" unique_id=51124429]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
 offset_right = 24.0
 offset_bottom = 24.0
 texture_normal = ExtResource("26_w2ykx")

@@ -1,5 +1,5 @@
 {
-  "StartingCelestial": "Venus",
+  "StartingCelestial": "Ganymede",
   "StartOnSurface": false,
   "PartTree": {
 	"Parts": [
@@ -11,9 +11,9 @@
 		"ParentSnapPointIndex": -2,
 		"SnapPointIndex": -2,
 		"Position": {
-		  "X": -0.69882333,
-		  "Y": 1.8052722,
-		  "Z": -0.254292
+		  "X": -0.35982907,
+		  "Y": 6.2520986,
+		  "Z": 7.9373536
 		},
 		"Rotation": {
 		  "X": -0,
@@ -30,13 +30,13 @@
 	  {
 		"IsSurfaceAttached": false,
 		"PartIndex": 1,
-		"PartDefID": "CUBE_6f6f",
+		"PartDefID": "TANK_12g3",
 		"ParentIndex": 0,
 		"ParentSnapPointIndex": 1,
-		"SnapPointIndex": 2,
+		"SnapPointIndex": 0,
 		"Position": {
-		  "X": 5.9604645E-08,
-		  "Y": -1,
+		  "X": 1.7881393E-07,
+		  "Y": -1.5,
 		  "Z": 0
 		},
 		"Rotation": {
@@ -51,21 +51,20 @@
 		},
 		"Components": [
 		  {
-			"ComponentType": "Converter",
-			"Rate": 0,
-			"Index": 0,
-			"BaseMass": 0
-		  },
-		  {
 			"ComponentType": "FuelTank",
 			"FuelLevels": [
 			  {
-				"FuelType": "Fueler",
+				"FuelType": "Methane",
+				"Level": 300,
+				"Max": 300
+			  },
+			  {
+				"FuelType": "Oxidizer",
 				"Level": 100,
 				"Max": 100
 			  }
 			],
-			"Index": 1,
+			"Index": 0,
 			"BaseMass": 0
 		  }
 		]
@@ -75,11 +74,11 @@
 		"PartIndex": 2,
 		"PartDefID": "ENGINE_132h",
 		"ParentIndex": 1,
-		"ParentSnapPointIndex": 3,
+		"ParentSnapPointIndex": 1,
 		"SnapPointIndex": 0,
 		"Position": {
-		  "X": 5.9604645E-08,
-		  "Y": -1,
+		  "X": 8.940697E-08,
+		  "Y": -1.5,
 		  "Z": 0
 		},
 		"Rotation": {

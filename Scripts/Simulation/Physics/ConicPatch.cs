@@ -53,4 +53,11 @@ public class ConicPatch
 	{
 		return OrbitLineNode?.CreateMarkerOfType(markerType);
 	}
+
+	public void DeleteMarkerOfType(OrbitMarkerType markerType)
+	{
+		OrbitLineNode.DeleteMarker(markerType);
+	}
+	
+	public static implicit operator string(ConicPatch conic) => $"Orbit of type {conic.Orbit.OrbitType} valid between ({conic.TimeRange}). {(conic.OrbitLineNode is null ? "Does not have an OrbitLineNode" : "Has an OrbitLineNode")}";
 }

@@ -112,6 +112,7 @@ public partial class OrbitMesh : MeshInstance3D
 	public void DeleteMarker(OrbitMarkerType markerType)
 	{
 		if (!_markers.TryGetValue(markerType, out var marker)) return;
+		HoverIcon.HoverIcons.Remove(marker);
 		marker.QueueFree();
 		_markers.Remove(markerType);
 	}
@@ -126,7 +127,7 @@ public partial class OrbitMesh : MeshInstance3D
 
 	private void SetMarkerAlpha(float alpha)
 	{
-		foreach (var marker in _markers.Values)
+		foreach (var (_, marker) in _markers)
 		{
 			marker.Modulate = marker.Modulate with{A = alpha};
 		}

@@ -232,6 +232,15 @@ public class Trajectory
 		
 		return relevantCelestials;
 	}
+	
+	public void Delete()
+	{
+		foreach (var conic in ConicPatches)
+		{
+			conic.DeleteOrbitLine();
+		}
+		ConicPatches.Clear();
+	}
 
 	/// Returns double.NaN if no encounter is found
 	public static double FindInterceptTime(Orbit vesselOrbit, Celestial celestial, Range timeRange)

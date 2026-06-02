@@ -149,26 +149,47 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-corner_detail = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_dnqrx"]
 color = Color(0.8, 0.8, 0.8, 1)
 thickness = 3
 vertical = true
 
-[node name="ContextMenu" type="Control" unique_id=423842149 node_paths=PackedStringArray("_timeUnilBurnLabel", "_totalDeltaVLabel", "_trueAnomalyLabel", "_trueAnomalySlider", "_prevOrbitButton", "_nextOrbitButton", "_currentCelestialLabel", "_currentCelestialTexture", "_deltaVLabels", "_coarseAdjustLabels", "_coarseAdjustPosButtons", "_coarseAdjustNegButtons", "_fineAdjustLabels", "_fineAdjustPosButtons", "_fineAdjustNegButtons", "_mouseCollider")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tkgr0"]
+bg_color = Color(0.21645805, 0.2114884, 0.27445507, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 1
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_7vl74"]
+color = Color(0.8, 0.8, 0.8, 1)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 3
+vertical = true
+
+[node name="ManeuverEditor" type="Control" unique_id=423842149 node_paths=PackedStringArray("_timeUnilBurnLabel", "_totalDeltaVLabel", "_trueAnomalyLabel", "_trueAnomalySlider", "_deleteButton", "_lockOrbitButton", "_prevOrbitButton", "_nextOrbitButton", "_currentCelestialLabel", "_currentCelestialTexture", "_deltaVLabels", "_coarseAdjustLabels", "_coarseAdjustPosButtons", "_coarseAdjustNegButtons", "_fineAdjustLabels", "_fineAdjustPosButtons", "_fineAdjustNegButtons", "_mouseCollider")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 340.0
-offset_bottom = 291.0
-mouse_filter = 2
+offset_bottom = 332.0
+mouse_filter = 1
 script = ExtResource("1_2gldy")
 _timeUnilBurnLabel = NodePath("Body/BodyContainer/GeneralInfo/TimeUntilBurn")
 _totalDeltaVLabel = NodePath("Body/BodyContainer/GeneralInfo/TotalDeltaVLabel")
 _trueAnomalyLabel = NodePath("Body/BodyContainer/TrueAnomalySlider/DegreeText")
 _trueAnomalySlider = NodePath("Body/BodyContainer/TrueAnomalySlider/Slider")
+_deleteButton = NodePath("Body/BodyContainer/DeleteLockButtons/DeleteButton")
+_lockOrbitButton = NodePath("Body/BodyContainer/DeleteLockButtons/LockButton")
 _prevOrbitButton = NodePath("Body/BodyContainer/OrbitSelector/Prev Button")
 _nextOrbitButton = NodePath("Body/BodyContainer/OrbitSelector/Next Button")
 _currentCelestialLabel = NodePath("Body/BodyContainer/OrbitSelector/CelestialName")
@@ -196,7 +217,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 41.0
 grow_horizontal = 2
-mouse_filter = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_vtmqt")
 
 [node name="Header Text" type="Label" parent="Header" unique_id=388414223]
@@ -208,6 +229,7 @@ offset_left = -109.093
 offset_top = 3.0
 offset_right = 83.907
 offset_bottom = 37.0
+mouse_filter = 1
 text = "Maneuver Editor"
 label_settings = SubResource("LabelSettings_x3c42")
 
@@ -236,7 +258,6 @@ offset_left = -151.0
 offset_top = 5.0
 offset_right = -118.0
 offset_bottom = 36.0
-mouse_filter = 2
 texture = ExtResource("10_xi0wp")
 stretch_mode = 5
 
@@ -246,7 +267,7 @@ anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.998
 offset_top = 41.0
-offset_bottom = -1.0980225
+offset_bottom = 2.6640015
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_smf8y")
 
@@ -909,3 +930,44 @@ offset_top = -15.480001
 offset_right = -22.0
 offset_bottom = 15.519999
 text = "Next"
+
+[node name="DeleteLockButtons" type="Panel" parent="Body/BodyContainer" unique_id=1905573906]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tkgr0")
+
+[node name="DeleteButton" type="Button" parent="Body/BodyContainer/DeleteLockButtons" unique_id=1524297429]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.256
+anchor_right = 0.256
+offset_left = -29.480003
+offset_top = 4.0
+offset_right = 29.519997
+offset_bottom = 35.0
+text = "Delete"
+
+[node name="Separator" type="Panel" parent="Body/BodyContainer/DeleteLockButtons" unique_id=1638182405]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -4.0
+offset_top = 2.0
+offset_right = -1.0
+offset_bottom = 38.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxLine_7vl74")
+
+[node name="LockButton" type="Button" parent="Body/BodyContainer/DeleteLockButtons" unique_id=582334845]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.73600006
+anchor_right = 0.73600006
+offset_left = -63.88002
+offset_top = 4.0
+offset_right = 62.11998
+offset_bottom = 35.0
+toggle_mode = true
+button_pressed = true
+text = "Lock Reference"

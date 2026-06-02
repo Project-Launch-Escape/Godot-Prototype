@@ -38,17 +38,22 @@ public partial class NavRectangle : Control
 
 	private void OnSASButtonPressed(TextureButton sasButton, SASType sasType)
 	{
+		GD.PrintT(sasButton.Name, sasType);
 		SetSASMode(sasType == SASMode ? SASType.Disabled : sasType);
 	}
 
 	public void SetSASMode(SASType sasType)
 	{
+		GD.Print(sasType);
 		foreach (var (_, sasButton) in _sasButtons)
 		{
 			sasButton.Size = ButtonSizeUnselected;
 		}
 
-		if (_sasButtons.TryGetValue(sasType, out var button)) button.Size = ButtonSizeSelected;
+		if (_sasButtons.TryGetValue(sasType, out var button))
+		{
+			button.Size = ButtonSizeSelected;
+		}
 		SASMode = sasType;
 	}
 
@@ -85,6 +90,7 @@ public partial class NavRectangle : Control
 
 	private void UpdateIconFromDirection(Control icon, Vector3d direction)
 	{
+		if (direction == Vector3d.Zero) return;
 		var sphericalCoords = SphericalCoordinates.FromCartesian((Vector3)direction * FlightCamera.CameraReferenceBasis);
 		if (icon is null) return;
 		var newAngles = new Vector2((float)sphericalCoords.Theta + Mathf.Pi, (float)sphericalCoords.Phi);

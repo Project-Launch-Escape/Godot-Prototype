@@ -117,8 +117,8 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 
 	public void AddManeuver()
 	{
-		var trajectory = Maneuvers.Count == 0 ? Trajectory : Maneuvers[^1].ParentTrajectory;
-		var newManeuver = new Maneuver(trajectory, 0, 0,Vector3d.Zero);
+		var trajectory = Maneuvers.Count == 0 ? Trajectory : Maneuvers[^1].PostTrajectory;
+		var newManeuver = new Maneuver(trajectory, 0, 0, Vector3d.Zero);
 		Maneuvers.Add(newManeuver);
 		newManeuver.CalculateTrajectory();
 	}

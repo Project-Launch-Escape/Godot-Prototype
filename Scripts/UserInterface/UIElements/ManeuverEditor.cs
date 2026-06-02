@@ -1,6 +1,7 @@
 using Godot;
 using GodotPrototype.Scripts.Other;
 using GodotPrototype.Scripts.Simulation.Physics;
+using GodotPrototype.Scripts.Vessels;
 
 namespace GodotPrototype.Scripts.UserInterface.UIElements;
 
@@ -21,6 +22,9 @@ public partial class ManeuverEditor : Draggable
 
 	[Export] private Label _trueAnomalyLabel;
 	[Export] private Slider _trueAnomalySlider;
+
+	[Export] private Button _deleteButton;
+	[Export] private Button _lockOrbitButton;
 	
 	[ExportGroup("OrbitSelection UI")]
 
@@ -54,6 +58,9 @@ public partial class ManeuverEditor : Draggable
 
 		_prevOrbitButton.Pressed += () => ParentManeuver.OrbitIndex = Math.Max(0, ParentManeuver.OrbitIndex - 1);
 		_nextOrbitButton.Pressed += () => ParentManeuver.OrbitIndex = Math.Min(ParentManeuver.ParentTrajectory.ConicPatches.Count-1, ParentManeuver.OrbitIndex + 1);
+
+		_deleteButton.Pressed += OnDeleteButtonPressed;
+		_lockOrbitButton.Toggled += OnLockButtonToggled;
 
 		for (int i = 0; i < 3; i++)
 		{
@@ -98,12 +105,22 @@ public partial class ManeuverEditor : Draggable
 	private void UpdateAxis(int iAxis, Label dvText, Label courseAdjustText, Label fineAdjustText)
 	{
 		dvText.Text = $"{ParentManeuver.DeltaVOrbital[iAxis]:F2} m/s";
-		courseAdjustText.Text = $"{CoarseStep:F2} m/s";
+		courseAdjustText.Text = $"{CoarseStep:F0} m/s";
 		fineAdjustText.Text = $"{FineStep:F2} m/s";
 	}
 
 	private void OnAdjustButtonPressed(int iAxis, bool negative, bool coarse)
 	{
 		ParentManeuver.DeltaVOrbital[iAxis] += (negative ? -1 : 1) * (coarse ? CoarseStep : FineStep);
+	}
+
+	private void OnDeleteButtonPressed()
+	{
+		ParentManeuver.DeleteManeuver();
+	}
+
+	private void OnLockButtonToggled(bool newValue)
+	{
+		ParentManeuver.ChangeLockMode(newValue);
 	}
 }
