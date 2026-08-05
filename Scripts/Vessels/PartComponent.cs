@@ -7,6 +7,7 @@ public abstract partial class PartComponent : Node3D
 {
 	public VesselPart ParentPart;
 	public Vessel ParentVessel => ParentPart.ParentVessel;
+	public PartTree ParentTree => ParentPart.ParentTree;
 	public FuelSystem ConnectedFuelSystem => ParentPart.ConnectedFuelSystem;
 
 	[Export] public double BaseMass { get; private set; }
@@ -22,6 +23,7 @@ public abstract partial class PartComponent : Node3D
 			FuelTank => ComponentType.FuelTank,
 			RocketEngine => ComponentType.Engine,
 			Converter => ComponentType.Converter,
+			Decoupler => ComponentType.Decoupler,
 			_ => throw new IndexOutOfRangeException()
 		};
 	}
@@ -32,5 +34,6 @@ public enum ComponentType
 	FuelTank,
 	Engine,
 	Converter,
-	Default
+	Default,
+	Decoupler
 }

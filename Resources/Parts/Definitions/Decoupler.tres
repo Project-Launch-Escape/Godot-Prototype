@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PartDefinition" format=3 uid="uid://cy0ey7ohxx6wj"]
+
+[ext_resource type="Texture2D" uid="uid://b47i3b6o2631i" path="res://Resources/Parts/Icons/FuelTankIcon.png" id="1_7ub8g"]
+[ext_resource type="PackedScene" uid="uid://bp0y71wbm8kj" path="res://Resources/Parts/Scenes/tank.tscn" id="2_ls2xe"]
+[ext_resource type="Script" uid="uid://b6mm672vti7v5" path="res://Scripts/Vessels/PartDefinition.cs" id="3_3yijw"]
+
+[resource]
+script = ExtResource("3_3yijw")
+Scene = ExtResource("2_ls2xe")
+Name = "Fuel Tank"
+ID = "TANK_12g3"
+Icon = ExtResource("1_7ub8g")
+IconColor = Color(0.6665981, 0.66426194, 0.15438941, 1)
+metadata/_custom_type_script = "uid://b6mm672vti7v5"

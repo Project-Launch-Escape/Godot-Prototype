@@ -11,7 +11,8 @@ public partial class ContextMenuController : Node, IToolable
 	[Export] public Godot.Collections.Dictionary<ComponentType, PackedScene> ComponentMenus;
 	[Export] public PackedScene ContextMenuScene;
 	[Export] public PackedScene ValueInputScene;
-		
+	[Export] public PackedScene ContextButtonScene;
+	
 	public static ContextMenuController ControllerNode;
 	
 	public bool IsToolActive { get; set; }

@@ -32,7 +32,9 @@
 [ext_resource type="Script" uid="uid://ddk5fqdp5jm5s" path="res://Scripts/UserInterface/Draggable.cs" id="23_vmihi"]
 [ext_resource type="Script" uid="uid://tdqm2rseea2r" path="res://Scripts/UserInterface/XButton.cs" id="24_asrsh"]
 [ext_resource type="Script" uid="uid://cqpxgfj5c61sb" path="res://Scripts/VesselEditor/EditorUI/MouseAlertHandler.cs" id="26_eu1sv"]
+[ext_resource type="PackedScene" uid="uid://cvx8863a3ufqr" path="res://Scenes/VesselEditorUI/PartContextUI/DecouplerContext.tscn" id="26_oi34q"]
 [ext_resource type="PackedScene" uid="uid://cagnvn136i58w" path="res://Scenes/UIElements/MouseAlert.tscn" id="27_xpblq"]
+[ext_resource type="PackedScene" uid="uid://b4vawlg228xeq" path="res://Scenes/VesselEditorUI/PartContextUI/MenuComponents/ContextButton.tscn" id="28_05ykk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_05ykk"]
 render_priority = 0
@@ -224,7 +226,7 @@ transform = Transform3D(1, 0, 0, 0, 0.629456, 0.777036, 0, -0.777036, 0.629456, 
 light_intensity_lux = 50000.0
 light_temperature = 8000.0
 
-[node name="GizmoTranslate" parent="." unique_id=414266561 instance=ExtResource("8_txf6a")]
+[node name="TransformTool" parent="." unique_id=414266561 instance=ExtResource("8_txf6a")]
 visible = false
 _coarseGridSize = 0.5
 _fineGridSize = 0.125
@@ -341,10 +343,12 @@ ComponentMenus = Dictionary[int, PackedScene]({
 0: ExtResource("11_du1xg"),
 1: ExtResource("12_6e330"),
 2: ExtResource("23_livhk"),
-3: ExtResource("13_6e330")
+3: ExtResource("13_6e330"),
+4: ExtResource("26_oi34q")
 })
 ContextMenuScene = ExtResource("12_giy6m")
 ValueInputScene = ExtResource("15_s2kt1")
+ContextButtonScene = ExtResource("28_05ykk")
 
 [node name="ActionBar" type="Node" parent="UI" unique_id=480296986]
 

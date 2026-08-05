@@ -28,9 +28,6 @@ public partial class CelestialInitializer : Node
 	public override void _EnterTree()
 	{
 		OrbitMesh.DefaultMeshParent = this;
-		FuelType.InitializeFuelTypes();
-		Editor.InitializeParts();
-		SnapPoint.SetGlobalVisibility(false);
 	}
 
 	public override void _Ready()

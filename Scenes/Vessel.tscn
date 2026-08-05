@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cwlxjy32nwcnb"]
+
+[ext_resource type="Script" uid="uid://c0t5h0y2wo8ya" path="res://Scripts/Vessels/Vessel.cs" id="1_fy0x4"]
+[ext_resource type="PackedScene" uid="uid://4m28yia5jkb1" path="res://Prefabs/node_tracker.tscn" id="2_pwtyc"]
+
+[node name="Vessel" type="RigidBody3D" unique_id=171582696]
+process_priority = -1
+collision_layer = 2
+collision_mask = 2
+gravity_scale = 0.0
+can_sleep = false
+angular_damp = 1.0
+script = ExtResource("1_fy0x4")
+
+[node name="Node Tracker" parent="." unique_id=336902053 instance=ExtResource("2_pwtyc")]

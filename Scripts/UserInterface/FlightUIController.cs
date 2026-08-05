@@ -21,12 +21,7 @@ public partial class FlightUIController : Node
 		ControllerNode = this;
 	}
 
-	public override void _Ready()
-	{
-		InitializeFuelMeters();
-	}
-
-	private void InitializeFuelMeters()
+	public void InitializeFuelMeters()
 	{
 		var activeFuelSystem = Vessel.ActiveVessel.FuelSystems[0];
 		var activeVesselFuelTypes = activeFuelSystem.GetContainedFuelTypes();

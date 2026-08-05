@@ -31,7 +31,7 @@ public partial class SnapPoint : Node3D
 
 	private void AttachTo(SnapPoint otherSnapPoint)
 	{
-		AttachedSnapPoint?.Unattatch();
+		AttachedSnapPoint?.Unattach();
 		
 		AttachedSnapPoint = otherSnapPoint;
 		_collisionShape.Disabled = true;
@@ -60,11 +60,11 @@ public partial class SnapPoint : Node3D
 		var childPart = child.ParentPart;
 
 		parentPart.ParentTree.SplitTree(childPart);
-		parent.Unattatch();
-		child.Unattatch();
+		parent.Unattach();
+		child.Unattach();
 	}
 
-	public void Unattatch()
+	public void Unattach()
 	{
 		AttachedSnapPoint = null;
 		_collisionShape.Disabled = false;

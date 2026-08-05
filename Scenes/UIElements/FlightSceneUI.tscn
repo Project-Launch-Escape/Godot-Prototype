@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://crnsjo4ueukmv" path="res://Scenes/VesselEditorUI/PartContextUI/ContextMenuContainer.tscn" id="7_2j32i"]
 [ext_resource type="Script" uid="uid://c2kjjjaaag1p8" path="res://Scripts/UserInterface/UIElements/PauseButton.cs" id="7_mhhnu"]
 [ext_resource type="Script" uid="uid://d3u667s66u083" path="res://Scripts/UserInterface/UIElements/NavRectangle.cs" id="8_mbdiu"]
+[ext_resource type="PackedScene" uid="uid://cvx8863a3ufqr" path="res://Scenes/VesselEditorUI/PartContextUI/DecouplerContext.tscn" id="8_uwedk"]
 [ext_resource type="PackedScene" uid="uid://ba0yb6a4ei3ua" path="res://Scenes/VesselEditorUI/PartContextUI/MenuComponents/ValueInput.tscn" id="8_w2ykx"]
 [ext_resource type="Texture2D" uid="uid://clnr21py3bpk7" path="res://Resources/UITextures/FlightScene/NavRect/NavRectangle.png" id="9_22ulr"]
 [ext_resource type="Texture2D" uid="uid://c1ckh70pdlwl8" path="res://Resources/UITextures/FlightScene/NavRect/NavRectangleCurrent.png" id="9_mbdiu"]
@@ -286,7 +287,8 @@ ComponentMenus = Dictionary[int, PackedScene]({
 0: ExtResource("3_d7ba0"),
 1: ExtResource("4_3vel4"),
 2: ExtResource("5_whd4q"),
-3: ExtResource("6_m6d5o")
+3: ExtResource("6_m6d5o"),
+4: ExtResource("8_uwedk")
 })
 ContextMenuScene = ExtResource("7_2j32i")
 ValueInputScene = ExtResource("8_w2ykx")

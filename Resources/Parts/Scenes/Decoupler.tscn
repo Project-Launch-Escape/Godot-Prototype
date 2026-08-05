@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://cnuq8iu1glwb2"]
+
+[ext_resource type="Script" uid="uid://k3500mi8rulg" path="res://Scripts/Vessels/VesselPart.cs" id="1_6sfyt"]
+[ext_resource type="ArrayMesh" uid="uid://dpxwmusvm5o1o" path="res://Resources/Parts/Models/Decoupler 01.obj" id="2_4aq35"]
+[ext_resource type="PackedScene" uid="uid://0hctrn76drmj" path="res://Resources/Parts/SnapPoint.tscn" id="3_yjmx8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6sfyt"]
+resource_local_to_scene = true
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_r617f"]
+height = 0.125
+
+[node name="Decoupler" type="StaticBody3D" unique_id=1242700947 node_paths=PackedStringArray("Mesh", "SnapPoints", "Components")]
+script = ExtResource("1_6sfyt")
+Mesh = NodePath("MeshInstance3D")
+SnapPoints = [NodePath("SnapPoint"), NodePath("SnapPoint2")]
+Components = []
+metadata/_custom_type_script = "uid://k3500mi8rulg"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=711830862]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = ExtResource("2_4aq35")
+surface_material_override/0 = SubResource("StandardMaterial3D_6sfyt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1613923248]
+shape = SubResource("CylinderShape3D_r617f")
+
+[node name="SnapPoint" parent="." unique_id=216221874 instance=ExtResource("3_yjmx8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.063, 0)
+
+[node name="SnapPoint2" parent="." unique_id=415093751 instance=ExtResource("3_yjmx8")]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, -0.062, 0)

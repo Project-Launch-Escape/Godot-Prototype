@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://snj8ta1xythe"]
 
 [ext_resource type="Script" uid="uid://dv5t83e3vek0b" path="res://Scripts/Other/VesselViewport.cs" id="1_124qp"]
+[ext_resource type="Script" uid="uid://bvld0d8ikp65s" path="res://Scripts/Other/Initializer.cs" id="1_gipt1"]
 [ext_resource type="Script" uid="uid://dmaih72r5wu61" path="res://Scripts/Other/GlobalValues.cs" id="2_qolck"]
 [ext_resource type="Texture2D" uid="uid://cvjlw25rj6tcu" path="res://images/Skybox.jpg" id="3_ry528"]
 [ext_resource type="Script" uid="uid://chyyvqft35nvh" path="res://Scripts/Simulation/FlightCamera.cs" id="4_yhlfj"]
@@ -12,13 +13,11 @@
 [ext_resource type="Shader" uid="uid://3qgyf5ffkiod" path="res://Resources/Outline.gdshader" id="9_6gwdq"]
 [ext_resource type="PackedScene" uid="uid://dxd4rsywbsrei" path="res://Prefabs/Celestial Prefabs/LightEmitter.tscn" id="9_hgvmy"]
 [ext_resource type="PackedScene" uid="uid://en1t4lwqhbx6" path="res://Prefabs/Celestial Prefabs/SurfaceGlow.tscn" id="10_ebcm8"]
-[ext_resource type="PackedScene" uid="uid://4m28yia5jkb1" path="res://Prefabs/node_tracker.tscn" id="11_4v654"]
 [ext_resource type="PackedScene" uid="uid://bekwkkpfweibu" path="res://Scenes/UIElements/CelestialMarker.tscn" id="11_124qp"]
 [ext_resource type="PackedScene" uid="uid://km1h4vn3ffl7" path="res://Scenes/UIElements/FlightSceneUI.tscn" id="12_7rq2r"]
 [ext_resource type="Texture2D" uid="uid://3ttgmnnurah1" path="res://Resources/UITextures/FlightScene/CelestialIcon.png" id="12_ry528"]
 [ext_resource type="Script" uid="uid://bqkvcyw0qftag" path="res://Scripts/Simulation/LocalSurface.cs" id="14_y0yaw"]
 [ext_resource type="Script" uid="uid://cx2pmje0i6e6n" path="res://Scripts/Other/LocalCamera.cs" id="15_qolck"]
-[ext_resource type="Script" uid="uid://c0t5h0y2wo8ya" path="res://Scripts/Vessels/Vessel.cs" id="15_yl3ua"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rsfko"]
 render_priority = 0
@@ -56,10 +55,8 @@ environment = SubResource("Environment_ex6dp")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ry528"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_qolck"]
-radius = 1.0
-
 [node name="GameScene" type="Node3D" unique_id=1209339600]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="ViewportContainer" type="SubViewportContainer" parent="." unique_id=1967507754]
 anchors_preset = 15
@@ -124,20 +121,6 @@ collision_mask = 2
 [node name="TerrainCollider" type="CollisionShape3D" parent="ViewportContainer/VesselSpaceView/LocalTerrain/TerrainPhysicsBody" unique_id=348029028]
 shape = SubResource("SphereShape3D_ry528")
 
-[node name="Vessel" type="RigidBody3D" parent="ViewportContainer/VesselSpaceView" unique_id=1321874153]
-process_priority = -1
-collision_layer = 2
-collision_mask = 2
-gravity_scale = 0.0
-can_sleep = false
-angular_damp = 1.0
-script = ExtResource("15_yl3ua")
-
-[node name="Node Tracker" parent="ViewportContainer/VesselSpaceView/Vessel" unique_id=1727072701 instance=ExtResource("11_4v654")]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ViewportContainer/VesselSpaceView/Vessel" unique_id=178179567]
-shape = SubResource("SphereShape3D_qolck")
-
 [node name="LocalCamera" type="Camera3D" parent="ViewportContainer/VesselSpaceView" unique_id=219440179]
 current = true
 far = 400000.0
@@ -152,3 +135,7 @@ size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="FlightUI" parent="ViewportContainer/UIView" unique_id=740060954 instance=ExtResource("12_7rq2r")]
+
+[node name="Initializer" type="Node" parent="." unique_id=1886330655 node_paths=PackedStringArray("_vesselParent")]
+script = ExtResource("1_gipt1")
+_vesselParent = NodePath("../ViewportContainer/VesselSpaceView")

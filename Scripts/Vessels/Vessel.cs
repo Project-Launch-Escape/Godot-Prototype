@@ -16,10 +16,12 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 {
 	public static readonly List<Vessel> AllVessels = [];
 	public static Vessel ActiveVessel;
-	
-	
-	public RelativePosition PositionRel = new (new Vector3d(-2514749.0,-2714.0,0));
-	public RelativeVelocity VelocityRel = new (new Vector3d(50, 150, -1350));
+	public static Node VesselParent => GlobalValues.LocalSpaceCamera.GetParent();
+
+	private static PackedScene _vesselScene = GD.Load<PackedScene>("res://Scenes/Vessel.tscn");
+
+	public RelativePosition PositionRel; //new (new Vector3d(-2514749.0,-2714.0,0));
+	public RelativeVelocity VelocityRel; //new (new Vector3d(50, 150, -1350));
 	private Vector3d _acceleration = new();
 
 	public Celestial ParentBody;
@@ -42,47 +44,48 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 	
 	public PhysicsType PhysicsMode = PhysicsType.Kepler;
 
-	private DebugVector _gravityVector;
-	private DebugVector _thrustVector;
-
 	public PartTree PartAssembly;
 	public List<FuelSystem> FuelSystems = [];
 
 	public double Throttle;
-	
-	public override void _Ready()
-	{
-		AllVessels.Add(this);
-		ActiveVessel = this;
-		FlightCamera.AddToRenderSpaceUpdate(this);
-		
-		FuelSystems.Add(new FuelSystem());
-		InitializeFromLaunchFile();
-		SnapPoint.SetGlobalVisibility(false);
 
-		_gravityVector = DebugVector.CreateVector(Vector3d.Zero, Vector3d.Zero, new Color(0, 1, 0), this);
-		_thrustVector = DebugVector.CreateVector(Vector3d.Zero, Vector3d.Zero, new Color(1f, 0.85f, 0.1f), this);
-		
-		LocalSurface.OnSOIChange(ParentBody);
-		GlobalValues.FOPosition = new RelativePosition(PositionRel);
-		
-		Position = Vector3.Zero;
-		LinearVelocity = (Vector3)VelocityLocal;
-		ContactMonitor = true;
-		MaxContactsReported = 10;
-	}
 
-	private void InitializeFromLaunchFile()
+	public static Vessel CreateVessel(PartTree partTree, Celestial parentBody, Vector3d localPosition, Vector3d localVelocity)
 	{
-		var launchFile = VesselFileTools.GetLaunchFile();
-		var partTree = launchFile.PartTree.ToPartTree();
+		var vessel = _vesselScene.Instantiate<Vessel>();
 
 		var root = partTree.RootPart;
 		root.Position = Vector3.Zero;
-		AddChild(root);
 
-		PartAssembly = new PartTree(root, this);
-		PartAssembly.InitializeParts();
+		if (root.IsInsideTree()) root.Reparent(vessel);
+		else vessel.AddChild(root);
+
+		vessel.PartAssembly = partTree;
+		vessel.PartAssembly.ParentVessel = vessel;
+
+		vessel.PositionRel = new RelativePosition(localPosition, parentBody);
+		vessel.VelocityRel = new RelativeVelocity(localVelocity, parentBody);
+		vessel.ParentBody = parentBody;
+		
+		vessel.Trajectory = new Trajectory(vessel.PositionLocal, vessel.VelocityLocal, parentBody, new Color(0.9f, 0.4f, 0.8f));
+		
+		vessel.Initialize();
+		vessel.PartAssembly.InitializeParts();
+		return vessel;
+	}
+	
+	public void Initialize()
+	{
+		AllVessels.Add(this);
+		FlightCamera.AddToRenderSpaceUpdate(this);
+		
+		FuelSystems.Add(new FuelSystem());
+		SnapPoint.SetGlobalVisibility(false);
+		
+		Position = (Vector3)PositionRel[CoordinateSpace.VesselSpace];
+		LinearVelocity = (Vector3)VelocityLocal;
+		ContactMonitor = true;
+		MaxContactsReported = 10;
 		
 		foreach (var part in PartAssembly.Parts)
 		{
@@ -94,25 +97,37 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 				}
 			}
 		}
+	}
+
+	public void MakeActiveVessel()
+	{
+		ActiveVessel = this;
+		LocalSurface.OnSOIChange(ParentBody);
+		GlobalValues.FOPosition = new RelativePosition(PositionRel);
+	}
+
+	public static Vessel CreateVesselFromLaunchFile()
+	{
+		var launchFile = VesselFileTools.GetLaunchFile();
+		var partTree = launchFile.PartTree.ToPartTree();
 		
 		var parentBody = Celestial.CelestialDict[launchFile.StartingCelestial];
+		Vector3d localVelocity;
+		Vector3d localPosition;
 		if (launchFile.StartOnSurface)
 		{
-			PositionLocal = parentBody.GetSurfacePosition(0, Math.PI / 2);
-			VelocityLocal = Vector3d.One;
+			localPosition = parentBody.GetSurfacePosition(0, Math.PI / 2);
+			localVelocity = Vector3d.One;
 		}
 		else
 		{
 			var orbitRadius = parentBody.Radius * 3;
 			var orbitalVelocity = 1.3*Math.Sqrt(parentBody.Mu / orbitRadius);
-			PositionLocal = new Vector3d(orbitRadius, 0.01 * orbitRadius, 0.01 * orbitRadius);
-			VelocityLocal = new Vector3d(0, -orbitalVelocity * 0.05, orbitalVelocity);
+			localPosition = new Vector3d(orbitRadius, 0.01 * orbitRadius, 0.01 * orbitRadius);
+			localVelocity = new Vector3d(0, -orbitalVelocity * 0.05, orbitalVelocity);
 		}
-		
-		Trajectory = new Trajectory(PositionLocal, VelocityLocal, parentBody, new Color(0.9f, 0.4f, 0.8f));
-		PositionRel.ParentPosition = parentBody.PositionRel;
-		VelocityRel.ReferenceVelocity = parentBody.VelocityRel;
-		ParentBody = parentBody;
+
+		return CreateVessel(partTree, parentBody, localPosition, localVelocity);
 	}
 
 	public void AddManeuver()
@@ -160,9 +175,6 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		{
 			fuelSystem.HandleFuelRequests();
 		}
-		
-		//var encounterTime = Trajectory.FindEncounter(Trajectory.CurrentOrbit, Celestial.CelestialDict["Luna"], new Range(GlobalValues.Time, GlobalValues.Time + Trajectory.CurrentOrbit.Period));
-		//if (!double.IsNaN(encounterTime) && Engine.GetFramesDrawn() % 48 == 0) GD.Print(GlobalValues.TimeToVerboseString(encounterTime), "\n", encounterTime,"\n", GlobalValues.Time + Trajectory.CurrentOrbit.Period / 2,"\n");
 	}
 
 	private void PhysicsUpdateNewton(double dtPhys)
@@ -182,18 +194,13 @@ public partial class Vessel : RigidBody3D, IRenderable, IOrbiter
 		{
 			var gravity = -PositionLocal.Normalized() * ParentBody.Mu / PositionLocal.MagnitudeSquared();
 			AddForce(Mass * gravity);
-			_gravityVector.UpdateVector(Vector3d.Zero, 100 * gravity, _gravityVector.Color, this);
 		}
-
-		//var velprev = new Vector3d(LinearVelocity); //Disabled since fuel now drains asynchronously
+		
 		foreach (var engine in PartAssembly.Engines)
 		{
 			engine.FireEngine(Throttle, dtPhys);
 		}
 		
-		//var engineAccel = (LinearVelocity - velprev) / dtPhys;
-
-		//_thrustVector.UpdateVector(Vector3d.Zero, engineAccel, _thrustVector.Color, this);
 		Trajectory.SetFromStateVectors(PositionLocal, VelocityLocal, ParentBody);
 	}
 	

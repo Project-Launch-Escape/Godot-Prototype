@@ -1,14 +1,14 @@
 [gd_resource type="Resource" script_class="PartDefinition" format=3 uid="uid://br5pw3trpbjie"]
 
 [ext_resource type="Texture2D" uid="uid://b47i3b6o2631i" path="res://Resources/Parts/Icons/FuelTankIcon.png" id="1_bvlhp"]
-[ext_resource type="PackedScene" uid="uid://bp0y71wbm8kj" path="res://Resources/Parts/Scenes/tank.tscn" id="2_j004g"]
+[ext_resource type="PackedScene" uid="uid://cnuq8iu1glwb2" path="res://Resources/Parts/Scenes/Decoupler.tscn" id="2_bvlhp"]
 [ext_resource type="Script" uid="uid://b6mm672vti7v5" path="res://Scripts/Vessels/PartDefinition.cs" id="3_k8ste"]
 
 [resource]
 script = ExtResource("3_k8ste")
-Scene = ExtResource("2_j004g")
-Name = "Fuel Tank"
-ID = "TANK_12g3"
+Scene = ExtResource("2_bvlhp")
+Name = "Decoupler"
+ID = "DECOUPLER_de2f"
 Icon = ExtResource("1_bvlhp")
-IconColor = Color(0.6665981, 0.66426194, 0.15438941, 1)
+IconColor = Color(0.891682, 0.5186906, 0.46762162, 1)
 metadata/_custom_type_script = "uid://b6mm672vti7v5"

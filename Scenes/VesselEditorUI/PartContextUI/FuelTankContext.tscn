@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://b4el8s1os3ibp"]
+[gd_scene format=3 uid="uid://b4el8s1os3ibp"]
 
 [ext_resource type="Script" uid="uid://cusc5la1iuijj" path="res://Scripts/VesselEditor/EditorUI/ContextMenus/MenuFuelTank.cs" id="1_o20pn"]
 

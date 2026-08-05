@@ -1,5 +1,5 @@
 {
-  "StartingCelestial": "Ganymede",
+  "StartingCelestial": "Earth",
   "StartOnSurface": false,
   "PartTree": {
 	"Parts": [
@@ -11,9 +11,9 @@
 		"ParentSnapPointIndex": -2,
 		"SnapPointIndex": -2,
 		"Position": {
-		  "X": -0.35982907,
-		  "Y": 6.2520986,
-		  "Z": 7.9373536
+		  "X": -0.3176867,
+		  "Y": 3.2178426,
+		  "Z": 0.45157862
 		},
 		"Rotation": {
 		  "X": -0,
@@ -30,19 +30,43 @@
 	  {
 		"IsSurfaceAttached": false,
 		"PartIndex": 1,
-		"PartDefID": "TANK_12g3",
+		"PartDefID": "DECOUPLER_de2f",
 		"ParentIndex": 0,
 		"ParentSnapPointIndex": 1,
 		"SnapPointIndex": 0,
 		"Position": {
-		  "X": 1.7881393E-07,
-		  "Y": -1.5,
+		  "X": 0,
+		  "Y": -0.56299996,
 		  "Z": 0
 		},
 		"Rotation": {
 		  "X": -0,
 		  "Y": 0,
 		  "Z": 1.7484558E-07
+		},
+		"UnsnappedRotation": {
+		  "X": -0,
+		  "Y": 0,
+		  "Z": 0
+		},
+		"Components": []
+	  },
+	  {
+		"IsSurfaceAttached": false,
+		"PartIndex": 2,
+		"PartDefID": "TANK_12g3",
+		"ParentIndex": 1,
+		"ParentSnapPointIndex": 1,
+		"SnapPointIndex": 0,
+		"Position": {
+		  "X": -1.1920929E-07,
+		  "Y": -1.062,
+		  "Z": -5.9604645E-08
+		},
+		"Rotation": {
+		  "X": -8.742278E-08,
+		  "Y": 3.1415927,
+		  "Z": 8.742278E-08
 		},
 		"UnsnappedRotation": {
 		  "X": -0,
@@ -71,13 +95,13 @@
 	  },
 	  {
 		"IsSurfaceAttached": false,
-		"PartIndex": 2,
+		"PartIndex": 3,
 		"PartDefID": "ENGINE_132h",
-		"ParentIndex": 1,
+		"ParentIndex": 2,
 		"ParentSnapPointIndex": 1,
 		"SnapPointIndex": 0,
 		"Position": {
-		  "X": 8.940697E-08,
+		  "X": 0,
 		  "Y": -1.5,
 		  "Z": 0
 		},
